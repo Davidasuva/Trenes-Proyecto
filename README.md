@@ -65,6 +65,8 @@ Al momento del abordaje, el sistema publicara en los monitores de la estación e
 # **Notas técnicas**
 - Pueden haber cambios de diseño durante el desarrollo del proyecto, esto débido a la falta de experiencia por parte de las partes involucradas dentro del proyecto. 
 
+# **Como inicializar el programa**
+Escribe mvn javafx:run en la terminal, iniciaria el programa
 # **Integrantes del Equipo de Desarrollo**
 - [David Santiago Peña González](https://github.com/Davidasuva)
 - [Juan Sebastian Rueda Velandia](https://github.com/juanse1172)
