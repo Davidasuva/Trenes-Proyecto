@@ -1,3 +1,4 @@
+App.class
 edu\project\model\Ticket_Interface.class
 edu\project\model\Ticket.class
 edu\project\model\Ticket_Service.class
