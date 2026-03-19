@@ -1,5 +1,5 @@
 package edu.project;
-import edu.project.view.AuthView;
+import edu.project.view.auth.AuthView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -1,7 +1,7 @@
 C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\controller\AuthController.java
 C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\Main.java
 C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\model\server.java
-C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\model\Ticket.java
-C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\model\Ticket_Interface.java
-C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\model\Ticket_Service.java
-C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\view\AuthView.java
+C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\model\ticket\Ticket.java
+C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\model\ticket\Ticket_Interface.java
+C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\model\ticket\Ticket_Service.java
+C:\Users\david\OneDrive\Documentos\Universidad\3° Semestre\proyecto estructuras\trenesproyecto\src\main\java\edu\project\view\auth\AuthView.java

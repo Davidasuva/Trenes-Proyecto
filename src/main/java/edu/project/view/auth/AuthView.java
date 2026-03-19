@@ -1,4 +1,4 @@
-package edu.project.view;
+package edu.project.view.auth;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

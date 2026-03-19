@@ -1,4 +1,4 @@
-package edu.project.model;
+package edu.project.server.model.ticket;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,9 +11,9 @@ public class Ticket_Service extends UnicastRemoteObject implements Ticket_Interf
         super();
     }
 
-    public Ticket register(String id) throws RemoteException {
-        Ticket ticket=new Ticket(id, "Ticket"+id);
-        tickets[index++]=ticket;
+    public Ticket register(Ticket ticket) throws RemoteException {
+        tickets[index]=ticket;
+        index++;
         return ticket;
     }
 
