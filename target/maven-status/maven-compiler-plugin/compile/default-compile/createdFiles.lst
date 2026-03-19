@@ -1,7 +1,0 @@
-edu\project\view\auth\AuthView.class
-edu\project\controller\AuthController.class
-edu\project\model\ticket\Ticket.class
-edu\project\model\ticket\Ticket_Interface.class
-edu\project\model\ticket\Ticket_Service.class
-edu\project\Main.class
-edu\project\model\server.class
