@@ -9,4 +9,8 @@ public interface TicketInterface extends Remote {
 
     boolean validate(Ticket ticket) throws RemoteException;
 
+    void seeTicketsPerPassenger(Passenger Passenger) throws RemoteException;
+
+
+
 }
