@@ -1,39 +1,39 @@
 package server.factory;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import server.controller.ServerController;
 import server.model.ServerModel;
-import server.model.history.History;
-import server.view.ServerView;
 import environment.Environment;
 
 public class ServerFactory {
-    private ServerFactory(){
 
-    }
+    private ServerFactory(){}
 
-    public static ServerController create(){
-        Environment env=Environment.getInstance();
-        if(env==null){
-            throw new IllegalStateException("Failed to create Environment.");
-        }
+    public static Parent create() {
+        try {
+            Environment env = Environment.getInstance();
 
-        History history=new History();
-        if(history==null){
-            throw new IllegalStateException("Failed to create History.");
-        }
+            ServerModel model = new ServerModel(
+                    env.getIp(),
+                    env.getPort(),
+                    env.getServiceName()
+            );
 
-        ServerModel model = new ServerModel(env.getIp(),env.getPort(),env.getServiceName());
-        if(model==null){
-            throw new IllegalStateException("Failed to create ServerModel.");
-        }
+            FXMLLoader loader = new FXMLLoader(
+                    ServerFactory.class.getResource("/server/view/server/Server.fxml")
+            );
 
-        ServerView view=new ServerView("Server Control Panel",history);
-        if(view==null){
-            throw new IllegalStateException("Failed to create ServerView.");
+            Parent root = loader.load();
+
+            ServerController controller = loader.getController();
+            controller.setModel(model);
+
+            return root;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error creando ServerView");
         }
-        ServerController controller = new ServerController(model, view);
-        if (controller == null) {
-            throw new IllegalStateException("Failed to create ServerController");
-        }
-        return controller;
     }
 }

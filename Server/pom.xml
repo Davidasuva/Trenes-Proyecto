@@ -52,6 +52,8 @@
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.fxml</include>
+                    <include>**/*.css</include>
+                    <include>**/*.png</include>
                 </includes>
             </resource>
             <resource>
@@ -83,7 +85,7 @@
                     <artifactId>javafx-maven-plugin</artifactId>
                     <version>0.0.8</version>
                     <configuration>
-                        <mainClass>edu.project.Main</mainClass>
+                        <mainClass>Main</mainClass>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -92,7 +94,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <mainClass>edu.project.Main</mainClass>
+                                <mainClass>Main</mainClass>
                             </manifest>
                         </archive>
                     </configuration>

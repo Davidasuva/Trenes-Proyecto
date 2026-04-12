@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="16" alignment="TOP_CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="server.controller.ServerController"
+      style="-fx-padding: 20;">
+
+    <!-- Fila superior: status + botón -->
+    <HBox spacing="16" alignment="CENTER">
+        <Label fx:id="lblStatus"
+               text="Status: Stopped."
+               style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <Button fx:id="btnDeploy"
+                text="Deploy"
+                onAction="#handleDeploy"/>
+    </HBox>
+
+    <!-- Consola de eventos -->
+    <TextArea fx:id="txtConsola"
+              editable="false"
+              wrapText="true"
+              promptText="Esperando eventos..."
+              VBox.vgrow="ALWAYS"
+              style="-fx-font-family: 'Courier New', monospace;
+                     -fx-font-size: 12px;
+                     -fx-background-color: #1e1e1e;
+                     -fx-text-fill: #d4d4d4;
+                     -fx-control-inner-background: #1e1e1e;
+                     -fx-highlight-fill: #264f78;
+                     -fx-border-color: #3c3c3c;
+                     -fx-border-radius: 4px;
+                     -fx-background-radius: 4px;"/>
+
+</VBox>

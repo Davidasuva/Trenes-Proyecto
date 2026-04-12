@@ -3,7 +3,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
-import server.model.ticket.Ticket;
 
 public class UserService  extends UnicastRemoteObject implements User{
 
