@@ -1,6 +1,7 @@
 package server.model.ticket;
 import java.io.Serializable;
 import edu.uva.app.array.Array;
+import server.model.user.Passenger;
 import server.model.carriage.CarriageLoad;
 import server.model.train.Train;
 import server.model.carriage.CarriagePassenger;
@@ -33,6 +34,7 @@ public class Ticket implements Serializable {
         this.status = status;
         this.dateBuy = dateBuy;
         luggage=new Array<>(2);
+        passenger.addTicket(this);
     }
 
     public boolean verificateLuggage(Luggage luggage){
@@ -76,7 +78,7 @@ public class Ticket implements Serializable {
         return price;
     }
 
-    public boolean isStatus() {
+    public boolean Status() {
         return status;
     }
 
@@ -109,6 +111,7 @@ public class Ticket implements Serializable {
     }
 
     public void setStatus(boolean status) {
+        passenger.setTraveling();
         this.status = status;
     }
 

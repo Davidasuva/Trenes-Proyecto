@@ -1,24 +1,29 @@
-package server.model.ticket;
+package server.model.user;
+
 import java.io.Serializable;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
-public class Passenger implements Serializable {
+public abstract class AbstractUser implements Serializable {
     private static final long serialVersionUID = 2L;
-
     private String id;
     private String name;
+    private String mail;
     private String lastName;
     private String password;
     private String typeIdetification;
     private String adress;
+    private int type;
+    //1 Para usuario normal, 2 para Personal(Empleados), 3 para administradores
     private LinkedList<String> phoneNumbers;
 
-    public Passenger(String id, String name, String lastName, String password, String typeIdetification, String adress) {
+    public AbstractUser(String id, String mail,String name, String lastName, String password, String typeIdetification, String adress, int type) {
         this.id = id;
+        this.mail = mail;
         this.name = name;
         this.lastName = lastName;
         this.password = password;
         this.typeIdetification = typeIdetification;
         this.adress = adress;
+        this.type = type;
         phoneNumbers = new LinkedList<>();
     }
 
@@ -75,5 +80,17 @@ public class Passenger implements Serializable {
     }
     public LinkedList<String> getPhoneNumbers() {
         return phoneNumbers;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }

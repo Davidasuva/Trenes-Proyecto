@@ -5,82 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f5e6aa2c-b310-4062-a7e6-dc86ce3b7c26" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/trenesproyecto.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/lib/DataStructures.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/server/model/ServerModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/server/model/ticket/Passenger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/server/model/ticket/Ticket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/server/model/ticket/TicketInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/java/server/model/ticket/TicketService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/resources/META-INF/maven/archetype.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/resources/archetype-resources/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/resources/archetype-resources/src/main/java/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/src/main/resources/archetype-resources/src/test/java/AppTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataStructures.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/controller/AuthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/environment/Environment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/carriage/AbstractCarriage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/carriage/CarriageLoad.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/carriage/CarriagePassenger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/emergencyContact/EmergencyContact.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/luggage/Luggage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/route/Route.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/ticket/Ticket.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/train/Train.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/user/AbstractHighPermissionUser.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/user/AbstractUser.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/model/user/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/controller/ServerController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/factory/ServerFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/ServerModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/history/Action.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/history/History.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/observer/Observable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/observer/Observer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/observer/Subject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/passenger/Passenger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/ticket/Ticket.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/ticket/Ticket_Interface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/model/ticket/Ticket_Service.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/server/view/server/ServerView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/view/auth/AuthView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/project/view/auth/auth-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/controller/AuthController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/environment/Environment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/controller/ServerController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/factory/ServerFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/ServerModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/history/Action.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/history/History.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/observer/Observable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/observer/Observer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/observer/Subject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/passenger/Passenger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/ticket/Ticket.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/ticket/Ticket_Interface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/model/ticket/Ticket_Service.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/server/view/server/ServerView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/view/auth-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/view/auth/AuthView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/edu/project/view/auth/auth-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trenesproyecto.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,22 +16,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Davidasuva"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Davidasuva&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Davidasuva/Trenes-Proyecto.git",
-    "accountId": "4b1da7b3-2fad-455d-a444-660fc0b93e69"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Davidasuva/Trenes-Proyecto.git&quot;,
+    &quot;accountId&quot;: &quot;4b1da7b3-2fad-455d-a444-660fc0b93e69&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 5
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="3BLsJQMoYw3L1p5MabIYnZUCrrC" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -117,7 +43,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "archivos-temporales",
+    "git-widget-placeholder": "Organización",
     "kotlin-language-version-configured": "true"
   }
 }]]></component>

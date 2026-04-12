@@ -3,6 +3,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
+import server.model.user.Passenger;
 
 public class TicketService extends UnicastRemoteObject implements TicketInterface {
 
