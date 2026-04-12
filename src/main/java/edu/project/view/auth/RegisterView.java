@@ -6,22 +6,22 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AuthView {
+public class RegisterView {
 
     public static void show(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(
-                AuthView.class.getResource("auth-view.fxml")
+                RegisterView.class.getResource("register-view.fxml")
         );
 
         Parent root = loader.load();
         Scene scene = new Scene(root, 720, 480);
 
-        java.net.URL cssUrl = AuthView.class.getResource("auth-view.css");
+        java.net.URL cssUrl = RegisterView.class.getResource("auth-view.css");
         if (cssUrl != null) {
             scene.getStylesheets().add(cssUrl.toExternalForm());
         }
 
-        stage.setTitle("trenes — Iniciar sesión");
+        stage.setTitle("trenes — Registro");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.centerOnScreen();

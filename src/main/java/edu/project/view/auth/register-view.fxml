@@ -7,7 +7,7 @@
 
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="edu.project.controller.AuthController"
+           fx:controller="edu.project.controller.RegisterController"
            styleClass="raiz">
 
     <VBox styleClass="card"
@@ -25,7 +25,7 @@
             <Label text="trenes" styleClass="logo-texto"/>
         </HBox>
 
-        <Region minHeight="30" maxHeight="30"/>
+        <Region minHeight="24" maxHeight="24"/>
 
         <!-- Usuario -->
         <TextField fx:id="txtUsuario"
@@ -33,7 +33,15 @@
                    styleClass="campo"
                    maxWidth="340"/>
 
-        <Region minHeight="12" maxHeight="12"/>
+        <Region minHeight="10" maxHeight="10"/>
+
+        <!-- Correo -->
+        <TextField fx:id="txtCorreo"
+                   promptText="Correo electrónico"
+                   styleClass="campo"
+                   maxWidth="340"/>
+
+        <Region minHeight="10" maxHeight="10"/>
 
         <!-- Contraseña -->
         <StackPane maxWidth="340">
@@ -44,9 +52,28 @@
                        promptText="Contraseña"
                        styleClass="campo"
                        visible="false"/>
-            <Button fx:id="btnOjo" text="👁"
+            <Button fx:id="btnOjo1" text="👁"
                     styleClass="btn-ojo"
-                    onAction="#handleTogglePassword"
+                    onAction="#handleTogglePassword1"
+                    StackPane.alignment="CENTER_RIGHT">
+                <StackPane.margin><Insets right="10"/></StackPane.margin>
+            </Button>
+        </StackPane>
+
+        <Region minHeight="10" maxHeight="10"/>
+
+        <!-- Confirmar contraseña -->
+        <StackPane maxWidth="340">
+            <PasswordField fx:id="txtConfirm"
+                           promptText="Confirmar contraseña"
+                           styleClass="campo"/>
+            <TextField fx:id="txtConfirmVisible"
+                       promptText="Confirmar contraseña"
+                       styleClass="campo"
+                       visible="false"/>
+            <Button fx:id="btnOjo2" text="👁"
+                    styleClass="btn-ojo"
+                    onAction="#handleTogglePassword2"
                     StackPane.alignment="CENTER_RIGHT">
                 <StackPane.margin><Insets right="10"/></StackPane.margin>
             </Button>
@@ -61,24 +88,24 @@
             <VBox.margin><Insets top="5"/></VBox.margin>
         </Label>
 
-        <Region minHeight="18" maxHeight="18"/>
+        <Region minHeight="16" maxHeight="16"/>
 
-        <!-- Botón -->
-        <Button fx:id="btnIngresar"
-                text="Iniciar sesión"
+        <!-- Botón Registrar -->
+        <Button fx:id="btnRegistrar"
+                text="Crear cuenta"
                 styleClass="btn-ingresar"
                 maxWidth="340"
                 prefHeight="44"
-                onAction="#handleLogin"/>
+                onAction="#handleRegister"/>
 
-        <Region minHeight="26" maxHeight="26"/>
+        <Region minHeight="22" maxHeight="22"/>
 
-        <!-- Registro -->
-        <Label text="¿No tienes cuenta?" styleClass="texto-registro"/>
-        <Label fx:id="lblCrearCuenta"
-               text="Crea tu cuenta"
+        <!-- Volver al login -->
+        <Label text="¿Ya tienes cuenta?" styleClass="texto-registro"/>
+        <Label fx:id="lblIniciarSesion"
+               text="Inicia sesión"
                styleClass="link-registro"
-               onMouseClicked="#handleCrearCuenta">
+               onMouseClicked="#handleVolverLogin">
             <VBox.margin><Insets top="3"/></VBox.margin>
         </Label>
 

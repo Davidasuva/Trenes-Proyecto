@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.project.controller.MainController"
+      styleClass="raiz-main"
+      spacing="0">
+
+    <!-- ── Navbar ── -->
+    <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox.margin><Insets left="20" right="20"/></HBox.margin>
+        <Label text="inicio" styleClass="nav-link-active"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button styleClass="nav-icon" text="@train-travel-round-icon2-by-Vexels.png"/>
+        <Button styleClass="nav-icon" text="🔔"/>
+    </HBox>
+
+    <!-- ── Buscador ── -->
+    <VBox styleClass="buscador-wrapper" spacing="14">
+        <VBox.margin><Insets top="24" left="24" right="24"/></VBox.margin>
+
+        <!-- Filtros: tipo viaje + pasajeros -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <ComboBox fx:id="cmbTipoViaje" styleClass="combo-filtro" prefWidth="140"/>
+            <ComboBox fx:id="cmbPasajeros" styleClass="combo-filtro" prefWidth="140"/>
+        </HBox>
+
+        <!-- Campos de búsqueda -->
+        <HBox spacing="10" alignment="CENTER">
+            <TextField fx:id="txtOrigen"
+                       promptText="De: Ciudad, Estación...."
+                       styleClass="campo-busqueda"
+                       HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="txtDestino"
+                       promptText="A: Ciudad, Estación...."
+                       styleClass="campo-busqueda"
+                       HBox.hgrow="ALWAYS"/>
+            <DatePicker fx:id="dpFecha"
+                        promptText="D/M/A"
+                        styleClass="campo-fecha"
+                        prefWidth="140"/>
+            <Button fx:id="btnBuscar"
+                    text="buscar"
+                    styleClass="btn-buscar"
+                    prefHeight="44"
+                    prefWidth="110"
+                    onAction="#handleBuscar"/>
+        </HBox>
+
+        <!-- Métodos de pago -->
+        <HBox styleClass="pagos-bar" alignment="CENTER_LEFT" spacing="14">
+            <Label text="Paga de forma segura con:" styleClass="pagos-label"/>
+            <Label text="VISA" styleClass="logo-visa"/>
+            <Label text="●" styleClass="logo-mc"/>
+            <Label text="◆ NEQUI" styleClass="logo-nequi"/>
+            <Label text="● link" styleClass="logo-link"/>
+            <Label text=" Pay" styleClass="logo-apple"/>
+            <Label text="G Pay" styleClass="logo-gpay"/>
+            <Label text="P PayPal" styleClass="logo-paypal"/>
+        </HBox>
+    </VBox>
+
+    <!-- ── Grid de destinos ── -->
+    <ScrollPane styleClass="scroll-destinos" fitToWidth="true" VBox.vgrow="ALWAYS">
+        <VBox.margin><Insets top="20" left="24" right="24" bottom="24"/></VBox.margin>
+        <GridPane styleClass="grid-destinos" hgap="16" vgap="16">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50"/>
+                <ColumnConstraints percentWidth="50"/>
+            </columnConstraints>
+
+            <!-- Tarjeta 1 -->
+            <VBox styleClass="tarjeta-destino" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="Cucuta - Colombia" styleClass="tarjeta-label"/>
+            </VBox>
+
+            <!-- Tarjeta 2 -->
+            <VBox styleClass="tarjeta-destino" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="Bucaramanga - Colombia" styleClass="tarjeta-label"/>
+            </VBox>
+
+            <!-- Tarjeta 3 -->
+            <VBox styleClass="tarjeta-destino" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="Bogotá - Colombia" styleClass="tarjeta-label"/>
+            </VBox>
+
+            <!-- Tarjeta 4 -->
+            <VBox styleClass="tarjeta-destino" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="Medellín - Colombia" styleClass="tarjeta-label"/>
+            </VBox>
+        </GridPane>
+    </ScrollPane>
+
+</VBox>

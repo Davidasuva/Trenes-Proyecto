@@ -1,0 +1,98 @@
+/* ═══════════════════════════════════════════════════════════════
+   SGT — auth-view.css
+   Ubicar junto a auth-view.fxml
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Fondo general — blanco puro como en la referencia */
+.raiz {
+    -fx-background-color: #FFFFFF;
+}
+
+/* Tarjeta central sin borde ni sombra — igual que la referencia */
+.card {
+    -fx-background-color: transparent;
+    -fx-padding: 60px 40px 50px 40px;
+}
+
+.logo-texto {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 26px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #1A1A1A;
+}
+
+.campo {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-text-fill: #1A1A1A;
+    -fx-prompt-text-fill: #9AA3AE;
+    -fx-padding: 10px 14px;
+    -fx-pref-height: 44px;
+}
+
+.campo:focused {
+    -fx-border-color: #888E96;
+    -fx-background-color: white;
+}
+
+
+.btn-ojo {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-padding: 4px 6px;
+}
+
+.btn-ojo:hover {
+    -fx-background-color: rgba(0,0,0,0.05);
+    -fx-background-radius: 4px;
+}
+
+.label-error {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #888E96;
+}
+
+
+.btn-ingresar {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.btn-ingresar:hover {
+    -fx-background-color: #2A2E33;
+}
+
+.btn-ingresar:pressed {
+    -fx-background-color: #1E2226;
+}
+
+.texto-registro {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.link-registro {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+    -fx-cursor: hand;
+}
+
+.link-registro:hover {
+    -fx-underline: true;
+}
