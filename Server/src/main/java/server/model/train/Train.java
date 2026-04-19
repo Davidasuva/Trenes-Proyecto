@@ -19,6 +19,7 @@ public class Train implements Serializable {
         this.type = type;
         this.capacity = capacity;
         this.mileage = mileage;
+        carriages=new LinkedList<>();
     }
 
     public boolean addCarriage(AbstractCarriage carriage){
@@ -55,6 +56,30 @@ public class Train implements Serializable {
 
     public void updateMileage(int mileage) {
         this.mileage += mileage;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj){
+            return true;
+        }
+        if(!(obj instanceof Train)){
+            return false;
+        }
+        Train t=(Train)obj;
+        return this.id==t.getId();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }
 

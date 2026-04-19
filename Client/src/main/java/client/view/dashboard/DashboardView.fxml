@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="client.controller.dashboard.DashboardController"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- ── Barra superior ── -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16"
+              style="-fx-background-color: #3D4147; -fx-padding: 14 20;">
+            <Label text="trenes"
+                   style="-fx-font-family: Georgia; -fx-font-size: 20px;
+                          -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblBienvenido"
+                   style="-fx-font-size: 13px; -fx-text-fill: #cccccc;"/>
+            <Button fx:id="btnLogout" text="Cerrar sesión"
+                    onAction="#handleLogout"
+                    style="-fx-background-color: transparent; -fx-text-fill: #cccccc;
+                           -fx-border-color: #888; -fx-border-radius: 4px;
+                           -fx-cursor: hand; -fx-padding: 4 10;"/>
+        </HBox>
+    </top>
+
+    <!-- ── Contenido central ── -->
+    <center>
+        <HBox spacing="0">
+
+            <!-- Lista de rutas -->
+            <VBox spacing="12" style="-fx-padding: 20;" HBox.hgrow="ALWAYS">
+                <Label text="Rutas disponibles"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <Button text="↺ Actualizar rutas" onAction="#refreshRoutes"
+                        style="-fx-cursor: hand;"/>
+                <ListView fx:id="listRoutes" VBox.vgrow="ALWAYS"
+                          style="-fx-background-color: white;
+                                 -fx-border-color: #ddd; -fx-border-radius: 6px;"/>
+            </VBox>
+
+            <!-- Panel de compra -->
+            <VBox spacing="14" minWidth="280" maxWidth="280"
+                  style="-fx-padding: 20; -fx-background-color: white;
+                         -fx-border-color: #e0e0e0; -fx-border-width: 0 0 0 1;">
+
+                <Label text="Comprar ticket"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <Label text="Ruta seleccionada:"/>
+                <Label fx:id="lblRutaSeleccionada"
+                       text="(ninguna)"
+                       wrapText="true"
+                       style="-fx-text-fill: #555; -fx-font-size: 13px;"/>
+
+                <Label text="Categoría:"/>
+                <ChoiceBox fx:id="choiceCategoria" maxWidth="240"
+                           style="-fx-font-size: 13px;"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Label fx:id="lblTicketStatus"
+                       wrapText="true"
+                       style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+
+                <Button fx:id="btnComprar"
+                        text="Comprar"
+                        maxWidth="240" prefHeight="40"
+                        onAction="#handleComprar"
+                        style="-fx-background-color: #3D4147; -fx-text-fill: white;
+                               -fx-font-size: 14px; -fx-background-radius: 6px;
+                               -fx-cursor: hand;"/>
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <!-- ── Status bar ── -->
+    <bottom>
+        <Label fx:id="lblLog"
+               style="-fx-font-size: 11px; -fx-text-fill: #777;
+                      -fx-padding: 6 16; -fx-background-color: #eeeeee;"/>
+    </bottom>
+
+</BorderPane>

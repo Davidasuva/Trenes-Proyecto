@@ -111,8 +111,8 @@ public class Ticket implements Serializable {
     }
 
     public void setStatus(boolean status) {
-        passenger.setTraveling();
         this.status = status;
+        passenger.setTraveling();
     }
 
     public Passenger getPassenger() {

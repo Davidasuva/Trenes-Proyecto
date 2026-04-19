@@ -1,6 +1,9 @@
 package server.model.user;
 
+import edu.uva.app.array.Array;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
+import server.model.carriage.AbstractCarriage;
+import server.model.luggage.Luggage;
 import server.model.ticket.Ticket;
 
 public class Passenger extends AbstractUser{
@@ -30,14 +33,24 @@ public class Passenger extends AbstractUser{
     }
 
     public void setActualTicket(Ticket actualTicket) {
-        this.actualTicket = historyTickets.peek();
+        this.actualTicket = actualTicket;
     }
 
     public void setTraveling() {
-        this.isTraveling = historyTickets.peek().Status();
+        if(actualTicket != null){
+            this.isTraveling = actualTicket.Status();
+        }
+
     }
 
     public boolean IsTraveling() {
         return isTraveling;
+    }
+
+    public Array<Luggage> getLuggage() {
+        return actualTicket.getLuggage();
+    }
+    public AbstractCarriage getCarriage(){
+        return actualTicket.getCarriagePassenger();
     }
 }

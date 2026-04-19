@@ -93,4 +93,14 @@ public abstract class AbstractUser implements Serializable {
     public void setMail(String mail) {
         this.mail = mail;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractUser)){
+            return false;
+        }
+        AbstractUser u = (AbstractUser) o;
+        return this.id.equals(u.getId());
+    }
 }

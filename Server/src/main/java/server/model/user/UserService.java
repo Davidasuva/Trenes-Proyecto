@@ -3,6 +3,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
+import server.model.carriage.AbstractCarriage;
+import server.model.luggage.Luggage;
+import edu.uva.app.array.Array;
 
 public class UserService  extends UnicastRemoteObject implements User{
 
@@ -12,47 +15,46 @@ public class UserService  extends UnicastRemoteObject implements User{
     }
     @Override
     public AbstractUser register(AbstractUser user) throws RemoteException {
+        if (getUserById(user.getId()) != null) {
+            throw new RemoteException("Ya existe un usuario con el id: " + user.getId());
+        }
+        if (userPerEmailAndPassword(user.getMail(), user.getPassword(), null) != null) {
+            throw new RemoteException("Ya existe un usuario con el email: " + user.getMail());
+        }
         users.add(user);
         return user;
     }
 
     @Override
-    public void seeUserPerCategory(int category,Object object) throws RemoteException{
-        if(category<1||category>3){
-            throw new IllegalArgumentException("Invalid category");
+    public LinkedList<AbstractUser> seeUserPerCategory(int category) throws RemoteException {
+        if (category < 1 || category > 3) {
+            throw new IllegalArgumentException("Categoría inválida");
         }
-        Iterator<AbstractUser> iterator=users.iterator();
-        while(iterator.hasNext()){
-            if(iterator.next().getType()==category){
-
+        LinkedList<AbstractUser> result = new LinkedList<>();
+        Iterator<AbstractUser> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            AbstractUser user = iterator.next();
+            if (user.getType() == category) {
+                result.add(user);
             }
         }
+        return result;
     }
 
     @Override
-    public void seeLuggagePerPassenger(Passenger passenger, Object object) throws RemoteException {
-        Iterator<AbstractUser> iterator=users.iterator();
-        while(iterator.hasNext()){
-            AbstractUser user=iterator.next();
-            if(user instanceof Passenger){
-                if(iterator.next().equals(passenger)){
-
-                }
-            }
+    public Array<Luggage> seeLuggagePerPassenger(String passengerId) throws RemoteException {
+        Passenger passenger = (Passenger) getUserById(passengerId);
+        if (passenger == null) {
+            return null;
         }
+        return passenger.getLuggage();
     }
 
     @Override
-    public void seeCarriagePerPassenger(Passenger passenger, Object object) throws RemoteException {
-        Iterator<AbstractUser> iterator=users.iterator();
-        while(iterator.hasNext()){
-            AbstractUser user=iterator.next();
-            if(user instanceof Passenger){
-                if(iterator.next().equals(passenger)){
-
-                }
-            }
-        }
+    public AbstractCarriage seeCarriagePerPassenger(String passengerId) throws RemoteException {
+        Passenger passenger = (Passenger) getUserById(passengerId);
+        if (passenger == null) return null;
+        return passenger.getCarriage();
     }
 
     @Override
@@ -65,5 +67,50 @@ public class UserService  extends UnicastRemoteObject implements User{
             }
         }
         return null;
+    }
+
+    @Override
+    public AbstractUser getUserById(String id) throws RemoteException {
+        Iterator<AbstractUser> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            AbstractUser user = iterator.next();
+            if (user.getId().equals(id)) return user;
+        }
+        return null;
+    }
+    @Override
+    public AbstractUser removeUser(String id) throws RemoteException {
+        AbstractUser user = getUserById(id);
+        if (user == null){
+            return null;
+        }
+        users.remove(user);
+        return user;
+    }
+    @Override
+    public LinkedList<AbstractUser> getUsers() throws RemoteException {
+        return users;
+    }
+
+    @Override
+    public AbstractUser registerWorker(Worker worker, AbstractUser user) throws RemoteException {
+        if (user.getType() != 3) {
+            throw new RemoteException("Solo administradores");
+        }
+        return register(worker);
+
+    }
+
+    @Override
+    public AbstractUser removeUser(String id, AbstractUser user) throws RemoteException {
+        if (user.getType() != 3) {
+            throw new RemoteException("Solo administradores");
+        }
+        return removeUser(id);
+    }
+
+    @Override
+    public AbstractUser registerPassenger(Passenger passenger) throws RemoteException {
+        return register(passenger);
     }
 }

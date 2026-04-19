@@ -78,21 +78,3 @@
 .btn-ingresar:pressed {
     -fx-background-color: #1E2226;
 }
-
-.texto-registro {
-    -fx-font-family: 'Georgia';
-    -fx-font-size: 13px;
-    -fx-text-fill: #6B7280;
-}
-
-.link-registro {
-    -fx-font-family: 'Georgia';
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1A1A1A;
-    -fx-cursor: hand;
-}
-
-.link-registro:hover {
-    -fx-underline: true;
-}

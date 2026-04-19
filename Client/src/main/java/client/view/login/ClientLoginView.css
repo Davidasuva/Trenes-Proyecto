@@ -1,0 +1,85 @@
+
+.raiz { -fx-background-color: #FFFFFF; }
+
+.card {
+    -fx-background-color: transparent;
+    -fx-padding: 50px 40px 50px 40px;
+}
+
+.logo-texto {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 26px;
+    -fx-text-fill: #1A1A1A;
+}
+
+/* Tabs */
+.tab-bar { -fx-background-color: #f0f0f0; -fx-background-radius: 8px; -fx-padding: 3; }
+
+.tab-active {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
+    -fx-pref-height: 34px;
+}
+
+.tab-inactive {
+    -fx-background-color: transparent;
+    -fx-text-fill: #555;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
+    -fx-pref-height: 34px;
+}
+
+.tab-inactive:hover { -fx-background-color: #e0e0e0; }
+
+/* Campos */
+.campo {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-text-fill: #1A1A1A;
+    -fx-prompt-text-fill: #9AA3AE;
+    -fx-padding: 10px 14px;
+    -fx-pref-height: 44px;
+}
+
+.campo:focused { -fx-border-color: #888E96; }
+
+.btn-ojo {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-padding: 4px 6px;
+}
+
+.btn-ojo:hover { -fx-background-color: rgba(0,0,0,0.05); -fx-background-radius: 4px; }
+
+.label-error {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #c0392b;
+}
+
+.btn-ingresar {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.btn-ingresar:hover    { -fx-background-color: #2A2E33; }
+.btn-ingresar:pressed  { -fx-background-color: #1E2226; }
+.btn-ingresar:disabled { -fx-opacity: 0.5; }

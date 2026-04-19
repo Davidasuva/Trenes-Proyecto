@@ -1,7 +1,8 @@
+package server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import server.view.auth.login.Login;
+import server.factory.ServerFactory;
 
 public class Main extends Application {
 
@@ -10,7 +11,7 @@ public class Main extends Application {
         // Cuando se cierren TODAS las ventanas JavaFX, la app termina sola
         Platform.setImplicitExit(true);
 
-        Login.show(stage);
+        ServerFactory.showLogin(stage);
     }
 
     @Override

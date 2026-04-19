@@ -21,7 +21,7 @@ public class CarriageLoad extends AbstractCarriage{
         if(luggage.getWeight()>80){
             return false;
         }else{
-            actualWeight++;
+            actualWeight+=luggage.getWeight();
             luggage.setCarriage(this);
             return luggages.push(luggage);
         }
@@ -32,4 +32,11 @@ public class CarriageLoad extends AbstractCarriage{
         return actualWeight < maxCapacity;
     }
 
+    public Stack<Luggage> getLuggages() {
+        return luggages;
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
 }

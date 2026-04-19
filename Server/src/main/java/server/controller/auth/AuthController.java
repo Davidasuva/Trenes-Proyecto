@@ -11,12 +11,14 @@ import server.model.user.AbstractUser;
 import server.model.user.Admin;
 import server.model.user.UserService;
 import server.view.server.ServerView;
-import environment.Environment;
 import server.model.ServerModel;
 
 public class AuthController {
 
     private UserService userService;
+
+    /** Modelo inyectado por ServerFactory antes de mostrar la ventana. */
+    private ServerModel model;
 
     @FXML private TextField     txtUsuario;
     @FXML private PasswordField txtPassword;
@@ -27,11 +29,22 @@ public class AuthController {
 
     private boolean passwordVisible = false;
 
+    // ──────────────────────────────────────────────────────────
+    // Inyección del modelo (llamada por ServerFactory)
+    // ──────────────────────────────────────────────────────────
+
+    public void setModel(ServerModel model) {
+        this.model = model;
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // Inicialización FXML
+    // ──────────────────────────────────────────────────────────
+
     @FXML
     public void initialize() {
         try {
             userService = new UserService();
-            // Usuario de prueba — reemplazar con carga desde BD o archivo en producción
             userService.register(new Admin(
                     "0", "Admin@project.com", "Admin123",
                     "Admin", "1234", "C.C", "cr 29#92-49", 3
@@ -53,6 +66,10 @@ public class AuthController {
         txtPassword.setOnAction(e -> handleLogin());
         txtPasswordVisible.setOnAction(e -> handleLogin());
     }
+
+    // ──────────────────────────────────────────────────────────
+    // Handlers
+    // ──────────────────────────────────────────────────────────
 
     @FXML
     public void handleTogglePassword() {
@@ -92,7 +109,7 @@ public class AuthController {
             AbstractUser user = userService.userPerEmailAndPassword(mail, password, null);
             if (user != null) {
                 lblError.setVisible(false);
-                abrirServerView();           // navega directamente, sin Alert bloqueante
+                abrirServerView();
             } else {
                 mostrarError("Credenciales incorrectas.");
                 sacudir(btnIngresar);
@@ -104,27 +121,30 @@ public class AuthController {
     }
 
     // ──────────────────────────────────────────────────────────
-    // Privados
+    // Navegación: Login → Server view
+    // El modelo ya fue creado por ServerFactory; aquí solo
+    // cambiamos de escena y lo pasamos a ServerView.
     // ──────────────────────────────────────────────────────────
 
     private void abrirServerView() {
         try {
-            Environment env   = Environment.getInstance();
-            ServerModel model = new ServerModel(
-                    env.getIp(), env.getPort(), env.getServiceName()
-            );
-
-            ServerView serverView = new ServerView(model);   // usa ServerView, no ServerFactory
+            ServerView serverView = new ServerView(model);
 
             Stage stage = (Stage) btnIngresar.getScene().getWindow();
             stage.setTitle("trenes — Server");
+            stage.setResizable(true);
             stage.setScene(new Scene(serverView.getView(), 400, 300));
+            stage.centerOnScreen();
 
         } catch (Exception e) {
             e.printStackTrace();
             mostrarError("No se pudo abrir la vista del servidor.");
         }
     }
+
+    // ──────────────────────────────────────────────────────────
+    // Utilidades de UI
+    // ──────────────────────────────────────────────────────────
 
     private void mostrarError(String msg) {
         lblError.setText(msg);

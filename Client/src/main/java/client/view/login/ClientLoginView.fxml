@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="client.controller.auth.ClientAuthController"
+           styleClass="raiz">
+
+    <VBox styleClass="card" spacing="0" alignment="CENTER" maxWidth="420">
+
+        <!-- Logo -->
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="trenes" styleClass="logo-texto"/>
+        </HBox>
+
+        <Region minHeight="20" maxHeight="20"/>
+
+        <!-- Tabs: Iniciar sesión / Crear cuenta -->
+        <HBox alignment="CENTER" spacing="10" styleClass="tab-bar">
+            <Button fx:id="btnTabLogin"
+                    text="Iniciar sesión"
+                    styleClass="tab-active"
+                    maxWidth="170"
+                    onAction="#showLogin"/>
+            <Button fx:id="btnTabRegister"
+                    text="Crear cuenta"
+                    styleClass="tab-inactive"
+                    maxWidth="170"
+                    onAction="#showRegister"/>
+        </HBox>
+
+        <Region minHeight="20" maxHeight="20"/>
+
+        <!-- ── PANEL LOGIN ── -->
+        <VBox fx:id="panelLogin" spacing="12" maxWidth="340">
+            <TextField fx:id="txtLoginMail"   promptText="Correo" styleClass="campo" maxWidth="340"/>
+            <StackPane maxWidth="340">
+                <PasswordField fx:id="txtLoginPass"        promptText="Contraseña" styleClass="campo"/>
+                <TextField     fx:id="txtLoginPassVisible" promptText="Contraseña" styleClass="campo" visible="false"/>
+                <Button fx:id="btnOjoLogin" text="👁" styleClass="btn-ojo"
+                        onAction="#toggleLoginPass" StackPane.alignment="CENTER_RIGHT">
+                    <StackPane.margin><Insets right="10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+        </VBox>
+
+        <!-- ── PANEL REGISTRO ── -->
+        <VBox fx:id="panelRegister" spacing="10" maxWidth="340" visible="false" managed="false">
+            <HBox spacing="10">
+                <TextField fx:id="txtRegNombre"   promptText="Nombre"   styleClass="campo" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="txtRegApellido" promptText="Apellido" styleClass="campo" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <TextField fx:id="txtRegMail"     promptText="Correo"     styleClass="campo" maxWidth="340"/>
+            <TextField fx:id="txtRegId"       promptText="Número de identificación" styleClass="campo" maxWidth="340"/>
+            <TextField fx:id="txtRegTipoId"   promptText="Tipo de ID (C.C, Pasaporte…)" styleClass="campo" maxWidth="340"/>
+            <TextField fx:id="txtRegDir"      promptText="Dirección"  styleClass="campo" maxWidth="340"/>
+            <StackPane maxWidth="340">
+                <PasswordField fx:id="txtRegPass"        promptText="Contraseña" styleClass="campo"/>
+                <TextField     fx:id="txtRegPassVisible" promptText="Contraseña" styleClass="campo" visible="false"/>
+                <Button fx:id="btnOjoReg" text="👁" styleClass="btn-ojo"
+                        onAction="#toggleRegPass" StackPane.alignment="CENTER_RIGHT">
+                    <StackPane.margin><Insets right="10"/></StackPane.margin>
+                </Button>
+            </StackPane>
+        </VBox>
+
+        <!-- Error -->
+        <Label fx:id="lblError" styleClass="label-error" maxWidth="340"
+               wrapText="true" visible="false">
+            <VBox.margin><Insets top="6"/></VBox.margin>
+        </Label>
+
+        <Region minHeight="16" maxHeight="16"/>
+
+        <!-- Botón principal -->
+        <Button fx:id="btnAccion"
+                text="Iniciar sesión"
+                styleClass="btn-ingresar"
+                maxWidth="340" prefHeight="44"
+                onAction="#handleAccion"/>
+
+    </VBox>
+</StackPane>

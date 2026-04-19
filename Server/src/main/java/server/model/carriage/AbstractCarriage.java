@@ -12,4 +12,13 @@ public abstract class AbstractCarriage implements Serializable {
         return id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractCarriage)){
+            return false;
+        }
+        AbstractCarriage c = (AbstractCarriage) o;
+        return this.id == c.getId();
+    }
 }

@@ -29,5 +29,18 @@ public class CarriagePassenger extends AbstractCarriage implements Serializable 
         return actualCapacity;
     }
 
+    public PriorityQueue<Ticket> getPassengers() {
+        return passengers;
+    }
 
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public boolean hasMoreCapacity(){
+        return actualCapacity<maxCapacity;
+    }
+    public int getActualCapacity() {
+        return actualCapacity;
+    }
 }

@@ -6,14 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
-/**
- * Clase auxiliar que carga y muestra la pantalla de Login.
- * No necesita ser un Observer — ese patrón es del modelo, no de la vista.
- */
 public class Login {
 
-    private Login() {}   // utilidad estática, no se instancia
+    private Login() {}
 
     public static void show(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(
