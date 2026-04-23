@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="server.controller.user.UserController"
+      styleClass="raiz-admin"
+      stylesheets="@AdminView.css"
+      prefWidth="1100" prefHeight="700">
+
+    <VBox HBox.hgrow="ALWAYS" spacing="0">
+
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="20">
+            <HBox alignment="CENTER" spacing="8">
+                <ImageView fitWidth="28" fitHeight="28" preserveRatio="true">
+                    <image>
+                        <Image url="@../auth/login/Tren.jpeg"/>
+                    </image>
+                </ImageView>
+                <Label text="trenes" styleClass="nav-brand"/>
+            </HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="rutas"        styleClass="nav-link" onAction="#irRutas"/>
+            <Button text="trenes"       styleClass="nav-link" onAction="#irTrenes"/>
+            <Button text="usuarios"     styleClass="nav-link-active"/>
+            <Button text="trabajadores" styleClass="nav-link" onAction="#irTrabajadores"/>
+        </HBox>
+
+        <VBox VBox.vgrow="ALWAYS" spacing="0">
+            <VBox.margin><Insets top="28" left="28" right="28" bottom="28"/></VBox.margin>
+
+            <VBox spacing="4">
+                <Label text="Usuarios" styleClass="seccion-titulo"/>
+                <Label text="Consulta y administra los pasajeros registrados." styleClass="seccion-subtitulo"/>
+            </VBox>
+
+            <Region minHeight="20" maxHeight="20"/>
+
+            <HBox styleClass="barra-acciones" spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="txtBuscar"
+                           promptText="Buscar por nombre, correo o documento..."
+                           styleClass="campo-busqueda"
+                           prefWidth="340"
+                           onKeyReleased="#handleBuscar"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Nuevo Usuario" styleClass="btn-primario" onAction="#handleNuevoUsuario"/>
+            </HBox>
+
+            <Region minHeight="14" maxHeight="14"/>
+
+            <TableView fx:id="tablaUsuarios" styleClass="tabla" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId"        text="ID"         prefWidth="100"/>
+                    <TableColumn fx:id="colNombre"    text="Nombre"     prefWidth="170"/>
+                    <TableColumn fx:id="colCorreo"    text="Correo"     prefWidth="200"/>
+                    <TableColumn fx:id="colDocumento" text="Documento"  prefWidth="130"/>
+                    <TableColumn fx:id="colTelefono"  text="Teléfono"   prefWidth="130"/>
+                    <TableColumn fx:id="colAcciones"  text="Acciones"   prefWidth="150"/>
+                </columns>
+                <placeholder>
+                    <Label text="No hay usuarios registrados." styleClass="seccion-subtitulo"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </VBox>
+
+    <!-- Panel derecho: formulario -->
+    <VBox fx:id="panelForm" styleClass="panel-form"
+          prefWidth="320" spacing="0"
+          visible="false" managed="false">
+
+        <Label fx:id="lblTituloForm" text="Nuevo Usuario" styleClass="form-titulo"/>
+        <Region minHeight="22" maxHeight="22"/>
+
+        <Label text="ID / Documento" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <TextField fx:id="txtId" promptText="Ej: 1234567890" styleClass="campo"/>
+
+        <Region minHeight="14" maxHeight="14"/>
+
+        <Label text="Nombre" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <TextField fx:id="txtNombre" promptText="Ej: Juan" styleClass="campo"/>
+
+        <Region minHeight="14" maxHeight="14"/>
+
+        <Label text="Apellido" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <TextField fx:id="txtApellido" promptText="Ej: Pérez" styleClass="campo"/>
+
+        <Region minHeight="14" maxHeight="14"/>
+
+        <Label text="Correo electrónico" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <TextField fx:id="txtCorreo" promptText="correo@ejemplo.com" styleClass="campo"/>
+
+        <Region minHeight="14" maxHeight="14"/>
+
+        <Label text="Contraseña" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <TextField fx:id="txtPassword" promptText="Contraseña" styleClass="campo"/>
+
+        <Region minHeight="14" maxHeight="14"/>
+
+        <Label text="Tipo de documento" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <ComboBox fx:id="cmbTipoDoc" styleClass="combo-campo" maxWidth="Infinity"
+                  promptText="Cédula, Pasaporte..."/>
+
+        <Region minHeight="14" maxHeight="14"/>
+
+        <Label text="Dirección" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <TextField fx:id="txtDireccion" promptText="Dirección" styleClass="campo"/>
+
+        <Region minHeight="6" maxHeight="6"/>
+
+        <Label fx:id="lblErrorForm" styleClass="form-label" wrapText="true"
+               visible="false" managed="false"/>
+
+        <Region VBox.vgrow="ALWAYS"/>
+        <Pane styleClass="separador"/>
+        <Region minHeight="16" maxHeight="16"/>
+
+        <HBox spacing="10">
+            <Button text="Guardar" styleClass="btn-primario" onAction="#handleGuardar"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button text="Cancelar" styleClass="btn-secundario" onAction="#handleCancelar"/>
+        </HBox>
+    </VBox>
+</HBox>

@@ -13,6 +13,38 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
         super();
     }
 
+    // ── Límites de vagones por fabricante ─────────────────────────────────────
+    private static final int MAX_VAGONES_MERCEDES = 28;
+    private static final int MAX_VAGONES_ARNOLD   = 32;
+
+    /**
+     * Valida que el total de vagones (pasajeros + carga) no supere el límite
+     * del fabricante y que sea al menos 1.
+     * Lanza RemoteException con mensaje descriptivo si no se cumple.
+     */
+    private void validarVagones(String tipo, int vagonesPasajeros, int vagonesCarga) throws RemoteException {
+        int total = vagonesPasajeros + vagonesCarga;
+        if (total < 1) {
+            throw new RemoteException("El tren debe tener al menos 1 vagón.");
+        }
+        boolean esMercedes = tipo != null && tipo.toLowerCase().contains("mercedes");
+        boolean esArnold   = tipo != null && tipo.toLowerCase().contains("arnold");
+        if (esMercedes && total > MAX_VAGONES_MERCEDES) {
+            throw new RemoteException("Un tren Mercedes-Benz no puede superar los "
+                    + MAX_VAGONES_MERCEDES + " vagones (actual: " + total + ").");
+        }
+        if (esArnold && total > MAX_VAGONES_ARNOLD) {
+            throw new RemoteException("Un tren Arnold no puede superar los "
+                    + MAX_VAGONES_ARNOLD + " vagones (actual: " + total + ").");
+        }
+        // Advertencia sobre la regla 1 carga por cada 2 pasajeros
+        if (vagonesPasajeros > 0 && vagonesCarga < Math.ceil(vagonesPasajeros / 2.0)) {
+            throw new RemoteException("Se requiere al menos 1 vagón de carga por cada 2 de pasajeros "
+                    + "(pasajeros: " + vagonesPasajeros + ", carga mínima requerida: "
+                    + (int) Math.ceil(vagonesPasajeros / 2.0) + ").");
+        }
+    }
+
     @Override
     public Train register(Train train, AbstractUser user) throws RemoteException {
         if(user.getType()==1){
@@ -21,6 +53,7 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
         if (getTrainById(train.getId()) != null) {
             throw new RemoteException("Ya existe un tren con el id: " + train.getId());
         }
+        validarVagones(train.getType(), train.getCapacity(), train.getCargoWagons());
         trains.add(train);
         return train;
     }
@@ -120,7 +153,7 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
     }
 
     @Override
-    public boolean modifyTrain(int id, String name, String type, int capacity, AbstractUser user) throws RemoteException {
+    public boolean modifyTrain(int id, String name, String type, int capacity, int cargoWagons, AbstractUser user) throws RemoteException {
         if(user.getType()==1){
             throw new RemoteException("Sin permisos");
         }
@@ -128,10 +161,11 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
         if(train==null){
             return false;
         }
+        validarVagones(type, capacity, cargoWagons);
         train.setName(name);
         train.setType(type);
         train.setCapacity(capacity);
+        train.setCargoWagons(cargoWagons);
         return true;
-
     }
 }

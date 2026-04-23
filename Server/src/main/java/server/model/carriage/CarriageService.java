@@ -61,6 +61,7 @@ public class CarriageService extends UnicastRemoteObject implements CarriageInte
         if (!(carriage instanceof CarriagePassenger)) {
             return false;
         }
+
         return ((CarriagePassenger) carriage).addPassenger(ticket);
     }
     @Override

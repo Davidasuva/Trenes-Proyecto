@@ -18,6 +18,7 @@ public class Ticket implements Serializable {
     private CarriagePassenger carriagePassenger;
     private CarriageLoad carriageLoad;
     private int category;
+    //0 Para los premium, 1 para los ejecutivos, 2 para los estandar
     private int price;
     private boolean status;
     private String dateBuy;

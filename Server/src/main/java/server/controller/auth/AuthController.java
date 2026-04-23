@@ -3,14 +3,13 @@ package server.controller.auth;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import server.model.user.AbstractUser;
 import server.model.user.Admin;
 import server.model.user.UserService;
-import server.view.server.ServerView;
+import server.factory.ServerFactory;
 import server.model.ServerModel;
 
 public class AuthController {
@@ -128,14 +127,8 @@ public class AuthController {
 
     private void abrirServerView() {
         try {
-            ServerView serverView = new ServerView(model);
-
             Stage stage = (Stage) btnIngresar.getScene().getWindow();
-            stage.setTitle("trenes — Server");
-            stage.setResizable(true);
-            stage.setScene(new Scene(serverView.getView(), 400, 300));
-            stage.centerOnScreen();
-
+            ServerFactory.showServerView(stage, model);
         } catch (Exception e) {
             e.printStackTrace();
             mostrarError("No se pudo abrir la vista del servidor.");

@@ -21,6 +21,24 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
         return route;
     }
 
+    /**
+     * Verifica si un tren ya está asignado a alguna ruta activa.
+     * Retorna el nombre de la ruta que lo usa, o null si está libre.
+     */
+    public String getRouteNameUsingTrain(Train train) throws RemoteException {
+        Iterator<Route> it = routes.iterator();
+        while (it.hasNext()) {
+            Route route = it.next();
+            if (!route.isActive()) continue;
+            Queue<Train> cola = route.getTrains();
+            if (cola == null || cola.isEmpty()) continue;
+            if (cola.peek().equals(train)) {
+                return route.getName();
+            }
+        }
+        return null;
+    }
+
     @Override
     public Route createRoute(int id, String name, Queue<Train> trains, String dateTravel, String dateArrival, Station origin, Station destiny,AbstractUser user) throws RemoteException {
         if (user.getType() == 1) {
@@ -183,6 +201,57 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
     public boolean existsPath(Station origin, Station destiny) throws RemoteException {
         return routeGraph.getShortestDistance(origin, destiny) != -1;
     }
+    public LinkedList<String> getBoardingOrder(int routeId) throws RemoteException {
+        Route route = getRouteById(routeId);
+        LinkedList<String> result = new LinkedList<>();
+        if (route == null) return result;
+
+        // Obtener pasajeros ordenados por categoría desde los vagones de pasajeros
+        // Los vagones ya usan PriorityQueue por categoría. Generamos el orden teórico:
+        // vagón N → vagón N-1 → ... → vagón 1, dentro de cada vagón: premium, ejecutivo, estándar
+
+        result.add("=== ORDEN DE ABORDAJE: " + route.getName() + " ===");
+        result.add("(De atrás hacia adelante — Premium → Ejecutivo → Estándar)");
+        result.add("");
+
+        // Categorías por nombre
+        String[] categorias = { "Premium (4 lugares)", "Ejecutivo (8 lugares)", "Estándar (22 lugares)" };
+        int[] capacidades   = { 4, 8, 22 };
+
+        // Obtenemos la cantidad de vagones de pasajeros del tren asignado
+        int vagonesPasajeros = 0;
+        try {
+            Queue<Train> cola = route.getTrains();
+            if (!cola.isEmpty()) {
+                Train tren = cola.peek();
+                vagonesPasajeros = tren.getCapacity(); // vagones de pasajeros
+            }
+        } catch (Exception e) {
+            vagonesPasajeros = 1;
+        }
+
+        if (vagonesPasajeros == 0){
+            vagonesPasajeros = 1;
+        }
+
+        int turno = 1;
+        // De atrás hacia adelante: vagón más alto al más bajo
+        for (int v = vagonesPasajeros; v >= 1; v--) {
+            result.add("── Vagón " + v + " ──");
+            for (int cat = 0; cat < categorias.length; cat++) {
+                result.add("  " + categorias[cat] + ":");
+                for (int lugar = capacidades[cat]; lugar >= 1; lugar--) {
+                    result.add("    Turno " + turno + " → Vagón " + v
+                            + ", " + categorias[cat].split(" ")[0] + ", lugar " + lugar);
+                    turno++;
+                }
+            }
+            result.add("");
+        }
+        return result;
+    }
+
+
 
     @Override
     public boolean publicateRoute(int id, AbstractUser user) throws RemoteException {

@@ -9,15 +9,17 @@ public class Train implements Serializable {
     private int id;
     private String name;
     private String type;
-    private int capacity;
+    private int capacity;      // vagones de pasajeros
+    private int cargoWagons;   // vagones de carga
     private int mileage;
     private LinkedList<AbstractCarriage> carriages;
 
-    public Train(int id, String name, String type, int capacity, int mileage) {
+    public Train(int id, String name, String type, int capacity, int cargoWagons, int mileage) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.capacity = capacity;
+        this.cargoWagons = cargoWagons;
         this.mileage = mileage;
         carriages=new LinkedList<>();
     }
@@ -78,12 +80,13 @@ public class Train implements Serializable {
         this.type = type;
     }
 
+    public int getCargoWagons() { return cargoWagons; }
+
+    public void setCargoWagons(int cargoWagons) { this.cargoWagons = cargoWagons; }
+
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 }
-
-
-
 
 

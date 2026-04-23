@@ -13,17 +13,73 @@ public class LuggageService extends UnicastRemoteObject implements LuggageInterf
 
     @Override
     public Luggage register(Luggage luggage) throws RemoteException {
+        if (getLuggageById(luggage.getId()) != null) {
+            throw new RemoteException("Ya existe un equipaje con el id: " + luggage.getId());
+        }
         luggages.add(luggage);
+        return luggage;
+    }
+    @Override
+    public Luggage getLuggageById(int id) throws RemoteException {
+        Iterator<Luggage> iterator = luggages.iterator();
+        while (iterator.hasNext()) {
+            Luggage luggage = iterator.next();
+            if (luggage.getId() == id) {
+                return luggage;
+            }
+        }
+        return null;
+    }
+    @Override
+    public Luggage removeLuggage(int id) throws RemoteException {
+        Luggage luggage = getLuggageById(id);
+        if (luggage == null) {
+            return null;
+        }
+        luggages.remove(luggage);
         return luggage;
     }
 
     @Override
-    public void seeLuggagePerPassenger(Passenger passenger, Object object) throws RemoteException {
-        Iterator<Luggage> iterator=luggages.iterator();
-        while(iterator.hasNext()){
-            if(iterator.next().getTicket().getPassenger().equals(passenger)){
-
+    public LinkedList<Luggage> seeLuggagePerPassenger(Passenger passenger) throws RemoteException {
+        LinkedList<Luggage> result = new LinkedList<>();
+        Iterator<Luggage> iterator = luggages.iterator();
+        while (iterator.hasNext()) {
+            Luggage luggage = iterator.next();
+            if (luggage.getTicket() != null &&
+                    luggage.getTicket().getPassenger().equals(passenger)) {
+                result.add(luggage);
             }
         }
+        return result;
+    }
+    @Override
+    public LinkedList<Luggage> getLuggageByMaxWeight(int maxWeight) throws RemoteException {
+        LinkedList<Luggage> result = new LinkedList<>();
+        Iterator<Luggage> iterator = luggages.iterator();
+        while (iterator.hasNext()) {
+            Luggage luggage = iterator.next();
+            if (luggage.getWeight() <= maxWeight) {
+                result.add(luggage);
+            }
+        }
+        return result;
+    }
+    @Override
+    public LinkedList<Luggage> getLuggageByCarriage(int carriageId) throws RemoteException {
+        LinkedList<Luggage> result = new LinkedList<>();
+        Iterator<Luggage> iterator = luggages.iterator();
+        while (iterator.hasNext()) {
+            Luggage luggage = iterator.next();
+            if (luggage.getCarriage() != null &&
+                    luggage.getCarriage().getId() == carriageId) {
+                result.add(luggage);
+            }
+        }
+        return result;
+    }
+    @Override
+    public LinkedList<Luggage> getLuggages() throws RemoteException {
+        return luggages;
     }
 }

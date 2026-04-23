@@ -17,12 +17,18 @@ public class CarriagePassenger extends AbstractCarriage implements Serializable 
     }
 
     public boolean addPassenger(Ticket passenger) {
-        if(actualCapacity<maxCapacity){
-            actualCapacity++;
-            return passengers.insert(passenger.getCategory(),passenger);
-        }else{
+        try{
+            if(actualCapacity<maxCapacity){
+                actualCapacity++;
+                return passengers.insert(passenger.getCategory(),passenger);
+            }else{
+                return false;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
+
     }
 
     public int getNumberOfPassengers(){

@@ -2,39 +2,51 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="16" alignment="TOP_CENTER"
+<VBox spacing="0" alignment="TOP_CENTER"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="server.controller.ServerController"
-      style="-fx-padding: 20;">
+      styleClass="raiz-server"
+      stylesheets="@Server.css">
 
-    <!-- Fila superior: status + botón -->
-    <HBox spacing="16" alignment="CENTER">
+    <!-- ── Navbar ── -->
+    <HBox styleClass="navbar-server" alignment="CENTER_LEFT" spacing="16">
+        <Label text="trenes — Server" styleClass="nav-brand-server"/>
+        <Region HBox.hgrow="ALWAYS"/>
         <Label fx:id="lblStatus"
-               text="Status: Stopped."
-               style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-        <Button fx:id="btnDeploy"
-                text="Deploy"
-                onAction="#handleDeploy"/>
+               text="● Stopped"
+               styleClass="status-label status-stopped"/>
     </HBox>
 
-    <!-- Consola de eventos -->
-    <TextArea fx:id="txtConsola"
-              editable="false"
-              wrapText="true"
-              promptText="Esperando eventos..."
-              VBox.vgrow="ALWAYS"
-              style="-fx-font-family: 'Courier New', monospace;
-                     -fx-font-size: 12px;
-                     -fx-background-color: #1e1e1e;
-                     -fx-text-fill: #d4d4d4;
-                     -fx-control-inner-background: #1e1e1e;
-                     -fx-highlight-fill: #264f78;
-                     -fx-border-color: #3c3c3c;
-                     -fx-border-radius: 4px;
-                     -fx-background-radius: 4px;"/>
+    <!-- ── Cuerpo principal ── -->
+    <VBox VBox.vgrow="ALWAYS" spacing="16">
+        <VBox.margin><Insets top="20" left="20" right="20" bottom="20"/></VBox.margin>
+
+        <!-- Fila de acciones: Deploy + Ir al Menú -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button fx:id="btnDeploy"
+                    text="Deploy Server"
+                    styleClass="btn-deploy"
+                    onAction="#handleDeploy"/>
+            <Button fx:id="btnIrMenu"
+                    text="Ir al Menú →"
+                    styleClass="btn-menu"
+                    disable="true"
+                    onAction="#handleIrMenu"/>
+        </HBox>
+
+        <!-- Consola de eventos -->
+        <TextArea fx:id="txtConsola"
+                  editable="false"
+                  wrapText="true"
+                  promptText="Esperando eventos..."
+                  VBox.vgrow="ALWAYS"
+                  styleClass="consola"/>
+
+    </VBox>
 
 </VBox>

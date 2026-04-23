@@ -1,0 +1,304 @@
+/* ═══════════════════════════════════════════════════════════════
+   SGT — admin-view.css
+   Compartido entre rutas, trenes, usuarios y trabajadores
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Fondo ── */
+.raiz-admin {
+    -fx-background-color: #FFFFFF;
+}
+
+/* ── Navbar ── */
+.navbar {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 14px 24px;
+}
+
+.nav-brand {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 20px;
+    -fx-text-fill: #1A1A1A;
+}
+
+.nav-link {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.nav-link:hover {
+    -fx-text-fill: #1A1A1A;
+}
+
+.nav-link-active {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-font-weight: bold;
+}
+
+/* ── Encabezado de sección ── */
+.seccion-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.seccion-subtitulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+/* ── Barra de acciones ── */
+.barra-acciones {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 0 0 12px 0;
+}
+
+/* ── Búsqueda ── */
+.campo-busqueda {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-prompt-text-fill: #9AA3AE;
+    -fx-padding: 8px 12px;
+    -fx-pref-height: 38px;
+}
+
+.campo-busqueda:focused {
+    -fx-border-color: #888E96;
+}
+
+/* ── Botón primario ── */
+.btn-primario {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-padding: 8px 18px;
+    -fx-pref-height: 38px;
+}
+
+.btn-primario:hover {
+    -fx-background-color: #2A2E33;
+}
+
+.btn-primario:pressed {
+    -fx-background-color: #1E2226;
+}
+
+/* ── Botón secundario ── */
+.btn-secundario {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3D4147;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 18px;
+    -fx-pref-height: 38px;
+}
+
+.btn-secundario:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+/* ── Botón peligro ── */
+.btn-peligro {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #B91C1C;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #FECACA;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 6px 14px;
+    -fx-pref-height: 32px;
+}
+
+.btn-peligro:hover {
+    -fx-background-color: #FEF2F2;
+}
+
+/* ── Botón editar ── */
+.btn-editar {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3D4147;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 6px 14px;
+    -fx-pref-height: 32px;
+}
+
+.btn-editar:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+/* ── Tabla ── */
+.tabla {
+    -fx-background-color: transparent;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+}
+
+.tabla .column-header-background {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.tabla .column-header,
+.tabla .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 38px;
+}
+
+.tabla .column-header .label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B7280;
+    -fx-padding: 0 10px;
+}
+
+.tabla .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F3F4F6 transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-pref-height: 48px;
+}
+
+.tabla .table-row-cell:odd {
+    -fx-background-color: #FAFAFA;
+}
+
+.tabla .table-row-cell:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+.tabla .table-row-cell:selected {
+    -fx-background-color: #F0F1F3;
+}
+
+.tabla .table-cell {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-padding: 0 10px;
+    -fx-border-color: transparent;
+}
+
+/* ── Chip / badge de estado ── */
+.chip-activo {
+    -fx-background-color: #D1FAE5;
+    -fx-text-fill: #065F46;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 11px;
+    -fx-background-radius: 99px;
+    -fx-padding: 3px 10px;
+}
+
+.chip-inactivo {
+    -fx-background-color: #F3F4F6;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 11px;
+    -fx-background-radius: 99px;
+    -fx-padding: 3px 10px;
+}
+
+/* ── Formulario lateral / modal ── */
+.panel-form {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 0 0 1px;
+    -fx-padding: 28px 24px;
+}
+
+.form-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.form-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.campo {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-prompt-text-fill: #9AA3AE;
+    -fx-padding: 8px 12px;
+    -fx-pref-height: 40px;
+}
+
+.campo:focused {
+    -fx-border-color: #888E96;
+}
+
+.combo-campo {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-pref-height: 40px;
+}
+
+/* ── Separador ── */
+.separador {
+    -fx-background-color: #E5E7EB;
+    -fx-pref-height: 1px;
+}
+
+/* ── Scroll ── */
+.scroll-contenido {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-contenido .viewport {
+    -fx-background-color: transparent;
+}

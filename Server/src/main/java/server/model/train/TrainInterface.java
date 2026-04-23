@@ -12,7 +12,7 @@ public interface TrainInterface extends Remote {
     Train removeTrain(Train train, AbstractUser user) throws RemoteException;
     Train getTrainById(int id) throws RemoteException;
     LinkedList<AbstractCarriage> seeCarriagesPerTrain(int trainId) throws RemoteException;
-    boolean modifyTrain(int id, String name, String type, int capacity,  AbstractUser user) throws RemoteException;
+    boolean modifyTrain(int id, String name, String type, int capacity, int cargoWagons, AbstractUser user) throws RemoteException;
     boolean addCarriageToTrain(int trainId, AbstractCarriage carriage) throws RemoteException;
     boolean removeCarriageFromTrain(int trainId, AbstractCarriage carriage) throws RemoteException;
     boolean updateMileage(int trainId, int mileage) throws RemoteException;

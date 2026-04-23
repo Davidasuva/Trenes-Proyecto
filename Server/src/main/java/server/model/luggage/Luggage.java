@@ -42,4 +42,16 @@ public class Luggage implements Serializable {
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Luggage)) {
+            return false;
+        }
+        Luggage l = (Luggage) o;
+        return this.id == l.getId();
+    }
 }

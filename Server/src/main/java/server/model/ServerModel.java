@@ -133,4 +133,20 @@ public class ServerModel {
     public UserService getUserService() {
         return userService;
     }
+
+    public TrainService getTrainService() {
+        return trainService;
+    }
+
+    public RouteService getRouteService() {
+        return routeService;
+    }
+
+    public LuggageService getLuggageService() {
+        return luggageService;
+    }
+
+    public CarriageService getCarriageService() {
+        return carriageService;
+    }
 }
