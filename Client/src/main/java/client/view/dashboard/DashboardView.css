@@ -1,0 +1,211 @@
+/* ═══════════════════════════════════════════════════════════════
+   trenes — DashboardView.css  (mismo sistema de diseño que server)
+   ═══════════════════════════════════════════════════════════════ */
+
+.raiz-admin {
+    -fx-background-color: #FFFFFF;
+}
+
+/* Navbar */
+.navbar {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 14px 24px;
+}
+
+.nav-brand {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 20px;
+    -fx-text-fill: #1A1A1A;
+}
+
+.nav-user {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.btn-logout {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 6px 14px;
+}
+
+.btn-logout:hover { -fx-background-color: #F3F4F6; }
+
+/* Sección */
+.seccion-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.seccion-subtitulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+/* Filtros */
+.barra-acciones {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 0 0 0 0;
+}
+
+.filtro-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.combo-filtro {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-pref-height: 38px;
+}
+
+.btn-limpiar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4px 8px;
+}
+
+.btn-limpiar:hover { -fx-text-fill: #1A1A1A; }
+
+.btn-secundario {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3D4147;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 18px;
+    -fx-pref-height: 38px;
+}
+
+.btn-secundario:hover { -fx-background-color: #F3F4F6; }
+
+/* Scroll de rutas */
+.scroll-rutas {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-rutas .viewport {
+    -fx-background-color: transparent;
+}
+
+.contenedor-rutas {
+    -fx-background-color: transparent;
+}
+
+/* Tarjeta de ruta */
+.ruta-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 18px 20px;
+    -fx-cursor: hand;
+}
+
+.ruta-card:hover {
+    -fx-border-color: #3D4147;
+    -fx-background-color: #FAFAFA;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}
+
+.ruta-nombre {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.ruta-trayecto {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #3D4147;
+}
+
+.ruta-distancia {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.ruta-fechas {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.ruta-estaciones-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9AA3AE;
+}
+
+.ruta-estaciones {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.chip-activo {
+    -fx-background-color: #D1FAE5;
+    -fx-text-fill: #065F46;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 11px;
+    -fx-background-radius: 99px;
+    -fx-padding: 3px 10px;
+}
+
+.btn-comprar-card {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-padding: 8px 20px;
+}
+
+.btn-comprar-card:hover { -fx-background-color: #2A2E33; }
+.btn-comprar-card:pressed { -fx-background-color: #1E2226; }
+
+/* Status bar */
+.status-bar {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 11px;
+    -fx-text-fill: #9AA3AE;
+    -fx-padding: 6px 24px;
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB transparent transparent transparent;
+    -fx-border-width: 1px 0 0 0;
+}

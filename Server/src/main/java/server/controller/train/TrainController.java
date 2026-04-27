@@ -30,7 +30,8 @@ public class TrainController implements Initializable {
     // ── Formulario ──
     @FXML private VBox panelForm;
     @FXML private Label lblTituloForm, lblErrorForm, lblLimite;
-    @FXML private TextField txtId, txtNombre, txtVagonesPasajeros, txtVagonesCarga;
+    @FXML private Label txtId;  // ahora es Label (ID auto-generado, solo lectura)
+    @FXML private TextField txtNombre, txtVagonesPasajeros, txtVagonesCarga;
     @FXML private ComboBox<String> cmbFabricante, cmbTipo;
 
     private TrainService trainService;
@@ -124,8 +125,7 @@ public class TrainController implements Initializable {
     private void abrirEdicion(Train t) {
         trainEnEdicion = t;
         lblTituloForm.setText("Editar Tren");
-        txtId.setText(String.valueOf(t.getId()));
-        txtId.setDisable(true);
+        txtId.setText("ID: " + t.getId());
         txtNombre.setText(t.getName());
         txtVagonesPasajeros.setText(String.valueOf(t.getCapacity()));
         txtVagonesCarga.setText(String.valueOf(t.getCargoWagons()));
@@ -148,14 +148,12 @@ public class TrainController implements Initializable {
     }
 
     @FXML private void handleGuardar() {
-        String idStr   = txtId.getText().trim();
         String nombre  = txtNombre.getText().trim();
         String pasStr  = txtVagonesPasajeros.getText().trim();
         String cargStr = txtVagonesCarga.getText().trim();
         String fab     = cmbFabricante.getValue();
         String tipo    = cmbTipo.getValue();
 
-        if (idStr.isEmpty() || !idStr.matches("\\d+"))   { mostrarError("ID debe ser un número entero."); return; }
         if (nombre.isEmpty())                             { mostrarError("El nombre es obligatorio."); return; }
         if (pasStr.isEmpty() || !pasStr.matches("\\d+")) { mostrarError("Vagones de pasajeros debe ser un número."); return; }
         if (cargStr.isEmpty() || !cargStr.matches("\\d+")){ mostrarError("Vagones de carga debe ser un número."); return; }
@@ -163,13 +161,21 @@ public class TrainController implements Initializable {
         if (tipo == null)                                 { mostrarError("Selecciona un tipo."); return; }
         if (trainService == null)                         { mostrarError("Servidor no disponible."); return; }
 
-        int id   = Integer.parseInt(idStr);
         int pas  = Integer.parseInt(pasStr);
         int carg = Integer.parseInt(cargStr);
 
         try {
             if (trainEnEdicion == null) {
-                Train nuevo = new Train(id, nombre, tipo, pas, carg, 0);
+                // ID auto-generado: siguiente al máximo existente
+                int nuevoId = 1;
+                try {
+                    edu.uva.model.iterator.Iterator<Train> it = trainService.getTrains().iterator();
+                    while (it.hasNext()) {
+                        int tid = it.next().getId();
+                        if (tid >= nuevoId) nuevoId = tid + 1;
+                    }
+                } catch (Exception ignored) {}
+                Train nuevo = new Train(nuevoId, nombre, tipo, pas, carg, 0);
                 trainService.register(nuevo, adminFicticio());
                 dataTrenes.add(nuevo);
             } else {
@@ -186,7 +192,7 @@ public class TrainController implements Initializable {
     // ── Navegación ──
     @FXML private void irRutas()        { ServerFactory.navigateToRoutes  ((Stage) tablaTrenes.getScene().getWindow()); }
     @FXML private void irUsuarios()     { ServerFactory.navigateToUsers   ((Stage) tablaTrenes.getScene().getWindow()); }
-    @FXML private void irTrabajadores() { ServerFactory.navigateToWorkers ((Stage) tablaTrenes.getScene().getWindow()); }
+    @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaTrenes.getScene().getWindow()); }
 
     // ── Helpers ──
     private void actualizarTipos() {
@@ -238,7 +244,7 @@ public class TrainController implements Initializable {
     private void mostrarPanel(boolean v) { panelForm.setVisible(v); panelForm.setManaged(v); }
 
     private void limpiarFormulario() {
-        txtId.clear(); txtId.setDisable(false);
+        txtId.setText("— se genera al guardar —");
         txtNombre.clear(); txtVagonesPasajeros.clear(); txtVagonesCarga.clear();
         cmbFabricante.getSelectionModel().clearSelection();
         cmbTipo.getItems().clear();

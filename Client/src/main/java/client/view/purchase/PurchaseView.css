@@ -1,0 +1,232 @@
+/* ═══════════════════════════════════════════════════════════════
+   trenes — PurchaseView.css
+   ═══════════════════════════════════════════════════════════════ */
+
+.raiz-admin { -fx-background-color: #FFFFFF; }
+
+.navbar {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 12px 24px;
+}
+
+.nav-brand {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 18px;
+    -fx-text-fill: #1A1A1A;
+}
+
+.nav-sub {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-text-fill: #9AA3AE;
+}
+
+.nav-user {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.btn-volver {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4px 8px;
+}
+
+.btn-volver:hover { -fx-text-fill: #1A1A1A; }
+
+.seccion-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.seccion-subtitulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #9AA3AE;
+}
+
+.panel-ruta { -fx-background-color: #FFFFFF; }
+.panel-maletas { -fx-background-color: #FAFAFA; }
+
+.separador-v { -fx-background-color: #E5E7EB; }
+
+/* Card info ruta */
+.info-card {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 18px;
+}
+
+.info-ruta-nombre {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.info-micro-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9AA3AE;
+}
+
+.info-valor {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+}
+
+.info-flecha {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 18px;
+    -fx-text-fill: #9AA3AE;
+}
+
+.info-estaciones {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+/* Toggles categoría */
+.form-label-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.toggle-cat {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3D4147;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER;
+}
+
+.toggle-cat:hover {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #888E96;
+}
+
+.toggle-cat:selected {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-border-color: #3D4147;
+}
+
+/* Maletas */
+.maleta-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 14px 16px;
+}
+
+.maleta-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+.maleta-check { -fx-cursor: hand; }
+
+.form-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.campo-peso {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-padding: 6px 10px;
+    -fx-pref-height: 36px;
+}
+
+.campo-peso:focused { -fx-border-color: #888E96; }
+
+.valid-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #065F46;
+}
+
+.error-compra {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #B91C1C;
+}
+
+.btn-primario {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.btn-primario:hover    { -fx-background-color: #2A2E33; }
+.btn-primario:pressed  { -fx-background-color: #1E2226; }
+.btn-primario:disabled { -fx-opacity: 0.5; }
+
+/* ── Precio estimado ── */
+.precio-card {
+    -fx-background-color: #F0FDF4;
+    -fx-border-color: #86EFAC;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 14 16 14 16;
+}
+
+.precio-valor {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #166534;
+}
+
+.precio-nota {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 10px;
+    -fx-text-fill: #6B7280;
+    -fx-font-style: italic;
+}
+
+/* ── Scroll ── */
+.scroll-compra {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+.scroll-compra > .viewport {
+    -fx-background-color: transparent;
+}

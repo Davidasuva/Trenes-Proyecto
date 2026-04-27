@@ -6,26 +6,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import server.controller.auth.AuthController;
 import server.controller.route.RouteController;
+import server.controller.ticket.TicketController;
 import server.controller.train.TrainController;
 import server.controller.user.UserController;
-import server.controller.user.WorkerController;
 import server.model.ServerModel;
 import environment.Environment;
-import server.model.route.RouteService;
-import server.model.train.TrainService;
-import server.model.user.UserService;
 
 /**
  * Único punto de creación y navegación de toda la UI del servidor.
- *
- * Flujo:
- *   Main  ──► showLogin(stage)
- *   Login ──► showServerView(stage, model)   [tras autenticación]
- *   ServerView ──► buildMenuScenes(model)     [tras deploy exitoso]
- *   Menú  ──► navigateTo*                    [intercambio instantáneo de escena]
- *
- * Las escenas del menú se pre-crean UNA sola vez; cada navegación
- * solo hace stage.setScene() sin recargar FXML ni recrear objetos.
  */
 public class ServerFactory {
 
@@ -35,15 +23,15 @@ public class ServerFactory {
     private static Scene sceneRoutes;
     private static Scene sceneTrains;
     private static Scene sceneUsers;
-    private static Scene sceneWorkers;
+    private static Scene sceneTickets;
 
     // ── Modelo compartido ─────────────────────────────────────────────────────
     private static ServerModel sharedModel;
 
-    private static UserController userController=new UserController();
-    private static WorkerController workerController=new WorkerController();
-    private static RouteController routeController=new RouteController();
-    private static TrainController trainController=new TrainController();
+    private static UserController   userController   = new UserController();
+    private static TicketController ticketController = new TicketController();
+    private static RouteController  routeController  = new RouteController();
+    private static TrainController  trainController  = new TrainController();
 
     public static void showLogin(Stage stage) {
         try {
@@ -72,9 +60,7 @@ public class ServerFactory {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // SERVER VIEW  (Deploy panel)
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── SERVER VIEW (Deploy panel) ─────────────────────────────────────────────
 
     public static void showServerView(Stage stage, ServerModel model) {
         try {
@@ -89,22 +75,20 @@ public class ServerFactory {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRE-CREAR ESCENAS DEL MENÚ  (una sola vez, tras deploy)
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── PRE-CREAR ESCENAS DEL MENÚ ─────────────────────────────────────────────
 
     public static void buildMenuScenes(ServerModel model) {
-        if (sceneRoutes != null) return;   // ya construidas
+        if (sceneRoutes != null) return;
         sharedModel = model;
         try {
             sceneRoutes  = buildScene("/server/view/route/RouteView.fxml",
-                    server.view.route.RouteView.class, "route");
+                    server.view.route.RouteView.class,   "route");
             sceneTrains  = buildScene("/server/view/train/TrainView.fxml",
-                    server.view.train.TrainView.class, "train");
+                    server.view.train.TrainView.class,   "train");
             sceneUsers   = buildScene("/server/view/user/UserView.fxml",
-                    server.view.user.UserView.class, "user");
-            sceneWorkers = buildScene("/server/view/user/WorkerView.fxml",
-                    server.view.user.WorkerView.class, "worker");
+                    server.view.user.UserView.class,     "user");
+            sceneTickets = buildScene("/server/view/ticket/TicketView.fxml",
+                    server.view.ticket.TicketView.class, "ticket");
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error pre-creando escenas del menú", e);
@@ -113,82 +97,59 @@ public class ServerFactory {
 
     private static Scene buildScene(String fxmlPath, Class<?> refClass, String tipo) throws Exception {
         FXMLLoader loader = new FXMLLoader(refClass.getResource(fxmlPath));
-        if (loader.getLocation() == null){
+        if (loader.getLocation() == null)
             loader = new FXMLLoader(ServerFactory.class.getResource(fxmlPath));
-        }
-        Parent root  = loader.load();
-        Scene  scene = new Scene(root, 1100, 700);
 
-        // Inyectar modelo al controller correspondiente
+        Parent root  = loader.load();
+        Scene  scene = new Scene(root, 1280, 800);
+
         Object ctrl = loader.getController();
         switch (tipo) {
-            case "route":
-                routeController = (RouteController) ctrl;
-                routeController.setModel(sharedModel);
-                break;
-            case "train":
-                trainController = (TrainController) ctrl;
-                trainController.setModel(sharedModel);
-                break;
-            case "user":
-                userController = (UserController) ctrl;
-                userController.setModel(sharedModel);
-                break;
-            case "worker":
-                workerController.setModel(sharedModel);
-                workerController.setModel(sharedModel);
-                break;
+            case "route"  -> { routeController  = (RouteController)  ctrl; routeController.setModel(sharedModel); }
+            case "train"  -> { trainController  = (TrainController)  ctrl; trainController.setModel(sharedModel); }
+            case "user"   -> { userController   = (UserController)   ctrl; userController.setModel(sharedModel);  }
+            case "ticket" -> { ticketController = (TicketController) ctrl; ticketController.setModel(sharedModel);}
         }
 
-        // CSS relativo al paquete del refClass
-        String cssName = fxmlPath.contains("route") || fxmlPath.contains("train")
-                || fxmlPath.contains("user") ? "AdminView.css" : null;
-        if (cssName != null) {
-            java.net.URL css = refClass.getResource(cssName);
-            if (css == null) css = ServerFactory.class.getResource(
-                    fxmlPath.substring(0, fxmlPath.lastIndexOf('/') + 1) + cssName);
-            if (css != null) scene.getStylesheets().add(css.toExternalForm());
-        }
+        // CSS compartido
+        java.net.URL css = refClass.getResource("AdminView.css");
+        if (css == null) css = ServerFactory.class.getResource(
+                fxmlPath.substring(0, fxmlPath.lastIndexOf('/') + 1) + "AdminView.css");
+        // Para ticket, el CSS está en route/
+        if (css == null)
+            css = ServerFactory.class.getResource("/server/view/route/AdminView.css");
+        if (css != null) scene.getStylesheets().add(css.toExternalForm());
+
         return scene;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // NAVEGACIÓN
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── NAVEGACIÓN ──────────────────────────────────────────────────────────────
 
     public static void navigateToRoutes(Stage stage) {
-        if(routeController != null){
-            routeController.refreshRoutes();
-        };
+        if (routeController != null) routeController.refreshRoutes();
         stage.setTitle("trenes — Gestión de Rutas");
         stage.setScene(sceneRoutes);
-        stage.centerOnScreen();
+        stage.setMaximized(true);
     }
 
     public static void navigateToTrains(Stage stage) {
-        if(trainController != null){
-            trainController.refreshTrains();
-        }
+        if (trainController != null) trainController.refreshTrains();
         stage.setTitle("trenes — Gestión de Trenes");
         stage.setScene(sceneTrains);
-        stage.centerOnScreen();
+        stage.setMaximized(true);
     }
 
     public static void navigateToUsers(Stage stage) {
-        if(userController != null){
-            userController.refreshUsers();
-        }
+        if (userController != null) userController.refreshUsers();
         stage.setTitle("trenes — Usuarios");
         stage.setScene(sceneUsers);
-        stage.centerOnScreen();
+        stage.setMaximized(true);
     }
 
-    public static void navigateToWorkers(Stage stage) {
-        if(workerController != null){
-            workerController.refreshWorkers();
-        }
-        stage.setTitle("trenes — Trabajadores");
-        stage.setScene(sceneWorkers);
-        stage.centerOnScreen();
+    public static void navigateToTickets(Stage stage) {
+        if (ticketController != null) ticketController.refreshTickets();
+        stage.setTitle("trenes — Tickets");
+        stage.setScene(sceneTickets);
+        stage.setMaximized(true);
     }
 }

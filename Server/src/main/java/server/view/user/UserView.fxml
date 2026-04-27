@@ -27,7 +27,7 @@
             <Button text="rutas"        styleClass="nav-link" onAction="#irRutas"/>
             <Button text="trenes"       styleClass="nav-link" onAction="#irTrenes"/>
             <Button text="usuarios"     styleClass="nav-link-active"/>
-            <Button text="trabajadores" styleClass="nav-link" onAction="#irTrabajadores"/>
+            <Button text="tickets"      styleClass="nav-link" onAction="#irTickets"/>
         </HBox>
 
         <VBox VBox.vgrow="ALWAYS" spacing="0">

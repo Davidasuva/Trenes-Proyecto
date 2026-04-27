@@ -5,7 +5,6 @@ import server.model.history.History;
 import server.model.luggage.LuggageService;
 import server.model.route.RouteService;
 import server.model.ticket.TicketService;
-import server.model.train.TrainInterface;
 import server.model.train.TrainService;
 import server.model.user.Admin;
 import server.model.user.UserService;

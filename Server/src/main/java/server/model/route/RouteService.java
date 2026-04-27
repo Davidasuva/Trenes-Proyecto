@@ -6,6 +6,7 @@ import edu.uva.app.queue.list.Queue;
 import edu.uva.model.iterator.Iterator;
 import server.model.train.Train;
 import server.model.user.AbstractUser;
+import java.time.LocalDateTime;
 
 public class RouteService extends UnicastRemoteObject implements RouteInterface{
 
@@ -40,7 +41,7 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
     }
 
     @Override
-    public Route createRoute(int id, String name, Queue<Train> trains, String dateTravel, String dateArrival, Station origin, Station destiny,AbstractUser user) throws RemoteException {
+    public Route createRoute(int id, String name, Queue<Train> trains, LocalDateTime dateTravel, LocalDateTime dateArrival, Station origin, Station destiny, AbstractUser user) throws RemoteException {
         if (user.getType() == 1) {
             throw new RemoteException("Sin permisos");
         }

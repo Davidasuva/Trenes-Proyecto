@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="client.controller.purchase.PurchaseController"
+            styleClass="raiz-admin"
+            stylesheets="@PurchaseView.css">
+
+    <!-- Navbar -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+            <Button text="Volver" onAction="#handleVolver" styleClass="btn-volver"/>
+            <Label text="trenes" styleClass="nav-brand"/>
+            <Label text="Comprar tiquete" styleClass="nav-sub"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblUsuario" styleClass="nav-user"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-compra">
+            <content>
+            <HBox spacing="0">
+
+            <!-- Panel izquierdo: resumen de ruta -->
+            <VBox spacing="0" HBox.hgrow="ALWAYS" styleClass="panel-ruta">
+                <VBox.margin><Insets top="28" left="28" right="20" bottom="28"/></VBox.margin>
+
+                <Label text="Resumen de la ruta" styleClass="seccion-titulo"/>
+                <Region minHeight="16" maxHeight="16"/>
+
+                <!-- Card info ruta -->
+                <VBox styleClass="info-card" spacing="10">
+                    <Label fx:id="lblRutaNombre" styleClass="info-ruta-nombre"/>
+                    <HBox spacing="20">
+                        <VBox spacing="3">
+                            <Label text="ORIGEN" styleClass="info-micro-label"/>
+                            <Label fx:id="lblOrigen" styleClass="info-valor"/>
+                        </VBox>
+                        <Label text="→" styleClass="info-flecha"/>
+                        <VBox spacing="3">
+                            <Label text="DESTINO" styleClass="info-micro-label"/>
+                            <Label fx:id="lblDestino" styleClass="info-valor"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="30">
+                        <VBox spacing="3">
+                            <Label text="DISTANCIA" styleClass="info-micro-label"/>
+                            <Label fx:id="lblDistancia" styleClass="info-valor"/>
+                        </VBox>
+                        <VBox spacing="3">
+                            <Label text="SALIDA" styleClass="info-micro-label"/>
+                            <Label fx:id="lblSalida" styleClass="info-valor"/>
+                        </VBox>
+                        <VBox spacing="3">
+                            <Label text="LLEGADA" styleClass="info-micro-label"/>
+                            <Label fx:id="lblLlegada" styleClass="info-valor"/>
+                        </VBox>
+                    </HBox>
+                    <VBox spacing="4">
+                        <Label text="ESTACIONES INTERMEDIAS" styleClass="info-micro-label"/>
+                        <Label fx:id="lblEstaciones" styleClass="info-estaciones" wrapText="true"/>
+                    </VBox>
+                </VBox>
+
+                <Region minHeight="20" maxHeight="20"/>
+
+                <!-- Categoría -->
+                <Label text="Categoría de tiquete" styleClass="form-label-titulo"/>
+                <Region minHeight="8" maxHeight="8"/>
+                <HBox spacing="10">
+                    <ToggleButton fx:id="btnEco"      text="3  Estandar"   prefWidth="140" prefHeight="54" styleClass="toggle-cat" userData="2"/>
+                    <ToggleButton fx:id="btnEjec"     text="2  Ejecutivo"   prefWidth="140" prefHeight="54" styleClass="toggle-cat" userData="1"/>
+                    <ToggleButton fx:id="btnPrimera"  text="1  Premium"     prefWidth="140" prefHeight="54" styleClass="toggle-cat" userData="0"/>
+                </HBox>
+
+                <Region minHeight="20" maxHeight="20"/>
+
+                <!-- Precio estimado -->
+                <VBox styleClass="precio-card" spacing="6">
+                    <Label text="PRECIO ESTIMADO" styleClass="info-micro-label"/>
+                    <Label fx:id="lblPrecio" styleClass="precio-valor" text=""/>
+                    <Label text="* Precio inicial · puede variar si cambias la ruta durante el trayecto." styleClass="precio-nota" wrapText="true"/>
+                </VBox>
+
+            </VBox>
+
+            <!-- Separador vertical -->
+            <Pane styleClass="separador-v" prefWidth="1"/>
+
+            <!-- Panel derecho: maletas -->
+            <VBox spacing="0" minWidth="320" maxWidth="320" styleClass="panel-maletas">
+                <VBox.margin><Insets top="28" left="20" right="28" bottom="28"/></VBox.margin>
+
+                <Label text="Maletas" styleClass="seccion-titulo"/>
+                <Label text="Máximo 2 maletas · máx. 80 kg c/u" styleClass="seccion-subtitulo"/>
+                <Region minHeight="20" maxHeight="20"/>
+
+                <!-- Maleta 1 -->
+                <VBox styleClass="maleta-card" spacing="10">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="🧳" style="-fx-font-size:20px;"/>
+                        <Label text="Maleta 1" styleClass="maleta-titulo"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox fx:id="chkMaleta1" styleClass="maleta-check" onAction="#toggleMaleta1"/>
+                    </HBox>
+                    <VBox fx:id="panelMaleta1" spacing="8" visible="false" managed="false">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Peso (kg):" styleClass="form-label"/>
+                            <TextField fx:id="txtPesoMaleta1" promptText="0-80" styleClass="campo-peso"
+                                       prefWidth="80"/>
+                            <Label fx:id="lblValidMaleta1" styleClass="valid-label"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <Region minHeight="12" maxHeight="12"/>
+
+                <!-- Maleta 2 -->
+                <VBox styleClass="maleta-card" spacing="10">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="🧳" style="-fx-font-size:20px;"/>
+                        <Label text="Maleta 2" styleClass="maleta-titulo"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox fx:id="chkMaleta2" styleClass="maleta-check" onAction="#toggleMaleta2"/>
+                    </HBox>
+                    <VBox fx:id="panelMaleta2" spacing="8" visible="false" managed="false">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Peso (kg):" styleClass="form-label"/>
+                            <TextField fx:id="txtPesoMaleta2" promptText="0-80" styleClass="campo-peso"
+                                       prefWidth="80"/>
+                            <Label fx:id="lblValidMaleta2" styleClass="valid-label"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Label fx:id="lblErrorCompra" styleClass="error-compra" wrapText="true" visible="false"/>
+                <Region minHeight="12" maxHeight="12"/>
+
+                <Button fx:id="btnConfirmarCompra"
+                        text="Confirmar compra"
+                        maxWidth="Infinity" prefHeight="48"
+                        styleClass="btn-primario"
+                        onAction="#handleConfirmar"/>
+            </VBox>
+        </HBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

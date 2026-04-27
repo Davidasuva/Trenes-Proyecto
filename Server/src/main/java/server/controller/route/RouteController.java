@@ -22,6 +22,8 @@ import server.model.user.Admin;
 import edu.uva.app.queue.list.Queue;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class RouteController implements Initializable {
@@ -29,15 +31,23 @@ public class RouteController implements Initializable {
     // ── Tabla ──
     @FXML private TextField txtBuscar;
     @FXML private TableView<Route> tablaRutas;
-    @FXML private TableColumn<Route, String> colId, colNombre, colOrigen, colDestino, colDistancia, colEstado;
+    @FXML private TableColumn<Route, String> colId, colNombre, colOrigen, colDestino,
+            colDistancia, colEstado, colFechaSalida, colFechaLlegada;
     @FXML private TableColumn<Route, String> colAcciones;
 
     // ── Formulario ──
     @FXML private VBox panelForm;
     @FXML private Label lblTituloForm, lblErrorForm, lblEstaciones;
-    @FXML private TextField txtNombre, txtFechaSalida, txtFechaLlegada;
+    @FXML private TextField txtNombre;
+    @FXML private DatePicker dpFechaSalida, dpFechaLlegada;
+    @FXML private Spinner<Integer> spHoraSalida, spMinSalida, spHoraLlegada, spMinLlegada;
     @FXML private ComboBox<Train> cmbTren;
     @FXML private ComboBox<Station> cmbOrigen, cmbDestino;
+
+    // ── Panel abordaje ──
+    @FXML private VBox panelAbordaje;
+    @FXML private Label lblTituloAbordaje;
+    @FXML private TextArea txtOrdenAbordaje;
 
     private RouteService routeService;
     private TrainService trainService;
@@ -59,6 +69,8 @@ public class RouteController implements Initializable {
                 String.format("%.0f km", c.getValue().getTotalDistance())));
         colEstado.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().isActive() ? "Activa" : "Inactiva"));
+        colFechaSalida.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDateTravelStr()));
+        colFechaLlegada.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDateArrivalStr()));
 
         colAcciones.setCellFactory(col -> new TableCell<>() {
             private final Button btnEditar   = new Button("Editar");
@@ -121,8 +133,14 @@ public class RouteController implements Initializable {
             @Override public Train fromString(String str) { return null; }
         });
 
+        // ── Spinners de hora ──
+        inicializarSpinner(spHoraSalida,  0, 23, 8);
+        inicializarSpinner(spMinSalida,   0, 59, 0);
+        inicializarSpinner(spHoraLlegada, 0, 23, 10);
+        inicializarSpinner(spMinLlegada,  0, 59, 0);
+
         tablaRutas.setItems(dataRutas);
-        cmbTren.setItems(listaTrenes);  // lista persistente — se rellena en cargarTrenes()
+        cmbTren.setItems(listaTrenes);
 
         tablaRutas.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -134,6 +152,14 @@ public class RouteController implements Initializable {
                     }
                 });
             }
+        });
+    }
+
+    private void inicializarSpinner(Spinner<Integer> spinner, int min, int max, int inicial) {
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, inicial));
+        spinner.setEditable(true);
+        spinner.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) spinner.getEditor().setText(oldVal);
         });
     }
 
@@ -172,42 +198,46 @@ public class RouteController implements Initializable {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // ── Abrir modo edición de una ruta existente ──────────────────────────────
+    // ── Abrir modo edición ────────────────────────────────────────────────────
 
     private void abrirEdicion(Route r) {
-        // Solo se permite editar si la ruta no está activa (no ha iniciado)
         if (r.isActive()) {
             mostrarError("Solo se pueden editar rutas inactivas (desactívala primero).");
             return;
         }
+        // Cerrar panel de abordaje si estaba abierto
+        panelAbordaje.setVisible(false);
+        panelAbordaje.setManaged(false);
+
         rutaEnEdicion = r;
         lblTituloForm.setText("Editar Ruta");
         txtNombre.setText(r.getName());
-        txtFechaSalida.setText(r.getDateTravel());
-        txtFechaLlegada.setText(r.getDateArrival());
 
-        // Seleccionar estación origen
-        for (Station s : estaciones) {
-            if (s.equals(r.getOrigin())) { cmbOrigen.setValue(s); break; }
+        // Cargar fechas y horas en los controles
+        if (r.getDateTravel() != null) {
+            dpFechaSalida.setValue(r.getDateTravel().toLocalDate());
+            spHoraSalida.getValueFactory().setValue(r.getDateTravel().getHour());
+            spMinSalida.getValueFactory().setValue(r.getDateTravel().getMinute());
         }
-        // Seleccionar estación destino
-        for (Station s : estaciones) {
-            if (s.equals(r.getDestiny())) { cmbDestino.setValue(s); break; }
+        if (r.getDateArrival() != null) {
+            dpFechaLlegada.setValue(r.getDateArrival().toLocalDate());
+            spHoraLlegada.getValueFactory().setValue(r.getDateArrival().getHour());
+            spMinLlegada.getValueFactory().setValue(r.getDateArrival().getMinute());
         }
-        // Seleccionar tren
+
+        for (Station s : estaciones) {
+            if (s.equals(r.getOrigin()))  { cmbOrigen.setValue(s);  }
+            if (s.equals(r.getDestiny())) { cmbDestino.setValue(s); }
+        }
+
         cargarTrenes();
         try {
             Queue<Train> cola = routeService.seeTrainsPerRoute(r.getId());
-            if (cola != null) {
-                // El primer tren de la cola es el asignado
+            if (cola != null && !cola.isEmpty()) {
                 Iterator<Train> it = trainService.getTrains().iterator();
                 while (it.hasNext()) {
                     Train t = it.next();
-                    // Buscamos el tren cuyo id coincida con el de la ruta
-                    if (!cola.isEmpty() && t.equals(cola.peek())) {
-                        cmbTren.setValue(t);
-                        break;
-                    }
+                    if (t.equals(cola.peek())) { cmbTren.setValue(t); break; }
                 }
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -217,7 +247,7 @@ public class RouteController implements Initializable {
         mostrarPanel(true);
     }
 
-    // ── Handlers ──────────────────────────────────────────────────────────────
+    // ── Handlers ─────────────────────────────────────────────────────────────
 
     @FXML private void handleBuscar() {
         String q = txtBuscar.getText().toLowerCase().trim();
@@ -236,13 +266,13 @@ public class RouteController implements Initializable {
         lblTituloForm.setText("Nueva Ruta");
         cargarTrenes();
         limpiarFormulario();
+        panelAbordaje.setVisible(false);
+        panelAbordaje.setManaged(false);
         mostrarPanel(true);
     }
 
-    @FXML private void handleOrigenCambio()  {
-        actualizarEstacionesLabel(); }
-    @FXML private void handleDestinoCambio() {
-        actualizarEstacionesLabel(); }
+    @FXML private void handleOrigenCambio()  { actualizarEstacionesLabel(); }
+    @FXML private void handleDestinoCambio() { actualizarEstacionesLabel(); }
 
     private void actualizarEstacionesLabel() {
         Station org = cmbOrigen.getValue();
@@ -265,31 +295,44 @@ public class RouteController implements Initializable {
     }
 
     @FXML private void handleGuardar() {
-        String nombre    = txtNombre.getText().trim();
-        Station org      = cmbOrigen.getValue();
-        Station dst      = cmbDestino.getValue();
-        Train tren       = cmbTren.getValue();
-        String fechaSal  = txtFechaSalida.getText().trim();
-        String fechaLleg = txtFechaLlegada.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        Station org   = cmbOrigen.getValue();
+        Station dst   = cmbDestino.getValue();
+        Train tren    = cmbTren.getValue();
 
-        if (nombre.isEmpty())     { mostrarError("El nombre es obligatorio."); return; }
-        if (org == null)          { mostrarError("Selecciona la estación de origen."); return; }
-        if (dst == null)          { mostrarError("Selecciona la estación de destino."); return; }
-        if (org.equals(dst))      { mostrarError("Origen y destino deben ser distintos."); return; }
-        if (tren == null)         { mostrarError("Selecciona un tren."); return; }
-        if (fechaSal.isEmpty())   { mostrarError("Ingresa la fecha de salida."); return; }
-        if (fechaLleg.isEmpty())  { mostrarError("Ingresa la fecha de llegada."); return; }
-        if (routeService == null) { mostrarError("Servidor no disponible."); return; }
+        // Construir LocalDateTime desde DatePicker + Spinners
+        LocalDate fechaSalDate = dpFechaSalida.getValue();
+        LocalDate fechaLlegDate = dpFechaLlegada.getValue();
+
+        if (nombre.isEmpty())        { mostrarError("El nombre es obligatorio."); return; }
+        if (org == null)             { mostrarError("Selecciona la estación de origen."); return; }
+        if (dst == null)             { mostrarError("Selecciona la estación de destino."); return; }
+        if (org.equals(dst))         { mostrarError("Origen y destino deben ser distintos."); return; }
+        if (tren == null)            { mostrarError("Selecciona un tren."); return; }
+        if (fechaSalDate == null)    { mostrarError("Selecciona la fecha de salida."); return; }
+        if (fechaLlegDate == null)   { mostrarError("Selecciona la fecha de llegada."); return; }
+        if (routeService == null)    { mostrarError("Servidor no disponible."); return; }
+
+        // Leer horas de spinners (forzar commit del texto)
+        spHoraSalida.increment(0);  spMinSalida.increment(0);
+        spHoraLlegada.increment(0); spMinLlegada.increment(0);
+
+        LocalDateTime fechaSal  = fechaSalDate.atTime(spHoraSalida.getValue(), spMinSalida.getValue());
+        LocalDateTime fechaLleg = fechaLlegDate.atTime(spHoraLlegada.getValue(), spMinLlegada.getValue());
+
+        if (!fechaLleg.isAfter(fechaSal)) {
+            mostrarError("La fecha/hora de llegada debe ser posterior a la de salida.");
+            return;
+        }
 
         try {
             if (rutaEnEdicion == null) {
-                // ── Validar que el tren no esté ya en una ruta activa ──
+                // ── Validar tren libre ──
                 String rutaUsando = routeService.getRouteNameUsingTrain(tren);
                 if (rutaUsando != null) {
                     mostrarError("El tren ya está asignado a la ruta activa: \"" + rutaUsando + "\".");
                     return;
                 }
-                // ── Crear nueva ruta ──
                 Queue<Train> cola = new Queue<>();
                 cola.insert(tren);
                 int nuevoId = dataRutas.size() + 1;
@@ -297,13 +340,12 @@ public class RouteController implements Initializable {
                         fechaSal, fechaLleg, org, dst, adminFicticio());
                 dataRutas.add(r);
             } else {
-                // ── Validar tren al editar (ignorar si es el mismo tren que ya tenía) ──
+                // ── Editar ──
                 String rutaUsando = routeService.getRouteNameUsingTrain(tren);
                 if (rutaUsando != null && !rutaUsando.equals(rutaEnEdicion.getName())) {
                     mostrarError("El tren ya está asignado a la ruta activa: \"" + rutaUsando + "\".");
                     return;
                 }
-                // ── Editar ruta existente ──
                 rutaEnEdicion.setName(nombre);
                 rutaEnEdicion.setDateTravel(fechaSal);
                 rutaEnEdicion.setDateArrival(fechaLleg);
@@ -319,22 +361,15 @@ public class RouteController implements Initializable {
         } catch (Exception ex) { mostrarError(ex.getMessage()); }
     }
 
-    // ── Panel de abordaje ──
-    @FXML private VBox panelAbordaje;
-    @FXML private Label lblTituloAbordaje;
-    @FXML private TextArea txtOrdenAbordaje;
+    // ── Panel abordaje ──────────────────────────────────────────────────────
 
-    /** Muestra el orden de abordaje de una ruta en el panel lateral */
     private void mostrarAbordaje(Route r) {
         mostrarPanel(false);
         try {
             LinkedList<String> orden = routeService.getBoardingOrder(r.getId());
             StringBuilder sb = new StringBuilder();
-            Iterator<String> iterador=orden.iterator();
-            while(iterador.hasNext()){
-                sb.append(iterador.next()).append("\n");
-            }
-
+            Iterator<String> iterador = orden.iterator();
+            while (iterador.hasNext()) sb.append(iterador.next()).append("\n");
             lblTituloAbordaje.setText("Abordaje: " + r.getName());
             txtOrdenAbordaje.setText(sb.toString());
         } catch (Exception e) {
@@ -355,12 +390,9 @@ public class RouteController implements Initializable {
     }
 
     // ── Navegación ──
-    @FXML private void irTrenes()       {
-        ServerFactory.navigateToTrains ((Stage) tablaRutas.getScene().getWindow()); }
-    @FXML private void irUsuarios()     {
-        ServerFactory.navigateToUsers   ((Stage) tablaRutas.getScene().getWindow()); }
-    @FXML private void irTrabajadores() {
-        ServerFactory.navigateToWorkers ((Stage) tablaRutas.getScene().getWindow()); }
+    @FXML private void irTrenes()       { ServerFactory.navigateToTrains ((Stage) tablaRutas.getScene().getWindow()); }
+    @FXML private void irUsuarios()     { ServerFactory.navigateToUsers  ((Stage) tablaRutas.getScene().getWindow()); }
+    @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaRutas.getScene().getWindow()); }
 
     // ── Helpers ──
     private Admin adminFicticio() {
@@ -368,7 +400,13 @@ public class RouteController implements Initializable {
     }
     private void mostrarPanel(boolean v) { panelForm.setVisible(v); panelForm.setManaged(v); }
     private void limpiarFormulario() {
-        txtNombre.clear(); txtFechaSalida.clear(); txtFechaLlegada.clear();
+        txtNombre.clear();
+        dpFechaSalida.setValue(null);
+        dpFechaLlegada.setValue(null);
+        spHoraSalida.getValueFactory().setValue(8);
+        spMinSalida.getValueFactory().setValue(0);
+        spHoraLlegada.getValueFactory().setValue(10);
+        spMinLlegada.getValueFactory().setValue(0);
         cmbOrigen.getSelectionModel().clearSelection();
         cmbDestino.getSelectionModel().clearSelection();
         cmbTren.getSelectionModel().clearSelection();
@@ -387,7 +425,7 @@ public class RouteController implements Initializable {
     }
     private void ocultarError() { lblErrorForm.setVisible(false); lblErrorForm.setManaged(false); }
 
-    public void refreshRoutes(){
+    public void refreshRoutes() {
         cargarTabla();
         cargarEstaciones();
         cargarTrenes();

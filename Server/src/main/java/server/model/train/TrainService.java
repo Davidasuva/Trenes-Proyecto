@@ -4,10 +4,14 @@ import java.rmi.server.UnicastRemoteObject;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
 import server.model.carriage.AbstractCarriage;
+import server.model.carriage.CarriagePassenger;
+import server.model.carriage.CarriageLoad;
 import server.model.user.AbstractUser;
 
 public class TrainService extends UnicastRemoteObject implements TrainInterface {
     private LinkedList<Train> trains=new LinkedList<>();
+    // Contador global para IDs de vagones (auto-incremental)
+    private int carriageIdCounter = 1;
 
     public TrainService() throws RemoteException {
         super();
@@ -54,6 +58,18 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
             throw new RemoteException("Ya existe un tren con el id: " + train.getId());
         }
         validarVagones(train.getType(), train.getCapacity(), train.getCargoWagons());
+
+        // Crear automáticamente los vagones de pasajeros (capacidad 40 por vagón)
+        for (int i = 0; i < train.getCapacity(); i++) {
+            CarriagePassenger cp = new CarriagePassenger(carriageIdCounter++, 40);
+            train.addCarriage(cp);
+        }
+        // Crear automáticamente los vagones de carga (capacidad máx = 2 maletas * 80kg = 160 kg)
+        for (int i = 0; i < train.getCargoWagons(); i++) {
+            CarriageLoad cl = new CarriageLoad(carriageIdCounter++, 160);
+            train.addCarriage(cl);
+        }
+
         trains.add(train);
         return train;
     }

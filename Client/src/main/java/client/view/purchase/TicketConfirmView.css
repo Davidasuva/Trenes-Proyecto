@@ -1,0 +1,110 @@
+/* ═══════════════════════════════════════════════════════════════
+   trenes — TicketConfirmView.css
+   ═══════════════════════════════════════════════════════════════ */
+
+.raiz-confirm {
+    -fx-background-color: #F9FAFB;
+}
+
+.confirm-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 0 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 3);
+}
+
+.confirm-header {
+    -fx-background-color: #3D4147;
+    -fx-padding: 28px 32px 22px 32px;
+    -fx-background-radius: 12px 12px 0 0;
+}
+
+.check-icon {
+    -fx-font-size: 36px;
+    -fx-text-fill: #D1FAE5;
+}
+
+.confirm-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.confirm-id {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #9AA3AE;
+}
+
+.info-grid {
+    -fx-padding: 0 28px;
+}
+
+.seccion-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9AA3AE;
+}
+
+.info-row {
+    -fx-padding: 7px 0;
+    -fx-border-color: transparent transparent #F3F4F6 transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.info-key {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+    -fx-min-width: 160px;
+    -fx-pref-width: 160px;
+}
+
+.info-val {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-font-weight: bold;
+}
+
+.separador {
+    -fx-background-color: #E5E7EB;
+    -fx-pref-height: 1px;
+}
+
+.maleta-info-row {
+    -fx-padding: 6px 12px;
+    -fx-background-color: #F9FAFB;
+    -fx-background-radius: 6px;
+}
+
+.maleta-info-text {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #3D4147;
+}
+
+.no-maletas {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #9AA3AE;
+}
+
+.btn-volver-inicio {
+    -fx-background-color: #3D4147;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-margin: 0 28px;
+}
+
+.btn-volver-inicio:hover  { -fx-background-color: #2A2E33; }
+.btn-volver-inicio:pressed { -fx-background-color: #1E2226; }

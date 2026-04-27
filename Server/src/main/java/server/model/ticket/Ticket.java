@@ -116,6 +116,10 @@ public class Ticket implements Serializable {
         passenger.setTraveling();
     }
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public Passenger getPassenger() {
         return passenger;
     }

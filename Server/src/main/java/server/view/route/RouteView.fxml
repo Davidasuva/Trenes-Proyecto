@@ -10,14 +10,16 @@
       fx:controller="server.controller.route.RouteController"
       styleClass="raiz-admin"
       stylesheets="@AdminView.css"
-      prefWidth="1100" prefHeight="700">
+      prefWidth="1400" prefHeight="800">
 
     <VBox HBox.hgrow="ALWAYS" spacing="0">
 
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="20">
             <HBox alignment="CENTER" spacing="8">
                 <ImageView fitWidth="28" fitHeight="28" preserveRatio="true">
-                    <image><Image url="@../auth/train-travel-round-icon2-by-Vexels.png"/></image>
+                    <image>
+                        <Image url="@../auth/login/Tren.jpeg"/>
+                    </image>
                 </ImageView>
                 <Label text="trenes" styleClass="nav-brand"/>
             </HBox>
@@ -25,7 +27,7 @@
             <Button text="rutas"        styleClass="nav-link-active"/>
             <Button text="trenes"       styleClass="nav-link" onAction="#irTrenes"/>
             <Button text="usuarios"     styleClass="nav-link" onAction="#irUsuarios"/>
-            <Button text="trabajadores" styleClass="nav-link" onAction="#irTrabajadores"/>
+            <Button text="tickets"      styleClass="nav-link" onAction="#irTickets"/>
         </HBox>
 
         <VBox VBox.vgrow="ALWAYS" spacing="0">
@@ -52,13 +54,15 @@
 
             <TableView fx:id="tablaRutas" styleClass="tabla" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colId"       text="ID"        prefWidth="60"/>
-                    <TableColumn fx:id="colNombre"   text="Nombre"    prefWidth="160"/>
-                    <TableColumn fx:id="colOrigen"   text="Origen"    prefWidth="160"/>
-                    <TableColumn fx:id="colDestino"  text="Destino"   prefWidth="160"/>
-                    <TableColumn fx:id="colDistancia" text="Dist. km" prefWidth="90"/>
-                    <TableColumn fx:id="colEstado"   text="Estado"    prefWidth="90"/>
-                    <TableColumn fx:id="colAcciones" text="Acciones"  prefWidth="350"/>
+                    <TableColumn fx:id="colId"          text="ID"          prefWidth="50"/>
+                    <TableColumn fx:id="colNombre"       text="Nombre"      prefWidth="130"/>
+                    <TableColumn fx:id="colOrigen"       text="Origen"      prefWidth="110"/>
+                    <TableColumn fx:id="colDestino"      text="Destino"     prefWidth="110"/>
+                    <TableColumn fx:id="colDistancia"    text="Dist. km"    prefWidth="75"/>
+                    <TableColumn fx:id="colFechaSalida"  text="Salida"      prefWidth="120"/>
+                    <TableColumn fx:id="colFechaLlegada" text="Llegada"     prefWidth="120"/>
+                    <TableColumn fx:id="colEstado"       text="Estado"      prefWidth="80"/>
+                    <TableColumn fx:id="colAcciones"     text="Acciones"    prefWidth="350"/>
                 </columns>
                 <placeholder>
                     <Label text="No hay rutas registradas." styleClass="seccion-subtitulo"/>
@@ -69,7 +73,7 @@
 
     <!-- Panel derecho: formulario -->
     <VBox fx:id="panelForm" styleClass="panel-form"
-          prefWidth="340" spacing="0"
+          prefWidth="500" spacing="0"
           visible="false" managed="false">
 
         <Label fx:id="lblTituloForm" text="Nueva Ruta" styleClass="form-titulo"/>
@@ -104,7 +108,6 @@
 
         <Region minHeight="12" maxHeight="12"/>
 
-        <!-- Estaciones intermedias (del camino calculado) -->
         <Label text="Estaciones en la ruta" styleClass="form-label"/>
         <Region minHeight="5" maxHeight="5"/>
         <Label fx:id="lblEstaciones" text="Selecciona origen y destino"
@@ -112,15 +115,33 @@
 
         <Region minHeight="12" maxHeight="12"/>
 
+        <!-- Fecha y hora de salida -->
         <Label text="Fecha de salida" styleClass="form-label"/>
         <Region minHeight="5" maxHeight="5"/>
-        <TextField fx:id="txtFechaSalida" promptText="DD/MM/AAAA" styleClass="campo"/>
+        <DatePicker fx:id="dpFechaSalida" styleClass="combo-campo" maxWidth="Infinity"
+                    promptText="dd/mm/aaaa"/>
+        <Region minHeight="6" maxHeight="6"/>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <Label text="Hora:" styleClass="form-label" minWidth="35"/>
+            <Spinner fx:id="spHoraSalida" prefWidth="100" styleClass="campo" editable="true"/>
+            <Label text="Min:" styleClass="form-label" minWidth="35"/>
+            <Spinner fx:id="spMinSalida" prefWidth="100" styleClass="campo" editable="true"/>
+        </HBox>
 
         <Region minHeight="12" maxHeight="12"/>
 
+        <!-- Fecha y hora de llegada -->
         <Label text="Fecha de llegada" styleClass="form-label"/>
         <Region minHeight="5" maxHeight="5"/>
-        <TextField fx:id="txtFechaLlegada" promptText="DD/MM/AAAA" styleClass="campo"/>
+        <DatePicker fx:id="dpFechaLlegada" styleClass="combo-campo" maxWidth="Infinity"
+                    promptText="dd/mm/aaaa"/>
+        <Region minHeight="6" maxHeight="6"/>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <Label text="Hora:" styleClass="form-label" minWidth="35"/>
+            <Spinner fx:id="spHoraLlegada" prefWidth="100" styleClass="campo" editable="true"/>
+            <Label text="Min:" styleClass="form-label" minWidth="35"/>
+            <Spinner fx:id="spMinLlegada" prefWidth="100" styleClass="campo" editable="true"/>
+        </HBox>
 
         <Region minHeight="6" maxHeight="6"/>
 

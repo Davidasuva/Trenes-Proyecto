@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="client.controller.purchase.TicketConfirmController"
+           styleClass="raiz-confirm"
+           stylesheets="@TicketConfirmView.css">
+
+    <VBox spacing="0" maxWidth="600" alignment="TOP_CENTER"
+          styleClass="confirm-card">
+
+        <!-- Encabezado éxito -->
+        <VBox alignment="CENTER" spacing="6" styleClass="confirm-header">
+            <Label text="✔" styleClass="check-icon"/>
+            <Label text="¡Tiquete confirmado!" styleClass="confirm-titulo"/>
+            <Label fx:id="lblTicketId" styleClass="confirm-id"/>
+        </VBox>
+
+        <Region minHeight="20" maxHeight="20"/>
+
+        <!-- Grid de información -->
+        <VBox styleClass="info-grid" spacing="0">
+
+            <Label text="INFORMACIÓN DEL TIQUETE" styleClass="seccion-label"/>
+            <Region minHeight="10" maxHeight="10"/>
+
+            <HBox styleClass="info-row">
+                <Label text="ID Tiquete" styleClass="info-key"/>
+                <Label fx:id="lblId" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="ID Usuario" styleClass="info-key"/>
+                <Label fx:id="lblUserId" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Pasajero" styleClass="info-key"/>
+                <Label fx:id="lblPasajero" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Fecha de compra" styleClass="info-key"/>
+                <Label fx:id="lblFechaCompra" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Categoría" styleClass="info-key"/>
+                <Label fx:id="lblCategoria" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Precio" styleClass="info-key"/>
+                <Label fx:id="lblPrecio" styleClass="info-val" style="-fx-font-weight: bold; -fx-text-fill: #166534;"/>
+            </HBox>
+
+            <Region minHeight="14" maxHeight="14"/>
+            <Pane styleClass="separador"/>
+            <Region minHeight="14" maxHeight="14"/>
+
+            <Label text="RUTA" styleClass="seccion-label"/>
+            <Region minHeight="10" maxHeight="10"/>
+
+            <HBox styleClass="info-row">
+                <Label text="Ruta" styleClass="info-key"/>
+                <Label fx:id="lblRuta" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Origen" styleClass="info-key"/>
+                <Label fx:id="lblOrigen" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Destino" styleClass="info-key"/>
+                <Label fx:id="lblDestino" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Distancia" styleClass="info-key"/>
+                <Label fx:id="lblDistancia" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Salida" styleClass="info-key"/>
+                <Label fx:id="lblSalida" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Llegada" styleClass="info-key"/>
+                <Label fx:id="lblLlegada" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row" alignment="TOP_LEFT">
+                <Label text="Estaciones" styleClass="info-key"/>
+                <Label fx:id="lblEstaciones" styleClass="info-val" wrapText="true"/>
+            </HBox>
+
+            <Region minHeight="14" maxHeight="14"/>
+            <Pane styleClass="separador"/>
+            <Region minHeight="14" maxHeight="14"/>
+
+            <Label text="TREN Y VAGONES" styleClass="seccion-label"/>
+            <Region minHeight="10" maxHeight="10"/>
+
+            <HBox styleClass="info-row">
+                <Label text="Tren" styleClass="info-key"/>
+                <Label fx:id="lblTren" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Vagón pasajeros" styleClass="info-key"/>
+                <Label fx:id="lblVagonPasajero" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Vagón maletas" styleClass="info-key"/>
+                <Label fx:id="lblVagonMaleta" styleClass="info-val"/>
+            </HBox>
+
+            <Region minHeight="14" maxHeight="14"/>
+            <Pane styleClass="separador"/>
+            <Region minHeight="14" maxHeight="14"/>
+
+            <Label text="MALETAS REGISTRADAS" styleClass="seccion-label"/>
+            <Region minHeight="10" maxHeight="10"/>
+            <VBox fx:id="vboxMaletas" spacing="4"/>
+
+        </VBox>
+
+        <Region minHeight="24" maxHeight="24"/>
+
+        <Button text="Volver al inicio"
+                maxWidth="Infinity" prefHeight="44"
+                styleClass="btn-volver-inicio"
+                onAction="#handleVolver"/>
+
+        <Region minHeight="16" maxHeight="16"/>
+
+    </VBox>
+
+</StackPane>

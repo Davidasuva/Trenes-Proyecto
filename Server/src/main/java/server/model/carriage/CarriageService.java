@@ -103,4 +103,6 @@ public class CarriageService extends UnicastRemoteObject implements CarriageInte
     public LinkedList<AbstractCarriage> getCarriages() throws RemoteException {
         return carriages;
     }
+
+
 }

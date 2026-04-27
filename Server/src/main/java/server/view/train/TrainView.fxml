@@ -16,7 +16,9 @@
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="20">
             <HBox alignment="CENTER" spacing="8">
                 <ImageView fitWidth="28" fitHeight="28" preserveRatio="true">
-                    <image><Image url="@../auth/train-travel-round-icon2-by-Vexels.png"/></image>
+                    <image>
+                        <Image url="@../auth/login/Tren.jpeg"/>
+                    </image>
                 </ImageView>
                 <Label text="trenes" styleClass="nav-brand"/>
             </HBox>
@@ -24,7 +26,7 @@
             <Button text="rutas"        styleClass="nav-link" onAction="#irRutas"/>
             <Button text="trenes"       styleClass="nav-link-active"/>
             <Button text="usuarios"     styleClass="nav-link" onAction="#irUsuarios"/>
-            <Button text="trabajadores" styleClass="nav-link" onAction="#irTrabajadores"/>
+            <Button text="tickets"      styleClass="nav-link" onAction="#irTickets"/>
         </HBox>
 
         <VBox VBox.vgrow="ALWAYS" spacing="0">
@@ -79,9 +81,9 @@
         <Label fx:id="lblTituloForm" text="Nuevo Tren" styleClass="form-titulo"/>
         <Region minHeight="22" maxHeight="22"/>
 
-        <Label text="ID (solo números)" styleClass="form-label"/>
+        <Label text="ID (asignado automáticamente)" styleClass="form-label"/>
         <Region minHeight="5" maxHeight="5"/>
-        <TextField fx:id="txtId" promptText="Ej: 101" styleClass="campo"/>
+        <Label fx:id="txtId" text="— se genera al guardar —" styleClass="form-label" style="-fx-text-fill: #6B7280; -fx-font-style: italic;"/>
 
         <Region minHeight="14" maxHeight="14"/>
 

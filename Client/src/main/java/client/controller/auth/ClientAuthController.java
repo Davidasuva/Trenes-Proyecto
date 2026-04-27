@@ -6,6 +6,7 @@ import client.view.dashboard.DashboardView;
 import environment.Environment;
 import javafx.animation.*;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -25,31 +26,41 @@ public class ClientAuthController {
     @FXML private Button btnOjoLogin;
     @FXML private VBox panelRegister;
     @FXML private TextField txtRegNombre, txtRegApellido, txtRegMail;
-    @FXML private TextField txtRegId, txtRegTipoId, txtRegDir;
+    @FXML private TextField txtRegId, txtRegDir;
+    @FXML private ComboBox<String> cmbRegTipoId;
     @FXML private PasswordField txtRegPass;
     @FXML private TextField txtRegPassVisible;
     @FXML private Button btnOjoReg;
     @FXML private Label lblError;
     @FXML private Button btnAccion;
 
-    private boolean modoLogin           = true;
-    private boolean loginPassVisible    = false;
-    private boolean regPassVisible      = false;
+    private boolean modoLogin        = true;
+    private boolean loginPassVisible = false;
+    private boolean regPassVisible   = false;
 
     private ClientModel model;
     private Observer modelObserver;
 
     @FXML
     public void initialize() {
-        try{
+        try {
+            // Cargar opciones del combobox de tipo de documento
+            cmbRegTipoId.setItems(FXCollections.observableArrayList(
+                    "Cédula de Ciudadanía (C.C.)",
+                    "Tarjeta de Identidad (T.I.)",
+                    "Cédula de Extranjería (C.E.)",
+                    "Pasaporte",
+                    "NIT",
+                    "Registro Civil"
+            ));
+
             Environment env = Environment.getInstance();
             model = new ClientModel(env.getIp(), env.getPort(), env.getServiceName());
 
-            modelObserver=new Observer(model) {
+            modelObserver = new Observer(model) {
                 @Override
                 public void update() {
-                    javafx.application.Platform.runLater(() ->
-                            mostrarError(model.getLogger()));
+                    Platform.runLater(() -> mostrarError(model.getLogger()));
                 }
             };
 
@@ -59,12 +70,11 @@ public class ClientAuthController {
                     if (!connected) {
                         mostrarError("No se pudo conectar al servidor. Verifica que esté activo.");
                         btnAccion.setDisable(true);
-                    } else {
-                        System.out.println("Conectado al servidor exitosamente");
                     }
                 });
             }).start();
 
+            // Sincronizar campos contraseña login
             txtLoginPass.textProperty().addListener((obs, o, n) -> {
                 if (!loginPassVisible) txtLoginPassVisible.setText(n);
             });
@@ -72,6 +82,7 @@ public class ClientAuthController {
                 if (loginPassVisible) txtLoginPass.setText(n);
             });
 
+            // Sincronizar campos contraseña registro
             txtRegPass.textProperty().addListener((obs, o, n) -> {
                 if (!regPassVisible) txtRegPassVisible.setText(n);
             });
@@ -86,16 +97,14 @@ public class ClientAuthController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarError("Error al iniciar la aplicación: "+e.getMessage());
+            mostrarError("Error al iniciar la aplicación: " + e.getMessage());
         }
-
     }
+
     @FXML public void showLogin() {
         modoLogin = true;
-        panelLogin.setVisible(true);
-        panelLogin.setManaged(true);
-        panelRegister.setVisible(false);
-        panelRegister.setManaged(false);
+        panelLogin.setVisible(true);   panelLogin.setManaged(true);
+        panelRegister.setVisible(false); panelRegister.setManaged(false);
         btnTabLogin.getStyleClass().setAll("tab-active");
         btnTabRegister.getStyleClass().setAll("tab-inactive");
         btnAccion.setText("Iniciar sesión");
@@ -135,6 +144,7 @@ public class ClientAuthController {
             hidden.requestFocus();
         }
     }
+
     @FXML
     public void handleAccion() {
         lblError.setVisible(false);
@@ -146,20 +156,18 @@ public class ClientAuthController {
         String mail = txtLoginMail.getText().trim();
         String pass = loginPassVisible ? txtLoginPassVisible.getText() : txtLoginPass.getText();
 
-        if (mail.isEmpty()) { sacudir(txtLoginMail);  return; }
-        if (pass.isEmpty()) { sacudir(txtLoginPass);   return; }
+        if (mail.isEmpty()) { sacudir(txtLoginMail); return; }
+        if (pass.isEmpty()) { sacudir(txtLoginPass);  return; }
 
         btnAccion.setDisable(true);
-        btnAccion.setText("Conectando");
+        btnAccion.setText("Conectando...");
         new Thread(() -> {
             boolean success = model.connect(mail, pass);
             Platform.runLater(() -> {
                 btnAccion.setDisable(false);
-                btnAccion.setText(modoLogin ? "Iniciar sesión" : "Crear cuenta");
-
-                if (success) {
-                    abrirDashboard();
-                } else {
+                btnAccion.setText("Iniciar sesión");
+                if (success) abrirDashboard();
+                else {
                     sacudir(btnAccion);
                     mostrarError("Credenciales incorrectas o error de conexión");
                 }
@@ -172,12 +180,12 @@ public class ClientAuthController {
         String apellido = txtRegApellido.getText().trim();
         String mail     = txtRegMail.getText().trim();
         String id       = txtRegId.getText().trim();
-        String tipoId   = txtRegTipoId.getText().trim();
+        String tipoId   = cmbRegTipoId.getValue();
         String dir      = txtRegDir.getText().trim();
         String pass     = regPassVisible ? txtRegPassVisible.getText() : txtRegPass.getText();
 
         if (nombre.isEmpty() || apellido.isEmpty() || mail.isEmpty()
-                || id.isEmpty() || tipoId.isEmpty() || dir.isEmpty() || pass.isEmpty()) {
+                || id.isEmpty() || tipoId == null || dir.isEmpty() || pass.isEmpty()) {
             mostrarError("Completa todos los campos.");
             sacudir(btnAccion);
             return;
@@ -190,51 +198,31 @@ public class ClientAuthController {
         }
     }
 
-    /**
-     * Cambia la escena actual al Dashboard.
-     * Es el único lugar donde se instancia DashboardView;
-     * toda la lógica de transición queda encapsulada aquí.
-     */
     private void abrirDashboard() {
         try {
             DashboardView dashboard = new DashboardView(model);
             Stage stage = (Stage) btnAccion.getScene().getWindow();
             stage.setTitle("trenes — " + model.getCurrentPassenger().getName());
             stage.setResizable(true);
-            stage.setScene(new Scene(dashboard.getView(), 820, 560));
+            stage.setScene(new Scene(dashboard.getView(), 960, 640));
             stage.centerOnScreen();
         } catch (Exception e) {
             e.printStackTrace();
             mostrarError("Error al abrir el dashboard.");
         }
     }
+
     private void mostrarError(String msg) {
         lblError.setText(msg);
         lblError.setVisible(true);
         FadeTransition ft = new FadeTransition(Duration.millis(200), lblError);
         ft.setFromValue(0); ft.setToValue(1); ft.play();
-        new Thread(() -> {
-            try {
-                Thread.sleep(3000);
-                Platform.runLater(() -> {
-                    FadeTransition ftOut = new FadeTransition(Duration.millis(200), lblError);
-                    ftOut.setFromValue(1);
-                    ftOut.setToValue(0);
-                    ftOut.setOnFinished(e -> lblError.setVisible(false));
-                    ftOut.play();
-                });
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
     }
 
     private void sacudir(Node n) {
         TranslateTransition tt = new TranslateTransition(Duration.millis(55), n);
-        tt.setFromX(0);
-        tt.setByX(6);
-        tt.setCycleCount(6);
-        tt.setAutoReverse(true);
+        tt.setFromX(0); tt.setByX(6);
+        tt.setCycleCount(6); tt.setAutoReverse(true);
         tt.play();
     }
 }

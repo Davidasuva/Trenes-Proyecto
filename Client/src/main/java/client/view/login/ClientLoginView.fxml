@@ -16,27 +16,27 @@
             <Label text="trenes" styleClass="logo-texto"/>
         </HBox>
 
-        <Region minHeight="20" maxHeight="20"/>
+        <Region minHeight="30" maxHeight="30"/>
 
         <!-- Tabs: Iniciar sesión / Crear cuenta -->
-        <HBox alignment="CENTER" spacing="10" styleClass="tab-bar">
+        <HBox alignment="CENTER" spacing="0" styleClass="tab-bar">
             <Button fx:id="btnTabLogin"
                     text="Iniciar sesión"
                     styleClass="tab-active"
-                    maxWidth="170"
+                    prefWidth="170" prefHeight="38"
                     onAction="#showLogin"/>
             <Button fx:id="btnTabRegister"
                     text="Crear cuenta"
                     styleClass="tab-inactive"
-                    maxWidth="170"
+                    prefWidth="170" prefHeight="38"
                     onAction="#showRegister"/>
         </HBox>
 
-        <Region minHeight="20" maxHeight="20"/>
+        <Region minHeight="22" maxHeight="22"/>
 
         <!-- ── PANEL LOGIN ── -->
         <VBox fx:id="panelLogin" spacing="12" maxWidth="340">
-            <TextField fx:id="txtLoginMail"   promptText="Correo" styleClass="campo" maxWidth="340"/>
+            <TextField fx:id="txtLoginMail" promptText="Correo" styleClass="campo" maxWidth="340"/>
             <StackPane maxWidth="340">
                 <PasswordField fx:id="txtLoginPass"        promptText="Contraseña" styleClass="campo"/>
                 <TextField     fx:id="txtLoginPassVisible" promptText="Contraseña" styleClass="campo" visible="false"/>
@@ -53,10 +53,10 @@
                 <TextField fx:id="txtRegNombre"   promptText="Nombre"   styleClass="campo" HBox.hgrow="ALWAYS"/>
                 <TextField fx:id="txtRegApellido" promptText="Apellido" styleClass="campo" HBox.hgrow="ALWAYS"/>
             </HBox>
-            <TextField fx:id="txtRegMail"     promptText="Correo"     styleClass="campo" maxWidth="340"/>
-            <TextField fx:id="txtRegId"       promptText="Número de identificación" styleClass="campo" maxWidth="340"/>
-            <TextField fx:id="txtRegTipoId"   promptText="Tipo de ID (C.C, Pasaporte…)" styleClass="campo" maxWidth="340"/>
-            <TextField fx:id="txtRegDir"      promptText="Dirección"  styleClass="campo" maxWidth="340"/>
+            <TextField fx:id="txtRegMail" promptText="Correo" styleClass="campo" maxWidth="340"/>
+            <TextField fx:id="txtRegId"   promptText="Número de identificación" styleClass="campo" maxWidth="340"/>
+            <ComboBox  fx:id="cmbRegTipoId" promptText="Tipo de documento" styleClass="combo-campo" maxWidth="340"/>
+            <TextField fx:id="txtRegDir"  promptText="Dirección" styleClass="campo" maxWidth="340"/>
             <StackPane maxWidth="340">
                 <PasswordField fx:id="txtRegPass"        promptText="Contraseña" styleClass="campo"/>
                 <TextField     fx:id="txtRegPassVisible" promptText="Contraseña" styleClass="campo" visible="false"/>
@@ -81,6 +81,8 @@
                 styleClass="btn-ingresar"
                 maxWidth="340" prefHeight="44"
                 onAction="#handleAccion"/>
+
+        <Region minHeight="30" maxHeight="30"/>
 
     </VBox>
 </StackPane>

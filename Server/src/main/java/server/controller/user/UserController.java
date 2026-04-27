@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import server.factory.ServerFactory;
@@ -16,7 +17,9 @@ import server.model.user.Passenger;
 import server.model.user.UserService;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class UserController implements Initializable {
 
@@ -35,6 +38,12 @@ public class UserController implements Initializable {
     private UserService userService;
     private ObservableList<AbstractUser> dataUsuarios = FXCollections.observableArrayList();
 
+    /** Usuario siendo editado; null = modo creación */
+    private AbstractUser usuarioEnEdicion = null;
+
+    private static final Pattern EMAIL_PATTERN =
+            Pattern.compile("^[\\w._%+\\-]+@[\\w.\\-]+\\.[a-zA-Z]{2,}$");
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cmbTipoDoc.getItems().addAll("Cédula de ciudadanía", "Pasaporte", "Tarjeta de identidad");
@@ -52,20 +61,30 @@ public class UserController implements Initializable {
                         phones.iterator().hasNext() ? phones.iterator().next() : "—");
             } catch (Exception e) { return new SimpleStringProperty("—"); }
         });
+
         colAcciones.setCellFactory(col -> new TableCell<>() {
+            private final Button btnEditar   = new Button("Editar");
             private final Button btnEliminar = new Button("Eliminar");
+            private final HBox box = new HBox(6, btnEditar, btnEliminar);
             {
+                btnEditar.getStyleClass().add("btn-editar");
                 btnEliminar.getStyleClass().add("btn-peligro");
+
+                btnEditar.setOnAction(e -> {
+                    AbstractUser u = getTableView().getItems().get(getIndex());
+                    abrirEdicion(u);
+                });
                 btnEliminar.setOnAction(e -> {
                     AbstractUser u = getTableView().getItems().get(getIndex());
-                    eliminarUsuario(u);
+                    confirmarYEliminar(u);
                 });
             }
             @Override protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : btnEliminar);
+                setGraphic(empty ? null : box);
             }
         });
+
         tablaUsuarios.setItems(dataUsuarios);
     }
 
@@ -78,10 +97,45 @@ public class UserController implements Initializable {
         dataUsuarios.clear();
         if (userService == null) return;
         try {
-            // Solo pasajeros (tipo 1)
             Iterator<AbstractUser> it = userService.seeUserPerCategory(1).iterator();
             while (it.hasNext()) dataUsuarios.add(it.next());
         } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    // ── Abrir edición ────────────────────────────────────────────────────────
+
+    private void abrirEdicion(AbstractUser u) {
+        usuarioEnEdicion = u;
+        lblTituloForm.setText("Editar Usuario");
+
+        // El ID no se puede cambiar en edición
+        txtId.setText(u.getId());
+        txtId.setDisable(true);
+
+        txtNombre.setText(u.getName());
+        txtApellido.setText(u.getLastName());
+        txtCorreo.setText(u.getMail());
+        txtPassword.setText(u.getPassword());
+        txtDireccion.setText(u.getAdress());
+        cmbTipoDoc.setValue(u.getTypeIdetification());
+
+        ocultarError();
+        mostrarPanel(true);
+    }
+
+    // ── Eliminar con confirmación ─────────────────────────────────────────────
+
+    private void confirmarYEliminar(AbstractUser u) {
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar eliminación");
+        confirmacion.setHeaderText("¿Eliminar usuario?");
+        confirmacion.setContentText("¿Estás seguro de que deseas eliminar a "
+                + u.getName() + " " + u.getLastName() + "? Esta acción no se puede deshacer.");
+
+        Optional<ButtonType> resultado = confirmacion.showAndWait();
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            eliminarUsuario(u);
+        }
     }
 
     private void eliminarUsuario(AbstractUser u) {
@@ -92,6 +146,8 @@ public class UserController implements Initializable {
             tablaUsuarios.refresh();
         } catch (Exception ex) { ex.printStackTrace(); }
     }
+
+    // ── Handlers ────────────────────────────────────────────────────────────
 
     @FXML private void handleBuscar() {
         String q = txtBuscar.getText().toLowerCase().trim();
@@ -107,48 +163,80 @@ public class UserController implements Initializable {
     }
 
     @FXML private void handleNuevoUsuario() {
+        usuarioEnEdicion = null;
         lblTituloForm.setText("Nuevo Usuario");
         limpiarFormulario();
         mostrarPanel(true);
     }
 
     @FXML private void handleGuardar() {
-        String id        = txtId.getText().trim();
-        String nombre    = txtNombre.getText().trim();
-        String apellido  = txtApellido.getText().trim();
-        String correo    = txtCorreo.getText().trim();
-        String password  = txtPassword.getText().trim();
-        String dir       = txtDireccion.getText().trim();
-        String tipoDoc   = cmbTipoDoc.getValue();
+        String id       = txtId.getText().trim();
+        String nombre   = txtNombre.getText().trim();
+        String apellido = txtApellido.getText().trim();
+        String correo   = txtCorreo.getText().trim();
+        String password = txtPassword.getText().trim();
+        String dir      = txtDireccion.getText().trim();
+        String tipoDoc  = cmbTipoDoc.getValue();
 
-        if (id.isEmpty())       { mostrarError("El ID es obligatorio."); return; }
-        if (nombre.isEmpty())   { mostrarError("El nombre es obligatorio."); return; }
-        if (apellido.isEmpty()) { mostrarError("El apellido es obligatorio."); return; }
-        if (correo.isEmpty())   { mostrarError("El correo es obligatorio."); return; }
-        if (password.isEmpty()) { mostrarError("La contraseña es obligatoria."); return; }
-        if (tipoDoc == null)    { mostrarError("Selecciona el tipo de documento."); return; }
-        if (userService == null){ mostrarError("Servidor no disponible."); return; }
+        // ── Validaciones ──
+        if (id.isEmpty())          { mostrarError("El ID es obligatorio."); return; }
+        if (nombre.isEmpty())      { mostrarError("El nombre es obligatorio."); return; }
+        if (apellido.isEmpty())    { mostrarError("El apellido es obligatorio."); return; }
+        if (correo.isEmpty())      { mostrarError("El correo es obligatorio."); return; }
+        if (!EMAIL_PATTERN.matcher(correo).matches()) {
+            mostrarError("El correo no tiene un formato válido."); return;
+        }
+        if (password.isEmpty())    { mostrarError("La contraseña es obligatoria."); return; }
+        if (password.length() < 8) { mostrarError("La contraseña debe tener mínimo 8 caracteres."); return; }
+        if (tipoDoc == null)       { mostrarError("Selecciona el tipo de documento."); return; }
+        if (userService == null)   { mostrarError("Servidor no disponible."); return; }
 
         try {
-            Passenger p = new Passenger(id, correo, nombre, apellido, password, tipoDoc,
-                    dir.isEmpty() ? "—" : dir);
-            userService.registerPassenger(p);
-            dataUsuarios.add(p);
+            if (usuarioEnEdicion == null) {
+                // ── Crear nuevo ──
+                Passenger p = new Passenger(id, correo, nombre, apellido, password, tipoDoc,
+                        dir.isEmpty() ? "—" : dir);
+                userService.registerPassenger(p);
+                dataUsuarios.add(p);
+            } else {
+                // ── Editar existente ──
+                usuarioEnEdicion.setName(nombre);
+                usuarioEnEdicion.setLastName(apellido);
+                usuarioEnEdicion.setMail(correo);
+                usuarioEnEdicion.setPassword(password);
+                usuarioEnEdicion.setTypeIdetification(tipoDoc);
+                usuarioEnEdicion.setAdress(dir.isEmpty() ? "—" : dir);
+                usuarioEnEdicion = null;
+            }
             tablaUsuarios.refresh();
             mostrarPanel(false);
-        } catch (Exception ex) { mostrarError(ex.getMessage()); }
+        } catch (Exception ex) {
+            // Mensaje amigable para ID duplicado
+            String msg = ex.getMessage();
+            if (msg != null && msg.contains("id")) {
+                mostrarError("Ya existe un usuario con ese ID.");
+            } else if (msg != null && msg.contains("email")) {
+                mostrarError("Ya existe un usuario con ese correo.");
+            } else {
+                mostrarError(msg != null ? msg : "Error al guardar.");
+            }
+        }
     }
 
-    @FXML private void handleCancelar() { mostrarPanel(false); }
+    @FXML private void handleCancelar() {
+        usuarioEnEdicion = null;
+        mostrarPanel(false);
+    }
 
     // ── Navegación ──
     @FXML private void irRutas()        { ServerFactory.navigateToRoutes  ((Stage) tablaUsuarios.getScene().getWindow()); }
     @FXML private void irTrenes()       { ServerFactory.navigateToTrains  ((Stage) tablaUsuarios.getScene().getWindow()); }
-    @FXML private void irTrabajadores() { ServerFactory.navigateToWorkers ((Stage) tablaUsuarios.getScene().getWindow()); }
+    @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaUsuarios.getScene().getWindow()); }
 
     // ── Helpers ──
     private void mostrarPanel(boolean v) { panelForm.setVisible(v); panelForm.setManaged(v); }
     private void limpiarFormulario() {
+        txtId.setDisable(false);
         txtId.clear(); txtNombre.clear(); txtApellido.clear();
         txtCorreo.clear(); txtPassword.clear(); txtDireccion.clear();
         cmbTipoDoc.getSelectionModel().clearSelection();
@@ -159,7 +247,5 @@ public class UserController implements Initializable {
     }
     private void ocultarError() { lblErrorForm.setVisible(false); lblErrorForm.setManaged(false); }
 
-    public void refreshUsers(){
-        cargarTabla();
-    }
+    public void refreshUsers() { cargarTabla(); }
 }

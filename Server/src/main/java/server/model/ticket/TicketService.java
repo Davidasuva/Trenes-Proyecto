@@ -1,11 +1,13 @@
 package server.model.ticket;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
 import server.model.luggage.Luggage;
 import server.model.route.Route;
 import server.model.user.Passenger;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 public class TicketService extends UnicastRemoteObject implements TicketInterface {
 
