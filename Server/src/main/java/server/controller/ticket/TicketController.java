@@ -196,7 +196,6 @@ public class TicketController implements Initializable {
     }
 
     // ── Navegación ────────────────────────────────────────────────────────────
-
     @FXML private void irRutas()    { ServerFactory.navigateToRoutes  ((Stage) tablaTickets.getScene().getWindow()); }
     @FXML private void irTrenes()   { ServerFactory.navigateToTrains  ((Stage) tablaTickets.getScene().getWindow()); }
     @FXML private void irUsuarios() { ServerFactory.navigateToUsers   ((Stage) tablaTickets.getScene().getWindow()); }

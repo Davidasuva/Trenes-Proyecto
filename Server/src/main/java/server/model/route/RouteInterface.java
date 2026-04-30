@@ -27,5 +27,7 @@ public interface RouteInterface extends Remote{
     boolean activateRoute(int id,AbstractUser user) throws RemoteException;
     boolean existsPath(Station origin, Station destiny) throws RemoteException;
     boolean publicateRoute(int id,AbstractUser user)throws RemoteException;
+    LinkedList<Route> getAllRoutesWithStatus() throws RemoteException;
+    int getRouteStatus(int routeId) throws RemoteException;
 }
 

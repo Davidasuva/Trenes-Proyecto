@@ -1,5 +1,6 @@
 package server.factory;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -125,31 +126,33 @@ public class ServerFactory {
 
     // ── NAVEGACIÓN ──────────────────────────────────────────────────────────────
 
+    private static void applySceneAndMaximize(Stage stage, javafx.scene.Scene scene, String title) {
+        // Reset maximized before switching scene to avoid JavaFX minimize bug
+        if (stage.isMaximized()) {
+            stage.setMaximized(false);
+        }
+        stage.setTitle(title);
+        stage.setScene(scene);
+        Platform.runLater(() -> stage.setMaximized(true));
+    }
+
     public static void navigateToRoutes(Stage stage) {
         if (routeController != null) routeController.refreshRoutes();
-        stage.setTitle("trenes — Gestión de Rutas");
-        stage.setScene(sceneRoutes);
-        stage.setMaximized(true);
+        applySceneAndMaximize(stage, sceneRoutes, "trenes — Gestión de Rutas");
     }
 
     public static void navigateToTrains(Stage stage) {
         if (trainController != null) trainController.refreshTrains();
-        stage.setTitle("trenes — Gestión de Trenes");
-        stage.setScene(sceneTrains);
-        stage.setMaximized(true);
+        applySceneAndMaximize(stage, sceneTrains, "trenes — Gestión de Trenes");
     }
 
     public static void navigateToUsers(Stage stage) {
         if (userController != null) userController.refreshUsers();
-        stage.setTitle("trenes — Usuarios");
-        stage.setScene(sceneUsers);
-        stage.setMaximized(true);
+        applySceneAndMaximize(stage, sceneUsers, "trenes — Usuarios");
     }
 
     public static void navigateToTickets(Stage stage) {
         if (ticketController != null) ticketController.refreshTickets();
-        stage.setTitle("trenes — Tickets");
-        stage.setScene(sceneTickets);
-        stage.setMaximized(true);
+        applySceneAndMaximize(stage, sceneTickets, "trenes — Tickets");
     }
 }

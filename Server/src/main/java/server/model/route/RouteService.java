@@ -7,13 +7,61 @@ import edu.uva.model.iterator.Iterator;
 import server.model.train.Train;
 import server.model.user.AbstractUser;
 import java.time.LocalDateTime;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RouteService extends UnicastRemoteObject implements RouteInterface{
 
     private LinkedList<Route> routes=new LinkedList<>();
     private RouteGraph routeGraph=new RouteGraph();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
     public RouteService() throws RemoteException {
         super();
+        // Auto-desactivar rutas cuya hora de llegada ya pasó (cada 60 segundos)
+        scheduler.scheduleAtFixedRate(() -> {
+            try { checkAndDeactivateExpiredRoutes(); } catch (Exception ignored) {}
+        }, 30, 60, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Recorre todas las rutas y desactiva automáticamente las cuya hora de
+     * llegada ya ocurrió. Para reactivarlas el admin debe ajustar las fechas.
+     */
+    private void checkAndDeactivateExpiredRoutes() {
+        LocalDateTime now = LocalDateTime.now();
+        try {
+            Iterator<Route> it = routes.iterator();
+            while (it.hasNext()) {
+                Route r = it.next();
+                if (r.isActive() && r.getDateArrival() != null && r.getDateArrival().isBefore(now)) {
+                    r.setActive(false);
+                    System.out.println("[Scheduler] Ruta desactivada automáticamente: " + r.getName()
+                            + " (llegada: " + r.getDateArrivalStr() + ")");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[Scheduler] Error revisando rutas: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Retorna el estado de la ruta según la hora actual:
+     *   0 = disponible para compra (aún no inicia)
+     *   1 = en curso (ya inició pero no llegó)
+     *   2 = finalizada/inactiva (llegada ya ocurrió o inactiva manualmente)
+     */
+    public int getRouteStatus(Route route) {
+        if (!route.isActive()) return 2;
+        LocalDateTime now = LocalDateTime.now();
+        if (route.getDateTravel() != null && now.isAfter(route.getDateTravel())) {
+            if (route.getDateArrival() != null && now.isAfter(route.getDateArrival())) {
+                return 2;
+            }
+            return 1; // en curso
+        }
+        return 0; // disponible
     }
 
     @Override
@@ -125,15 +173,23 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
 
     @Override
     public LinkedList<Route> getAvailableRoutes() throws RemoteException {
+        LocalDateTime now = LocalDateTime.now();
         LinkedList<Route> availableRoutes=new LinkedList<>();
         Iterator<Route> iterator=routes.iterator();
         while(iterator.hasNext()){
             Route route=iterator.next();
-            if(route.isActive()){
+            // Solo rutas activas cuya hora de salida aún no ha llegado
+            if(route.isActive()
+                    && (route.getDateTravel() == null || now.isBefore(route.getDateTravel()))){
                 availableRoutes.add(route);
             }
         }
         return availableRoutes;
+    }
+
+    @Override
+    public LinkedList<Route> getAllRoutesWithStatus() throws RemoteException {
+        return routes;
     }
 
     @Override
@@ -195,6 +251,12 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
         }
         Route route = getRouteById(id);
         if (route == null) return false;
+        // Validar que la fecha de salida no sea pasada al reactivar
+        LocalDateTime now = LocalDateTime.now();
+        if (route.getDateTravel() != null && route.getDateTravel().isBefore(now)) {
+            throw new RemoteException(
+                "No se puede activar: la hora de salida ya pasó. Edita la ruta y ajusta una hora futura.");
+        }
         route.setActive(true);
         return true;
     }
@@ -266,5 +328,11 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
         route.setActive(true);
         return true;
 
+    }
+    @Override
+    public int getRouteStatus(int routeId) throws RemoteException {
+        Route route = getRouteById(routeId);
+        if (route == null) return 2;
+        return getRouteStatus(route);
     }
 }

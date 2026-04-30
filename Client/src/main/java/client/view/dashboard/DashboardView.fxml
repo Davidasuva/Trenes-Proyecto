@@ -16,6 +16,7 @@
             <Label text="trenes" styleClass="nav-brand"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="lblBienvenido" styleClass="nav-user"/>
+            <Button text="Mis tiquetes" onAction="#handleHistorial" styleClass="btn-historial"/>
             <Button fx:id="btnLogout" text="Cerrar sesión"
                     onAction="#handleLogout" styleClass="btn-logout"/>
         </HBox>
@@ -53,6 +54,11 @@
                 <Button text="X Limpiar filtros" styleClass="btn-limpiar"
                         onAction="#limpiarFiltros"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Button text="⭐ Mejor ruta" onAction="#handleRecomendarRuta" styleClass="btn-recomendar">
+                    <tooltip>
+                        <Tooltip text="Selecciona origen y destino para ver la ruta más corta recomendada"/>
+                    </tooltip>
+                </Button>
                 <Button text="Actualizar" onAction="#refreshRoutes" styleClass="btn-secundario"/>
             </HBox>
 

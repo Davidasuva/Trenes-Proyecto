@@ -39,6 +39,9 @@ public class TicketConfirmController {
     @FXML private Label lblVagonPasajero;
     @FXML private Label lblVagonMaleta;
     @FXML private VBox  vboxMaletas;
+    @FXML private Label lblContactoNombre;
+    @FXML private Label lblContactoApellido;
+    @FXML private Label lblContactoTelefono;
 
     private final ClientModel model;
     private Ticket ticket;
@@ -115,6 +118,11 @@ public class TicketConfirmController {
         } else {
             lblVagonMaleta.setText("—");
         }
+
+        // Persona de contacto
+        if (lblContactoNombre != null)   lblContactoNombre.setText(ticket.getContactName() != null   ? ticket.getContactName()   : "—");
+        if (lblContactoApellido != null) lblContactoApellido.setText(ticket.getContactLastName() != null ? ticket.getContactLastName() : "—");
+        if (lblContactoTelefono != null) lblContactoTelefono.setText(ticket.getContactPhone() != null  ? ticket.getContactPhone()  : "—");
 
         // Maletas
         vboxMaletas.getChildren().clear();

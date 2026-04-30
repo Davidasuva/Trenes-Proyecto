@@ -140,7 +140,17 @@
 
                 <Region VBox.vgrow="ALWAYS"/>
 
-                <Label fx:id="lblErrorCompra" styleClass="error-compra" wrapText="true" visible="false"/>
+                <!-- Persona de contacto -->
+            <Label text="PERSONA DE CONTACTO" styleClass="seccion-compra-label"/>
+            <Region minHeight="6" maxHeight="6"/>
+            <HBox spacing="10">
+                <TextField fx:id="txtContactNombre" promptText="Nombre(s)" HBox.hgrow="ALWAYS" styleClass="campo-compra"/>
+                <TextField fx:id="txtContactApellido" promptText="Apellido(s)" HBox.hgrow="ALWAYS" styleClass="campo-compra"/>
+            </HBox>
+            <TextField fx:id="txtContactTelefono" promptText="Teléfono de contacto" styleClass="campo-compra"/>
+            <Region minHeight="10" maxHeight="10"/>
+
+            <Label fx:id="lblErrorCompra" styleClass="error-compra" wrapText="true" visible="false"/>
                 <Region minHeight="12" maxHeight="12"/>
 
                 <Button fx:id="btnConfirmarCompra"

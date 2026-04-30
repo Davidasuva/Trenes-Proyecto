@@ -8,7 +8,7 @@ import server.model.carriage.CarriagePassenger;
 import server.model.luggage.Luggage;
 import server.model.route.Route;
 
-public class Ticket implements Serializable {
+public class Ticket implements Serializable, Comparable<Ticket> {
     private static final long serialVersionUID = 1L;
 
     private String id;
@@ -23,6 +23,9 @@ public class Ticket implements Serializable {
     private boolean status;
     private String dateBuy;
     private Array<Luggage> luggage;
+    private String contactName;
+    private String contactLastName;
+    private String contactPhone;
 
     public Ticket(String id, Passenger passenger, Route route, Train train, CarriageLoad carriageLoad, CarriagePassenger carriagePassenger, int category, boolean status, String dateBuy) {
         this.id = id;
@@ -122,5 +125,17 @@ public class Ticket implements Serializable {
 
     public Passenger getPassenger() {
         return passenger;
+    }
+
+    public String getContactName() { return contactName; }
+    public void setContactName(String contactName) { this.contactName = contactName; }
+    public String getContactLastName() { return contactLastName; }
+    public void setContactLastName(String contactLastName) { this.contactLastName = contactLastName; }
+    public String getContactPhone() { return contactPhone; }
+    public void setContactPhone(String contactPhone) { this.contactPhone = contactPhone; }
+
+    @Override
+    public int compareTo(Ticket o) {
+        return this.id.compareTo(o.getId());
     }
 }

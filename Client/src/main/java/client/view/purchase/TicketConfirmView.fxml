@@ -10,8 +10,10 @@
            styleClass="raiz-confirm"
            stylesheets="@TicketConfirmView.css">
 
-    <VBox spacing="0" maxWidth="600" alignment="TOP_CENTER"
-          styleClass="confirm-card">
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="0" maxWidth="600" alignment="TOP_CENTER"
+              styleClass="confirm-card">
 
         <!-- Encabezado éxito -->
         <VBox alignment="CENTER" spacing="6" styleClass="confirm-header">
@@ -113,6 +115,26 @@
             <Pane styleClass="separador"/>
             <Region minHeight="14" maxHeight="14"/>
 
+            <Label text="CONTACTO DE EMERGENCIA" styleClass="seccion-label"/>
+            <Region minHeight="10" maxHeight="10"/>
+
+            <HBox styleClass="info-row">
+                <Label text="Nombre contacto" styleClass="info-key"/>
+                <Label fx:id="lblContactoNombre" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Apellido contacto" styleClass="info-key"/>
+                <Label fx:id="lblContactoApellido" styleClass="info-val"/>
+            </HBox>
+            <HBox styleClass="info-row">
+                <Label text="Teléfono contacto" styleClass="info-key"/>
+                <Label fx:id="lblContactoTelefono" styleClass="info-val"/>
+            </HBox>
+
+            <Region minHeight="14" maxHeight="14"/>
+            <Pane styleClass="separador"/>
+            <Region minHeight="14" maxHeight="14"/>
+
             <Label text="MALETAS REGISTRADAS" styleClass="seccion-label"/>
             <Region minHeight="10" maxHeight="10"/>
             <VBox fx:id="vboxMaletas" spacing="4"/>
@@ -128,6 +150,7 @@
 
         <Region minHeight="16" maxHeight="16"/>
 
-    </VBox>
+        </VBox>
+    </ScrollPane>
 
 </StackPane>

@@ -1,5 +1,6 @@
 package server.model.ticket;
 
+import edu.uva.app.bintree.avl.BinAVLTree;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
 import server.model.luggage.Luggage;
@@ -12,6 +13,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class TicketService extends UnicastRemoteObject implements TicketInterface {
 
     private LinkedList<Ticket> tickets=new LinkedList<>();
+    private BinAVLTree<Ticket> tickets2=new BinAVLTree<>();
 
     public TicketService() throws RemoteException {
         super();
@@ -97,6 +99,19 @@ public class TicketService extends UnicastRemoteObject implements TicketInterfac
     @Override
     public LinkedList<Ticket> getTickets() throws RemoteException {
         return tickets;
+    }
+
+    @Override
+    public Ticket modifyTicket(Ticket updatedTicket, String id) throws RemoteException {
+        Ticket existing = getTicketById(id);
+        if (existing == null) {
+            throw new RemoteException("No existe un ticket con el id: " + id);
+        }
+        // Actualizar la ruta en el objeto que vive en el servidor
+        if (updatedTicket.getRoute() != null) {
+            existing.setRoute(updatedTicket.getRoute());
+        }
+        return existing;
     }
 
 

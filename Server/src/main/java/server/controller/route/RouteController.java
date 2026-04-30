@@ -67,8 +67,15 @@ public class RouteController implements Initializable {
         colDestino.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDestiny().getName()));
         colDistancia.setCellValueFactory(c -> new SimpleStringProperty(
                 String.format("%.0f km", c.getValue().getTotalDistance())));
-        colEstado.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().isActive() ? "Activa" : "Inactiva"));
+        colEstado.setCellValueFactory(c -> {
+            Route r = c.getValue();
+            if (!r.isActive()) return new SimpleStringProperty("Inactiva");
+            java.time.LocalDateTime now = java.time.LocalDateTime.now();
+            if (r.getDateTravel() != null && now.isAfter(r.getDateTravel())) {
+                return new SimpleStringProperty("En curso");
+            }
+            return new SimpleStringProperty("Activa");
+        });
         colFechaSalida.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDateTravelStr()));
         colFechaLlegada.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDateArrivalStr()));
 
@@ -201,7 +208,13 @@ public class RouteController implements Initializable {
     // ── Abrir modo edición ────────────────────────────────────────────────────
 
     private void abrirEdicion(Route r) {
-        if (r.isActive()) {
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        boolean enCurso = r.isActive() && r.getDateTravel() != null && now.isAfter(r.getDateTravel());
+        if (enCurso) {
+            mostrarError("No se puede editar una ruta en curso.");
+            return;
+        }
+        if (r.isActive() && !enCurso) {
             mostrarError("Solo se pueden editar rutas inactivas (desactívala primero).");
             return;
         }
@@ -322,6 +335,11 @@ public class RouteController implements Initializable {
 
         if (!fechaLleg.isAfter(fechaSal)) {
             mostrarError("La fecha/hora de llegada debe ser posterior a la de salida.");
+            return;
+        }
+        java.time.LocalDateTime ahora = java.time.LocalDateTime.now();
+        if (fechaSal.isBefore(ahora)) {
+            mostrarError("La fecha/hora de salida no puede ser en el pasado.");
             return;
         }
 

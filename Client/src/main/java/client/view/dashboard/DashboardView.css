@@ -209,3 +209,39 @@
     -fx-border-color: #E5E7EB transparent transparent transparent;
     -fx-border-width: 1px 0 0 0;
 }
+
+/* Botón Mis tiquetes en el navbar */
+.btn-historial {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #1D4ED8;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-border-color: #BFDBFE;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 6px 14px;
+}
+.btn-historial:hover { -fx-background-color: #DBEAFE; }
+
+.chip-en-curso {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-padding: 3px 10px;
+}
+
+.btn-recomendar {
+    -fx-background-color: #D97706;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 6px 14px;
+}
+.btn-recomendar:hover  { -fx-background-color: #B45309; }
+.btn-recomendar:pressed { -fx-background-color: #92400E; }

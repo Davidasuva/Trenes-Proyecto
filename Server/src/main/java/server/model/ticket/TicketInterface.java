@@ -19,6 +19,7 @@ public interface TicketInterface extends Remote {
     LinkedList<Ticket> getTickets() throws RemoteException;
     boolean validate(Ticket ticket) throws RemoteException;
     LinkedList<Ticket> seeTicketsPerPassenger(Passenger Passenger) throws RemoteException;
+    Ticket modifyTicket(Ticket ticket, String id) throws RemoteException;
 
 
 

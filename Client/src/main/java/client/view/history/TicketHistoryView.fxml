@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="client.controller.history.TicketHistoryController"
+            styleClass="raiz-admin"
+            stylesheets="@TicketHistoryView.css">
+
+    <!-- Navbar -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="20">
+            <Label text="trenes" styleClass="nav-brand"/>
+            <Label text="/ Historial de Tickets" styleClass="nav-sub"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="← Volver al inicio" onAction="#handleVolver" styleClass="btn-logout"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="0">
+            <VBox.margin><Insets top="24" left="28" right="28" bottom="0"/></VBox.margin>
+
+            <!-- Título -->
+            <VBox spacing="4">
+                <Label text="Mis Tiquetes" styleClass="seccion-titulo"/>
+                <Label text="Consulta tus tiquetes activos y pasados. Puedes cambiar la ruta de los tiquetes activos que aún no han iniciado." styleClass="seccion-subtitulo"/>
+            </VBox>
+
+            <Region minHeight="16" maxHeight="16"/>
+
+            <!-- Barra de filtros -->
+            <HBox styleClass="barra-acciones" spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="txtBuscar"
+                           promptText="Buscar por ID, ruta, origen o destino..."
+                           prefWidth="300"
+                           styleClass="campo-buscar"
+                           onAction="#handleBuscar"/>
+                <Button text="Buscar" onAction="#handleBuscar" styleClass="btn-secundario"/>
+
+                <Label text="Estado:" styleClass="filtro-label"/>
+                <ComboBox fx:id="cmbFiltroEstado" prefWidth="190" styleClass="combo-filtro"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="↻ Actualizar" onAction="#handleRefresh" styleClass="btn-secundario"/>
+            </HBox>
+
+            <Region minHeight="12" maxHeight="12"/>
+
+            <!-- Tabla de tickets -->
+            <TableView fx:id="tablaTickets" VBox.vgrow="ALWAYS" styleClass="tabla-hist">
+                <columns>
+                    <TableColumn fx:id="colId"         text="ID Tiquete"  prefWidth="100"/>
+                    <TableColumn fx:id="colRuta"       text="Ruta"        prefWidth="130"/>
+                    <TableColumn fx:id="colOrigen"     text="Origen"      prefWidth="110"/>
+                    <TableColumn fx:id="colDestino"    text="Destino"     prefWidth="110"/>
+                    <TableColumn fx:id="colSalida"     text="Salida"      prefWidth="130"/>
+                    <TableColumn fx:id="colLlegada"    text="Llegada"     prefWidth="130"/>
+                    <TableColumn fx:id="colCategoria"  text="Categoría"   prefWidth="90"/>
+                    <TableColumn fx:id="colEstado"     text="Estado"      prefWidth="90"/>
+                    <TableColumn fx:id="colPrecio"     text="Precio"      prefWidth="100"/>
+                    <TableColumn fx:id="colFechaCompra" text="Comprado"   prefWidth="110"/>
+                </columns>
+                <placeholder>
+                    <Label text="No se encontraron tiquetes." style="-fx-font-family:'Georgia'; -fx-text-fill:#9AA3AE;"/>
+                </placeholder>
+            </TableView>
+
+            <Region minHeight="12" maxHeight="12"/>
+
+            <!-- Panel: editar ruta del ticket -->
+            <VBox fx:id="panelEditarRuta" styleClass="panel-editar-ruta" spacing="12"
+                  visible="false" managed="false">
+                <Label text="Cambiar destino del tiquete" styleClass="panel-titulo"/>
+
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <VBox spacing="4">
+                        <Label fx:id="lblTicketEditar" styleClass="info-chip"/>
+                        <Label fx:id="lblOrigenFijo" styleClass="origen-fijo"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="6">
+                    <Label text="Selecciona nueva ruta (mismo origen, distinto destino):"
+                           styleClass="campo-label"/>
+                    <ComboBox fx:id="cmbNuevaRuta" prefWidth="500" styleClass="combo-ruta-hist"/>
+                    <Label fx:id="lblInfoNuevaRuta" styleClass="info-ruta-sel" wrapText="true"/>
+                </VBox>
+
+                <Label fx:id="lblErrorEditar" styleClass="lbl-error"
+                       visible="false" managed="false"/>
+
+                <HBox spacing="10">
+                    <Button text="Confirmar cambio" onAction="#handleGuardarRuta"
+                            styleClass="btn-confirmar-ruta"/>
+                    <Button text="Cancelar" onAction="#handleCancelarEdicion"
+                            styleClass="btn-cancelar-ruta"/>
+                </HBox>
+            </VBox>
+
+            <Region minHeight="16" maxHeight="16"/>
+        </VBox>
+    </center>
+
+</BorderPane>

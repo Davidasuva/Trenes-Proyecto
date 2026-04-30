@@ -139,8 +139,11 @@ public class DashboardController {
         topRow.setAlignment(Pos.CENTER_LEFT);
         Label nombre = new Label(ruta.getName());
         nombre.getStyleClass().add("ruta-nombre");
-        Label chip = new Label("Publicada");
-        chip.getStyleClass().add("chip-activo");
+        // Determinar estado según hora actual
+        java.time.LocalDateTime ahora = java.time.LocalDateTime.now();
+        boolean enCurso = ruta.getDateTravel() != null && ahora.isAfter(ruta.getDateTravel());
+        Label chip = enCurso ? new Label("En curso") : new Label("Publicada");
+        chip.getStyleClass().add(enCurso ? "chip-en-curso" : "chip-activo");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         topRow.getChildren().addAll(nombre, spacer, chip);
@@ -215,6 +218,59 @@ public class DashboardController {
         } catch (Exception e) {
             e.printStackTrace();
             lblLog.setText("Error al abrir compra: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleRecomendarRuta() {
+        String origen  = cmbFiltroOrigen.getValue();
+        String destino = cmbFiltroDestino.getValue();
+
+        if (origen == null || origen.isEmpty() || destino == null || destino.isEmpty()
+                || "Todas".equals(origen) || "Todas".equals(destino)) {
+            lblLog.setText("Selecciona un origen y un destino para recibir una recomendación.");
+            return;
+        }
+        if (origen.equals(destino)) {
+            lblLog.setText("El origen y el destino no pueden ser iguales.");
+            return;
+        }
+
+        // Buscar la ruta más corta entre las disponibles que coincidan con origen y destino
+        Route mejorRuta = null;
+        double menorDistancia = Double.MAX_VALUE;
+        for (Route r : todasLasRutas) {
+            boolean origenOk  = r.getOrigin().getName().equalsIgnoreCase(origen);
+            boolean destinoOk = r.getDestiny().getName().equalsIgnoreCase(destino);
+            if (origenOk && destinoOk && r.getTotalDistance() < menorDistancia) {
+                mejorRuta = r;
+                menorDistancia = r.getTotalDistance();
+            }
+        }
+
+        if (mejorRuta == null) {
+            lblLog.setText("No se encontró ninguna ruta de " + origen + " → " + destino + ".");
+            return;
+        }
+
+        // Resaltar / abrir compra de la mejor ruta
+        final Route rutaRecomendada = mejorRuta;
+        lblLog.setText("✔  Ruta recomendada: " + rutaRecomendada.getName() +  " (" + String.format("%.0f", rutaRecomendada.getTotalDistance()) + " km");
+        abrirCompra(rutaRecomendada);
+    }
+
+    @FXML
+    public void handleHistorial() {
+        try {
+            Stage stage = (Stage) vboxRutas.getScene().getWindow();
+            client.view.history.TicketHistoryView view = new client.view.history.TicketHistoryView(model);
+            stage.setScene(new Scene(view.getView(), 1100, 680));
+            stage.setTitle("trenes — Mis tiquetes");
+            stage.setResizable(true);
+            stage.centerOnScreen();
+        } catch (Exception e) {
+            e.printStackTrace();
+            lblLog.setText("Error al abrir historial: " + e.getMessage());
         }
     }
 

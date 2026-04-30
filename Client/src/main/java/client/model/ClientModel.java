@@ -117,6 +117,8 @@ public class ClientModel extends Subject {
             CarriagePassenger carriagePassenger = null;
             CarriageLoad carriageLoad = null;
 
+            int maletasARegistrar = (maletas != null) ? maletas.size() : 0;
+
             Iterator<AbstractCarriage> itC = train.getCarriages().iterator();
             while (itC.hasNext()) {
                 AbstractCarriage c = itC.next();
@@ -126,12 +128,24 @@ public class ClientModel extends Subject {
                 }
                 if (c instanceof CarriageLoad && carriageLoad == null) {
                     CarriageLoad cl = (CarriageLoad) c;
-                    if (cl.hasMoreCapacity()) carriageLoad = cl;
+                    // El vagón debe tener espacio para TODAS las maletas del pasajero
+                    if (cl.getLuggageCount() + maletasARegistrar <= server.model.carriage.CarriageLoad.MAX_LUGGAGES_PER_WAGON) {
+                        carriageLoad = cl;
+                    }
                 }
             }
 
             if (carriagePassenger == null) {
                 log("No hay vagones de pasajeros con capacidad disponible en este tren.");
+                return null;
+            }
+
+            // Si quiere llevar maletas pero no hay vagón de carga con espacio, bloquear compra
+            if (maletasARegistrar > 0 && carriageLoad == null) {
+                log("No hay espacio en los vagones de carga para " + maletasARegistrar
+                        + " maleta(s). Cada vagón admite máximo "
+                        + server.model.carriage.CarriageLoad.MAX_LUGGAGES_PER_WAGON
+                        + " maletas. Por favor, reduce la cantidad de maletas o no las registres.");
                 return null;
             }
 
@@ -215,6 +229,52 @@ public class ClientModel extends Subject {
     public Passenger getCurrentPassenger() { return currentPassenger; }
     public String getLogger()              { return logger; }
     public boolean isLoggedIn()            { return currentPassenger != null; }
+
+    /** Obtiene todos los tickets del pasajero actual (activos e históricos) */
+    public LinkedList<server.model.ticket.Ticket> getMyTickets() {
+        if (currentPassenger == null) return new LinkedList<>();
+        try {
+            return ticketService.seeTicketsPerPassenger(currentPassenger);
+        } catch (Exception e) {
+            log("Error al obtener historial: " + e.getMessage());
+            return new LinkedList<>();
+        }
+    }
+
+    /** Rutas con el mismo origen que la ruta actual (para cambio de destino) */
+    public LinkedList<server.model.route.Route> getRoutesWithSameOrigin(server.model.route.Route current) {
+        try {
+            LinkedList<server.model.route.Route> all = routeService.getAvailableRoutes();
+            LinkedList<server.model.route.Route> result = new LinkedList<>();
+            Iterator<server.model.route.Route> it = all.iterator();
+            while (it.hasNext()) {
+                server.model.route.Route r = it.next();
+                if (r.getOrigin().equals(current.getOrigin()) && r.getId() != current.getId()) {
+                    result.add(r);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            log("Error obteniendo rutas: " + e.getMessage());
+            return new LinkedList<>();
+        }
+    }
+
+    /** Cambia la ruta de un ticket activo y persiste el cambio en el servidor */
+    public boolean changeTicketRoute(server.model.ticket.Ticket ticket, server.model.route.Route newRoute) {
+        try {
+            // Aplicar el cambio localmente para que la UI refleje el valor nuevo
+            ticket.setRoute(newRoute);
+            // Persistir en el servidor usando el método remoto modifyTicket
+            ticketService.modifyTicket(ticket, ticket.getId());
+            log("Ruta actualizada a: " + newRoute.getName());
+            return true;
+        } catch (Exception e) {
+            log("Error cambiando ruta: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public void logout() {
         currentPassenger = null;

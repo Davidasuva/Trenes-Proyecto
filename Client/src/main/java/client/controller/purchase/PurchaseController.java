@@ -35,6 +35,9 @@ public class PurchaseController {
     @FXML private TextField txtPesoMaleta1, txtPesoMaleta2;
     @FXML private Label lblValidMaleta1, lblValidMaleta2;
 
+    @FXML private TextField txtContactNombre;
+    @FXML private TextField txtContactApellido;
+    @FXML private TextField txtContactTelefono;
     @FXML private Label lblErrorCompra;
     @FXML private Button btnConfirmarCompra;
 
@@ -141,6 +144,15 @@ public class PurchaseController {
         if (sel == null) { mostrarError("Selecciona una categoría."); return; }
         int categoria = Integer.parseInt(sel.getUserData().toString());
 
+        // Persona de contacto
+        String contNombre   = txtContactNombre   != null ? txtContactNombre.getText().trim()   : "";
+        String contApellido = txtContactApellido != null ? txtContactApellido.getText().trim() : "";
+        String contTelefono = txtContactTelefono != null ? txtContactTelefono.getText().trim() : "";
+        if (contNombre.isEmpty() || contApellido.isEmpty() || contTelefono.isEmpty()) {
+            mostrarError("Completa los datos de la persona de contacto.");
+            return;
+        }
+
         // Maletas a registrar
         List<Luggage> maletas = new ArrayList<>();
         if (chkMaleta1.isSelected()) {
@@ -161,8 +173,16 @@ public class PurchaseController {
         btnConfirmarCompra.setDisable(true);
         btnConfirmarCompra.setText("Procesando...");
 
+        final String _contNombre = contNombre;
+        final String _contApellido = contApellido;
+        final String _contTelefono = contTelefono;
         new Thread(() -> {
             Ticket ticket = model.buyTicket(ruta, categoria, maletas);
+            if (ticket != null) {
+                ticket.setContactName(_contNombre);
+                ticket.setContactLastName(_contApellido);
+                ticket.setContactPhone(_contTelefono);
+            }
             javafx.application.Platform.runLater(() -> {
                 btnConfirmarCompra.setDisable(false);
                 btnConfirmarCompra.setText("Confirmar compra");
