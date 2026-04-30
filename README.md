@@ -8,7 +8,7 @@ El Sistema de Gestión de Trenes de Transporte de Pasajeros, automatiza los proc
 
 ## **Problematica**
 
-Al desarrollarse toda la gestión de manera manual, esto genera tiempos tardios al momento de la ejecución de los servicios. Además, genera cierto chance de error humano en la ejecución. Por eso se generl la necesidad de crear este sistema de gestión.
+Al desarrollarse toda la gestión de manera manual, esto genera tiempos tardios al momento de la ejecución de los servicios. Además, genera cierto chance de error humano en la ejecución. Por eso se genera la necesidad de crear este sistema de gestión.
 
 ## **Funcionalidades Principales**
 
@@ -45,7 +45,7 @@ Al desarrollarse toda la gestión de manera manual, esto genera tiempos tardios 
 - El sistema recomienda la ruta más corta al pasajero.
 - Se admiten rutas con transbordo entre trenes para llegar al destino.
 
-## **Módulo de Empleados**
+## **Módulo de Empleados/Administrador**
 - Consulta y modifica datos de trenes y rutas.
 - Administra horarios y recorridos.
 
@@ -66,7 +66,7 @@ Al momento del abordaje, el sistema publicara en los monitores de la estación e
 - Pueden haber cambios de diseño durante el desarrollo del proyecto, esto débido a la falta de experiencia por parte de las partes involucradas dentro del proyecto. 
 
 # **Como inicializar el programa**
-Escribe mvn javafx:run en la terminal, iniciaria el programa
+Escribe mvn javafx:run en la terminal en cada uno de los aplicativos, iniciaria el programa
 # **Integrantes del Equipo de Desarrollo**
 - [David Santiago Peña González](https://github.com/Davidasuva)
 - [Juan Sebastian Rueda Velandia](https://github.com/juanse1172)
