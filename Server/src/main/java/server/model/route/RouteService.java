@@ -2,8 +2,13 @@ package server.model.route;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
+import edu.uva.app.priorityQueue.PriorityQueue;
 import edu.uva.app.queue.list.Queue;
 import edu.uva.model.iterator.Iterator;
+import server.model.carriage.AbstractCarriage;
+import server.model.carriage.CarriagePassenger;
+import server.model.ticket.Ticket;
+import server.model.ticket.TicketService;
 import server.model.train.Train;
 import server.model.user.AbstractUser;
 import java.time.LocalDateTime;
@@ -16,6 +21,11 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
     private LinkedList<Route> routes=new LinkedList<>();
     private RouteGraph routeGraph=new RouteGraph();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private TicketService ticketService;
+
+    public void setTicketService(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 
     public RouteService() throws RemoteException {
         super();
@@ -24,11 +34,6 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
             try { checkAndDeactivateExpiredRoutes(); } catch (Exception ignored) {}
         }, 30, 60, TimeUnit.SECONDS);
     }
-
-    /**
-     * Recorre todas las rutas y desactiva automáticamente las cuya hora de
-     * llegada ya ocurrió. Para reactivarlas el admin debe ajustar las fechas.
-     */
     private void checkAndDeactivateExpiredRoutes() {
         LocalDateTime now = LocalDateTime.now();
         try {
@@ -269,48 +274,105 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface{
         LinkedList<String> result = new LinkedList<>();
         if (route == null) return result;
 
-        // Obtener pasajeros ordenados por categoría desde los vagones de pasajeros
-        // Los vagones ya usan PriorityQueue por categoría. Generamos el orden teórico:
-        // vagón N → vagón N-1 → ... → vagón 1, dentro de cada vagón: premium, ejecutivo, estándar
-
         result.add("=== ORDEN DE ABORDAJE: " + route.getName() + " ===");
         result.add("(De atrás hacia adelante — Premium → Ejecutivo → Estándar)");
         result.add("");
 
-        // Categorías por nombre
-        String[] categorias = { "Premium (4 lugares)", "Ejecutivo (8 lugares)", "Estándar (22 lugares)" };
-        int[] capacidades   = { 4, 8, 22 };
+        // Obtener el tren asignado
+        Queue<Train> cola = route.getTrains();
+        if (cola == null || cola.isEmpty()) {
+            result.add("No hay tren asignado a esta ruta.");
+            return result;
+        }
+        Train tren = cola.peek();
 
-        // Obtenemos la cantidad de vagones de pasajeros del tren asignado
-        int vagonesPasajeros = 0;
-        try {
-            Queue<Train> cola = route.getTrains();
-            if (!cola.isEmpty()) {
-                Train tren = cola.peek();
-                vagonesPasajeros = tren.getCapacity(); // vagones de pasajeros
+        // Obtener vagones de pasajeros del tren (de atrás hacia adelante)
+        LinkedList<AbstractCarriage> carriages = tren.getCarriages();
+        if (carriages == null || carriages.isEmpty()) {
+            result.add("El tren no tiene vagones registrados.");
+            return result;
+        }
+
+        // Construir lista de vagones de pasajeros
+        LinkedList<CarriagePassenger> passengerCarriages = new LinkedList<>();
+        Iterator<AbstractCarriage> cIt = carriages.iterator();
+        while (cIt.hasNext()) {
+            AbstractCarriage c = cIt.next();
+            if (c instanceof CarriagePassenger) {
+                passengerCarriages.add((CarriagePassenger) c);
             }
-        } catch (Exception e) {
-            vagonesPasajeros = 1;
         }
 
-        if (vagonesPasajeros == 0){
-            vagonesPasajeros = 1;
+        if (passengerCarriages.isEmpty()) {
+            result.add("El tren no tiene vagones de pasajeros.");
+            return result;
         }
 
+        // Nombres de categoría según ticket.getCategory(): 0=Premium, 1=Ejecutivo, 2=Estándar
+        String[] categoriaNombres = { "Premium", "Ejecutivo", "Estándar" };
         int turno = 1;
-        // De atrás hacia adelante: vagón más alto al más bajo
-        for (int v = vagonesPasajeros; v >= 1; v--) {
-            result.add("── Vagón " + v + " ──");
-            for (int cat = 0; cat < categorias.length; cat++) {
-                result.add("  " + categorias[cat] + ":");
-                for (int lugar = capacidades[cat]; lugar >= 1; lugar--) {
-                    result.add("    Turno " + turno + " → Vagón " + v
-                            + ", " + categorias[cat].split(" ")[0] + ", lugar " + lugar);
-                    turno++;
-                }
+
+        // Recorrer vagones en orden inverso (atrás → adelante)
+        // Primero los convertimos a array para acceder por índice invertido
+        int totalVagones = 0;
+        Iterator<CarriagePassenger> countIt = passengerCarriages.iterator();
+        while (countIt.hasNext()) { countIt.next(); totalVagones++; }
+
+        // Construir array temporal
+        CarriagePassenger[] vagonesArr = new CarriagePassenger[totalVagones];
+        Iterator<CarriagePassenger> fillIt = passengerCarriages.iterator();
+        for (int i = 0; i < totalVagones && fillIt.hasNext(); i++) {
+            vagonesArr[i] = fillIt.next();
+        }
+
+        // Recorrer de atrás hacia adelante
+        for (int v = totalVagones - 1; v >= 0; v--) {
+            CarriagePassenger vagon = vagonesArr[v];
+            result.add("── Vagón " + vagon.getId() + " ──");
+
+            PriorityQueue<Ticket> pq = vagon.getPassengers();
+
+            if (pq == null || pq.isEmpty()) {
+                result.add("  (Sin pasajeros registrados)");
+                result.add("");
+                continue;
             }
+
+            // La PriorityQueue agrupa por prioridad (0=Premium, 1=Ejecutivo, 2=Estándar)
+            // Extraemos todos en orden de prioridad y los mostramos
+            // Usamos una copia temporal para no destruir la estructura original
+            // Nota: debemos reconstruir después
+            LinkedList<Ticket> extraidos = new LinkedList<>();
+            String catActual = null;
+
+            while (!pq.isEmpty()) {
+                Ticket t = pq.extract();
+                if (t == null) break;
+                extraidos.add(t);
+                String cat = categoriaNombres[Math.min(t.getCategory(), 2)];
+                if (!cat.equals(catActual)) {
+                    catActual = cat;
+                    result.add("  [" + cat + "]");
+                }
+                String nombre = t.getPassenger().getName() + " " + t.getPassenger().getLastName();
+                result.add("    Turno " + turno + " → " + nombre);
+                turno++;
+            }
+
+            // Reinsertar los tickets en la PriorityQueue
+            Iterator<Ticket> reIt = extraidos.iterator();
+            while (reIt.hasNext()) {
+                Ticket t = reIt.next();
+                pq.insert(t.getCategory(), t);
+            }
+
             result.add("");
         }
+
+        if (turno == 1) {
+            result.add("No hay pasajeros registrados en esta ruta aún.");
+        }
+
         return result;
     }
 

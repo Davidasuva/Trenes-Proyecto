@@ -11,9 +11,14 @@ import server.model.user.AbstractUser;
 public class TrainService extends UnicastRemoteObject implements TrainInterface {
     private LinkedList<Train> trains=new LinkedList<>();
     private int carriageIdCounter = 1;
+    private server.model.carriage.CarriageService carriageService;
 
     public TrainService() throws RemoteException {
         super();
+    }
+
+    public void setCarriageService(server.model.carriage.CarriageService carriageService) {
+        this.carriageService = carriageService;
     }
 
     private static final int MAX_VAGONES_MERCEDES = 28;
@@ -53,12 +58,18 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
         validarVagones(train.getType(), train.getCapacity(), train.getCargoWagons());
 
         for (int i = 0; i < train.getCapacity(); i++) {
-            CarriagePassenger cp = new CarriagePassenger(carriageIdCounter++, 40);
+            CarriagePassenger cp = new CarriagePassenger(carriageIdCounter++, 34);
             train.addCarriage(cp);
+            if (carriageService != null) {
+                try { carriageService.register(cp); } catch (Exception ignored) {}
+            }
         }
         for (int i = 0; i < train.getCargoWagons(); i++) {
-            CarriageLoad cl = new CarriageLoad(carriageIdCounter++, 160);
+            CarriageLoad cl = new CarriageLoad(carriageIdCounter++, 5440);
             train.addCarriage(cl);
+            if (carriageService != null) {
+                try { carriageService.register(cl); } catch (Exception ignored) {}
+            }
         }
 
         trains.add(train);

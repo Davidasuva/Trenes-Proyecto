@@ -1,0 +1,180 @@
+/* ═══════════════════════════════════════════════════════════════
+   ValidarStyle.css — Pantalla de Validación de Tickets
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Base ──────────────────────────────────────────────────── */
+.raiz {
+    -fx-background-color: #F4F5F7;
+    -fx-font-family: 'Georgia';
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+.header-bar {
+    -fx-background-color: #1E2228;
+    -fx-padding: 14px 24px;
+    -fx-pref-height: 68px;
+}
+.header-icon {
+    -fx-font-size: 28px;
+}
+.header-titulo {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+.header-sub {
+    -fx-text-fill: #A0A8B4;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+}
+
+/* ─── Card body ──────────────────────────────────────────────── */
+.card-body {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 12, 0, 0, 4);
+}
+
+/* ─── Sección título ─────────────────────────────────────────── */
+.seccion-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+}
+
+/* ─── Campos ─────────────────────────────────────────────────── */
+.campo-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #555D6B;
+    -fx-font-weight: bold;
+}
+.campo-texto {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-padding: 0 12px;
+}
+.campo-texto:focused {
+    -fx-border-color: #1E2228;
+}
+
+/* ─── ComboBox ───────────────────────────────────────────────── */
+.combo-campo {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+}
+.combo-campo:focused { -fx-border-color: #3D4147; }
+.combo-campo .list-cell {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-padding: 8px 12px;
+}
+
+/* ─── Botones ────────────────────────────────────────────────── */
+.btn-primario {
+    -fx-background-color: #1E2228;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+.btn-primario:hover { -fx-background-color: #3D4147; }
+
+.btn-secundario {
+    -fx-background-color: #EAEDF0;
+    -fx-text-fill: #3D4147;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+.btn-secundario:hover { -fx-background-color: #D5D9DE; }
+
+.btn-volver {
+    -fx-background-color: transparent;
+    -fx-text-fill: #A0A8B4;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-border-color: #3D4147;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 6px 14px;
+}
+.btn-volver:hover { -fx-text-fill: #FFFFFF; -fx-border-color: #A0A8B4; }
+
+/* ─── Labels ─────────────────────────────────────────────────── */
+.label-info {
+    -fx-text-fill: #555D6B;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+}
+.label-aviso {
+    -fx-text-fill: #C05621;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-color: #FFF3CD;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 14px;
+}
+
+/* ─── Contenido central ──────────────────────────────────────── */
+.contenido-central {
+    -fx-background-color: #F4F5F7;
+    -fx-padding: 40px;
+}
+
+/* ─── Panel resultado ────────────────────────────────────────── */
+.panel-resultado {
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 18, 0, 0, 6);
+}
+.panel-validado {
+    -fx-background-color: #F0FFF4;
+    -fx-border-color: #68D391;
+    -fx-border-width: 2px;
+    -fx-border-radius: 16px;
+}
+.panel-rechazado {
+    -fx-background-color: #FFF5F5;
+    -fx-border-color: #FC8181;
+    -fx-border-width: 2px;
+    -fx-border-radius: 16px;
+}
+.resultado-icono {
+    -fx-font-size: 64px;
+}
+.resultado-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+    -fx-text-alignment: CENTER;
+}
+.resultado-detalle {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 15px;
+    -fx-text-fill: #555D6B;
+    -fx-text-alignment: CENTER;
+}
+.resultado-hint {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #A0A8B4;
+    -fx-text-alignment: CENTER;
+}

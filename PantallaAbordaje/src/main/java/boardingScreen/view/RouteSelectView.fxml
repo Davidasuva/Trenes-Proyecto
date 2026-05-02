@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="boardingScreen.controller.RouteSelectController"
+           styleClass="raiz">
+
+    <VBox alignment="CENTER" spacing="0" maxWidth="560">
+
+        <!-- Header -->
+        <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="12">
+            <HBox.margin><Insets left="0"/></HBox.margin>
+            <Label text="🚆" styleClass="header-icon"/>
+            <VBox spacing="2">
+                <Label text="Sistema de Abordaje" styleClass="header-titulo"/>
+                <Label text="Selecciona una ruta para iniciar el abordaje" styleClass="header-sub"/>
+            </VBox>
+        </HBox>
+
+        <VBox styleClass="card-body" spacing="24" alignment="CENTER">
+            <VBox.margin><Insets top="40" bottom="40" left="40" right="40"/></VBox.margin>
+
+            <!-- Connecting label -->
+            <Label fx:id="lblConectando" text="⏳  Conectando al servidor..." styleClass="label-info"
+                   visible="false" wrapText="true" maxWidth="480"/>
+
+            <!-- Combo -->
+            <VBox spacing="8" maxWidth="480">
+                <Label text="Ruta disponible" styleClass="campo-label"/>
+                <ComboBox fx:id="cmbRutas" promptText="Selecciona una ruta..."
+                          styleClass="combo-campo" maxWidth="480" prefHeight="48"/>
+            </VBox>
+
+            <!-- Estado / error -->
+            <Label fx:id="lblEstado" styleClass="label-aviso" visible="false"
+                   wrapText="true" maxWidth="480"/>
+
+            <!-- Botones -->
+            <HBox spacing="12" alignment="CENTER">
+                <Button text="↺  Refrescar" styleClass="btn-secundario"
+                        prefHeight="44" prefWidth="160" onAction="#handleRefrescar"/>
+                <Button fx:id="btnIniciar" text="Iniciar Abordaje  →"
+                        styleClass="btn-primario" prefHeight="44" prefWidth="220"
+                        onAction="#handleIniciarAbordaje" disable="true"/>
+            </HBox>
+
+        </VBox>
+
+    </VBox>
+
+</StackPane>

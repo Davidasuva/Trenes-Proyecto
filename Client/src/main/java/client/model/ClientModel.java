@@ -1,10 +1,10 @@
 package client.model;
 
 import java.rmi.Naming;
-import java.util.List;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
 import server.model.carriage.AbstractCarriage;
+import server.model.carriage.CarriageInterface;
 import server.model.carriage.CarriageLoad;
 import server.model.carriage.CarriagePassenger;
 import server.model.observer.Subject;
@@ -21,10 +21,12 @@ public class ClientModel extends Subject {
     private final String uri;
     private final String userUri;
     private final String routeUri;
+    private final String carriageUri;
 
     private TicketInterface ticketService;
     private User userService;
     private RouteInterface routeService;
+    private CarriageInterface carriageService;
 
     private String logger;
     private Passenger currentPassenger;
@@ -33,6 +35,7 @@ public class ClientModel extends Subject {
         this.uri      = "//" + ip + ":" + port + "/" + serviceName;
         this.userUri  = "//" + ip + ":" + port + "/" + serviceName + "-users";
         this.routeUri = "//" + ip + ":" + port + "/" + serviceName + "-routes";
+        this.carriageUri = "//" + ip + ":" + port + "/" + serviceName + "-carriages";
     }
 
     public boolean connect() {
@@ -40,6 +43,7 @@ public class ClientModel extends Subject {
             ticketService = (TicketInterface) Naming.lookup(uri);
             userService   = (User)            Naming.lookup(userUri);
             routeService  = (RouteInterface)  Naming.lookup(routeUri);
+            carriageService = (CarriageInterface) Naming.lookup(carriageUri);
             log("Conectando al servidor: " + uri);
             return true;
         } catch (Exception e) {
@@ -100,7 +104,7 @@ public class ClientModel extends Subject {
     }
 
     /** Compra con lista opcional de maletas. */
-    public Ticket buyTicket(Route route, int category, List<Luggage> maletas) {
+    public Ticket buyTicket(Route route, int category, LinkedList<Luggage> maletas) {
         if (currentPassenger == null) {
             log("Debe iniciar sesión para poder comprar un ticket.");
             return null;
@@ -182,18 +186,27 @@ public class ClientModel extends Subject {
             );
             ticket.setPrice(precio);
 
-            // Registrar pasajero en el vagón
-            carriagePassenger.addPassenger(ticket);
+            // Registrar pasajero en el vagón del SERVIDOR vía RMI
+            boolean agregado = carriageService.addPassengerToCarriage(carriagePassenger.getId(), ticket);
+            if (!agregado) {
+                log("No se pudo registrar el pasajero en el vagón del servidor.");
+                return null;
+            }
 
             // Agregar maletas SOLO si hay vagón de carga disponible
             if (maletas != null && !maletas.isEmpty()) {
                 if (carriageLoad == null) {
                     log("Advertencia: este tren no tiene vagón de carga. Las maletas no se registraron.");
                 } else {
-                    for (Luggage l : maletas) {
-                        boolean ok = ticket.addLuggage(l);
-                        if (!ok) {
-                            log("Advertencia: maleta de " + l.getWeight()
+                    Iterator<Luggage> iterator=maletas.iterator();
+                    while(iterator.hasNext()) {
+                        Luggage next=iterator.next();
+                        boolean ok=carriageService.addLuggageToCarriage(carriageLoad.getId(), next);
+                        if(ok){
+                            next.setCarriage(carriageLoad);
+                            ticket.getLuggage().add(next); // registrar en el ticket para mostrarlo
+                        } else {
+                            log("Advertencia: maleta de " + next.getWeight()
                                     + " kg no se pudo agregar (vagón lleno o peso excedido).");
                         }
                     }
@@ -201,6 +214,21 @@ public class ClientModel extends Subject {
             }
 
             Ticket registered = ticketService.register(ticket);
+
+            // Refrescar vagones desde el servidor para mostrar contadores reales
+            try {
+                AbstractCarriage cpActualizado = carriageService.getCarriageById(carriagePassenger.getId());
+                if (cpActualizado instanceof CarriagePassenger) {
+                    registered.setCarriagePassenger((CarriagePassenger) cpActualizado);
+                }
+                if (carriageLoad != null) {
+                    AbstractCarriage clActualizado = carriageService.getCarriageById(carriageLoad.getId());
+                    if (clActualizado instanceof CarriageLoad) {
+                        registered.setCarriageLoad((CarriageLoad) clActualizado);
+                    }
+                }
+            } catch (Exception ignored) {}
+
             log("Ticket comprado! ID: " + registered.getId()
                     + " | Ruta: " + registered.getRoute().getName()
                     + " | Categoría: " + registered.getCategory()

@@ -29,5 +29,6 @@ public interface RouteInterface extends Remote{
     boolean publicateRoute(int id,AbstractUser user)throws RemoteException;
     LinkedList<Route> getAllRoutesWithStatus() throws RemoteException;
     int getRouteStatus(int routeId) throws RemoteException;
+    LinkedList<String> getBoardingOrder(int routeId) throws RemoteException;
 }
 

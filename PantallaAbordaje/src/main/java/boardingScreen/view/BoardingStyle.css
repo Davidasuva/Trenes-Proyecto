@@ -1,0 +1,271 @@
+/* ═══════════════════════════════════════════════════════════════
+   trenes — BoardingStyle.css
+   Pantalla de Abordaje: RouteSelect + BoardingOrder
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Base ──────────────────────────────────────────────────── */
+.raiz {
+    -fx-background-color: #F4F5F7;
+    -fx-font-family: 'Georgia';
+}
+
+/* ─── Header Bar ─────────────────────────────────────────────── */
+.header-bar {
+    -fx-background-color: #1E2228;
+    -fx-padding: 14px 24px;
+    -fx-pref-height: 68px;
+}
+
+.header-icon {
+    -fx-font-size: 28px;
+}
+
+.header-titulo {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.header-sub {
+    -fx-text-fill: #A0A8B4;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+}
+
+/* ─── Card body (RouteSelect) ────────────────────────────────── */
+.card-body {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 12, 0, 0, 4);
+}
+
+/* ─── Campo label ────────────────────────────────────────────── */
+.campo-label {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #555D6B;
+    -fx-font-weight: bold;
+}
+
+/* ─── ComboBox ───────────────────────────────────────────────── */
+.combo-campo {
+    -fx-background-color: white;
+    -fx-border-color: #C8CDD4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-pref-height: 48px;
+}
+
+.combo-campo:focused {
+    -fx-border-color: #3D4147;
+}
+
+.combo-campo .list-cell {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-text-fill: #1A1A1A;
+    -fx-padding: 8px 12px;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────  */
+.btn-primario {
+    -fx-background-color: #1E2228;
+    -fx-text-fill: white;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.btn-primario:hover {
+    -fx-background-color: #3D4147;
+}
+
+.btn-secundario {
+    -fx-background-color: #EAEDF0;
+    -fx-text-fill: #3D4147;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.btn-secundario:hover {
+    -fx-background-color: #D5D9DE;
+}
+
+.btn-volver {
+    -fx-background-color: transparent;
+    -fx-text-fill: #A0A8B4;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-border-color: #3D4147;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 6px 14px;
+}
+
+.btn-volver:hover {
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #A0A8B4;
+}
+
+/* ─── Labels ─────────────────────────────────────────────────── */
+.label-info {
+    -fx-text-fill: #555D6B;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+}
+
+.label-aviso {
+    -fx-text-fill: #C05621;
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 13px;
+    -fx-background-color: #FFF3CD;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 14px;
+}
+
+/* ─── Progress Bar ───────────────────────────────────────────── */
+.progreso-bar-container {
+    -fx-background-color: #EAEDF0;
+    -fx-padding: 8px 20px 10px 20px;
+}
+
+.label-progreso {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #888E96;
+}
+
+.progress-abordaje {
+    -fx-accent: #1E2228;
+    -fx-background-color: #D0D4DA;
+    -fx-background-radius: 4px;
+}
+
+.progress-abordaje .bar {
+    -fx-background-color: #1E2228;
+    -fx-background-radius: 4px;
+}
+
+.progress-abordaje .track {
+    -fx-background-color: #D0D4DA;
+    -fx-background-radius: 4px;
+}
+
+/* ─── Contenido central ──────────────────────────────────────── */
+.contenido-central {
+    -fx-background-color: #F4F5F7;
+    -fx-padding: 32px 40px;
+}
+
+/* ─── Tarjeta turno actual ───────────────────────────────────── */
+.card-turno {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 16, 0, 0, 6);
+    -fx-padding: 36px 40px;
+    -fx-min-width: 500px;
+}
+
+.turno-numero {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888E96;
+    -fx-text-transform: uppercase;
+}
+
+.nombre-pasajero {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A1A;
+    -fx-text-alignment: CENTER;
+    -fx-wrap-text: true;
+}
+
+/* ─── Badges ─────────────────────────────────────────────────── */
+.badge-cat {
+    -fx-background-color: #EBF4FF;
+    -fx-background-radius: 20px;
+    -fx-padding: 6px 18px;
+}
+
+.badge-cat-texto {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B6CB0;
+}
+
+.badge-vagon {
+    -fx-background-color: #F0FFF4;
+    -fx-background-radius: 20px;
+    -fx-padding: 6px 18px;
+}
+
+.badge-vagon-texto {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #276749;
+}
+
+/* ─── Pasajero anterior ──────────────────────────────────────── */
+.card-anterior {
+    -fx-background-color: #F7F8FA;
+    -fx-background-radius: 10px;
+    -fx-border-color: #E2E5E9;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 14px 28px;
+}
+
+.anterior-titulo {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 11px;
+    -fx-text-fill: #A0A8B4;
+    -fx-text-transform: uppercase;
+}
+
+.anterior-nombre {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 16px;
+    -fx-text-fill: #555D6B;
+    -fx-font-weight: bold;
+}
+
+.anterior-detalle {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 12px;
+    -fx-text-fill: #A0A8B4;
+}
+
+/* ─── Estado completado ──────────────────────────────────────── */
+.label-completado {
+    -fx-font-family: 'Georgia';
+    -fx-font-size: 20px;
+    -fx-text-fill: #276749;
+    -fx-font-weight: bold;
+    -fx-background-color: #F0FFF4;
+    -fx-background-radius: 10px;
+    -fx-padding: 16px 32px;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+.footer-bar {
+    -fx-background-color: #EAEDF0;
+    -fx-border-color: #D0D4DA;
+    -fx-border-width: 1px 0 0 0;
+    -fx-padding: 10px 24px;
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="validarTicket.controller.RouteSelectController"
+           styleClass="raiz">
+
+    <VBox alignment="CENTER" spacing="0" maxWidth="580">
+
+        <!-- Header -->
+        <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="14">
+            <Label text="🎫" styleClass="header-icon"/>
+            <VBox spacing="2">
+                <Label text="Validación de Tickets" styleClass="header-titulo"/>
+                <Label text="Selecciona la ruta para iniciar la validación" styleClass="header-sub"/>
+            </VBox>
+        </HBox>
+
+        <VBox styleClass="card-body" spacing="28" alignment="CENTER">
+            <VBox.margin><Insets top="44" bottom="44" left="44" right="44"/></VBox.margin>
+
+            <Label fx:id="lblConectando" text="⏳  Conectando al servidor..."
+                   styleClass="label-info" visible="false" wrapText="true" maxWidth="492"/>
+
+            <VBox spacing="8" maxWidth="492">
+                <Label text="Ruta activa" styleClass="campo-label"/>
+                <ComboBox fx:id="cmbRutas" promptText="Selecciona una ruta..."
+                          styleClass="combo-campo" maxWidth="492" prefHeight="48"/>
+            </VBox>
+
+            <Label fx:id="lblEstado" styleClass="label-aviso" visible="false"
+                   wrapText="true" maxWidth="492"/>
+
+            <HBox spacing="14" alignment="CENTER">
+                <Button text="↺  Refrescar" styleClass="btn-secundario"
+                        prefHeight="44" prefWidth="160" onAction="#handleRefrescar"/>
+                <Button fx:id="btnIniciar" text="Iniciar validación  →"
+                        styleClass="btn-primario" prefHeight="44" prefWidth="220"
+                        onAction="#handleIniciar" disable="true"/>
+            </HBox>
+        </VBox>
+
+    </VBox>
+</StackPane>

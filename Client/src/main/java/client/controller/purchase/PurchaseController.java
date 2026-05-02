@@ -154,7 +154,7 @@ public class PurchaseController {
         }
 
         // Maletas a registrar
-        List<Luggage> maletas = new ArrayList<>();
+        LinkedList<Luggage> maletas = new LinkedList<>();
         if (chkMaleta1.isSelected()) {
             try {
                 int w = Integer.parseInt(txtPesoMaleta1.getText().trim());

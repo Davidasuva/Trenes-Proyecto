@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="validarTicket.controller.ValidarPasajeroController"
+      styleClass="raiz" spacing="0">
+
+    <!-- Header con info de ruta -->
+    <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="14">
+        <Button text="← Cambiar ruta" styleClass="btn-volver"
+                onAction="#handleCambiarRuta" prefHeight="36"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <VBox spacing="2" alignment="CENTER_RIGHT">
+            <Label text="Validación de Ticket" styleClass="header-titulo"/>
+            <Label fx:id="lblRuta" text="" styleClass="header-sub" wrapText="true" maxWidth="540"/>
+        </VBox>
+    </HBox>
+
+    <!-- Contenido central -->
+    <StackPane VBox.vgrow="ALWAYS" styleClass="contenido-central">
+
+        <!-- PANEL FORMULARIO -->
+        <VBox fx:id="panelForm" alignment="CENTER" spacing="0" maxWidth="520">
+
+            <VBox styleClass="card-body" spacing="22" alignment="CENTER">
+                <VBox.margin><Insets top="0" bottom="0" left="0" right="0"/></VBox.margin>
+                <padding><Insets top="36" bottom="36" left="44" right="44"/></padding>
+
+                <Label text="Datos del pasajero" styleClass="seccion-titulo"/>
+
+                <!-- Nombre -->
+                <VBox spacing="6">
+                    <Label text="Nombre" styleClass="campo-label"/>
+                    <TextField fx:id="txtNombre" promptText="Ej: Juan Pérez"
+                               styleClass="campo-texto" prefHeight="44"/>
+                </VBox>
+
+                <!-- Correo -->
+                <VBox spacing="6">
+                    <Label text="Correo electrónico" styleClass="campo-label"/>
+                    <TextField fx:id="txtCorreo" promptText="correo@ejemplo.com"
+                               styleClass="campo-texto" prefHeight="44"/>
+                </VBox>
+
+                <!-- Contraseña -->
+                <VBox spacing="6">
+                    <Label text="Contraseña" styleClass="campo-label"/>
+                    <PasswordField fx:id="txtPassword" promptText="••••••••"
+                                  styleClass="campo-texto" prefHeight="44"/>
+                </VBox>
+
+                <!-- Error -->
+                <Label fx:id="lblError" text="" styleClass="label-aviso"
+                       visible="false" wrapText="true" maxWidth="432"/>
+
+                <!-- Botón -->
+                <Button fx:id="btnValidar" text="Validar ticket"
+                        styleClass="btn-primario" prefHeight="48" prefWidth="220"
+                        onAction="#handleValidar"/>
+            </VBox>
+
+        </VBox>
+
+        <!-- PANEL RESULTADO (superpuesto) -->
+        <VBox fx:id="panelResultado" alignment="CENTER" spacing="20"
+              styleClass="panel-resultado" maxWidth="520" visible="false" managed="false">
+            <padding><Insets top="52" bottom="52" left="52" right="52"/></padding>
+            <Label fx:id="lblResultadoIcono" text="✅" styleClass="resultado-icono"/>
+            <Label fx:id="lblResultadoTitulo" text="" styleClass="resultado-titulo"
+                   wrapText="true" alignment="CENTER" maxWidth="416"/>
+            <Label fx:id="lblResultadoDetalle" text="" styleClass="resultado-detalle"
+                   wrapText="true" alignment="CENTER" maxWidth="416"/>
+            <Label text="Volviendo al formulario en 3 segundos..." styleClass="resultado-hint"/>
+        </VBox>
+
+    </StackPane>
+
+</VBox>

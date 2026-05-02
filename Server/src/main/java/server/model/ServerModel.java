@@ -61,6 +61,8 @@ public class ServerModel {
             routeService  = new RouteService();
             luggageService = new LuggageService();
             carriageService  = new CarriageService();
+            routeService.setTicketService(ticketService);
+            trainService.setCarriageService(carriageService);
             userService.register(new Admin(
                     "0", "Admin@project.com", "Admin123",
                     "Admin", "1234", "C.C", "cr 29#92-49", 3
