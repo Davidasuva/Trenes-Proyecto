@@ -35,9 +35,6 @@ public class ClientFactory {
                     "/client/view/login/ClientLoginView.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
 
-            // El controlador ya fue creado por FXMLLoader; lo recuperamos
-            // solo para confirmar el tipo (no es necesario inyectarle nada:
-            // ClientAuthController se conecta solo en su initialize()).
             ClientAuthController controller = loader.getController();
 
             stage.setTitle("trenes — Acceso");

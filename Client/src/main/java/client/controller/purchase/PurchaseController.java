@@ -13,9 +13,6 @@ import server.model.ticket.Ticket;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PurchaseController {
 
     @FXML private Label lblUsuario;
@@ -49,11 +46,9 @@ public class PurchaseController {
         this.model = model;
         this.ruta  = ruta;
 
-        // Navbar
         lblUsuario.setText(model.getCurrentPassenger().getName()
                 + "  •  " + model.getCurrentPassenger().getMail());
 
-        // Info ruta
         lblRutaNombre.setText(ruta.getName());
         lblOrigen.setText(ruta.getOrigin().getName());
         lblDestino.setText(ruta.getDestiny().getName());
@@ -61,7 +56,6 @@ public class PurchaseController {
         lblSalida.setText(ruta.getDateTravelStr());
         lblLlegada.setText(ruta.getDateArrivalStr());
 
-        // Estaciones intermedias via RouteGraph
         try {
             server.model.route.RouteGraph graph = new server.model.route.RouteGraph();
             LinkedList<Station> path = graph.getShortestPath(ruta.getOrigin(), ruta.getDestiny());
@@ -79,20 +73,16 @@ public class PurchaseController {
             lblEstaciones.setText(ruta.getOrigin().getName() + "  →  " + ruta.getDestiny().getName());
         }
 
-        // ToggleGroup categoría
         groupCategoria = new ToggleGroup();
         btnEco.setToggleGroup(groupCategoria);
         btnEjec.setToggleGroup(groupCategoria);
         btnPrimera.setToggleGroup(groupCategoria);
         btnEco.setSelected(true);
 
-        // Mostrar precio inicial (categoría estándar = 2)
         actualizarPrecio();
 
-        // Actualizar precio cuando cambia la selección de categoría
         groupCategoria.selectedToggleProperty().addListener((obs, oldT, newT) -> actualizarPrecio());
 
-        // Validación en tiempo real de pesos
         txtPesoMaleta1.textProperty().addListener((obs, o, n) -> validarPeso(n, lblValidMaleta1));
         txtPesoMaleta2.textProperty().addListener((obs, o, n) -> validarPeso(n, lblValidMaleta2));
     }
@@ -139,12 +129,10 @@ public class PurchaseController {
     @FXML public void handleConfirmar() {
         lblErrorCompra.setVisible(false);
 
-        // Categoría
         ToggleButton sel = (ToggleButton) groupCategoria.getSelectedToggle();
         if (sel == null) { mostrarError("Selecciona una categoría."); return; }
         int categoria = Integer.parseInt(sel.getUserData().toString());
 
-        // Persona de contacto
         String contNombre   = txtContactNombre   != null ? txtContactNombre.getText().trim()   : "";
         String contApellido = txtContactApellido != null ? txtContactApellido.getText().trim() : "";
         String contTelefono = txtContactTelefono != null ? txtContactTelefono.getText().trim() : "";
@@ -153,7 +141,6 @@ public class PurchaseController {
             return;
         }
 
-        // Maletas a registrar
         LinkedList<Luggage> maletas = new LinkedList<>();
         if (chkMaleta1.isSelected()) {
             try {

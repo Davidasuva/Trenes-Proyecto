@@ -25,7 +25,6 @@ public class ValidarPasajeroController implements Initializable {
     @FXML private Button btnValidar;
     @FXML private VBox panelForm;
 
-    // Panel resultado (validado / rechazado)
     @FXML private VBox panelResultado;
     @FXML private Label lblResultadoIcono;
     @FXML private Label lblResultadoTitulo;
@@ -76,7 +75,6 @@ public class ValidarPasajeroController implements Initializable {
     }
 
     private void mostrarResultado(ResultadoValidacion resultado) {
-        // Ocultar formulario, mostrar panel resultado
         panelForm.setVisible(false);
         panelForm.setManaged(false);
         panelResultado.setVisible(true);
@@ -85,20 +83,19 @@ public class ValidarPasajeroController implements Initializable {
         if (resultado == ResultadoValidacion.VALIDADO) {
             panelResultado.getStyleClass().removeAll("panel-rechazado");
             panelResultado.getStyleClass().add("panel-validado");
-            lblResultadoIcono.setText("✅");
+            lblResultadoIcono.setText("Yes");
             lblResultadoTitulo.setText("¡Validado! Puede pasar");
             lblResultadoDetalle.setText("Pasajero con ticket activo en esta ruta.");
         } else {
             panelResultado.getStyleClass().removeAll("panel-validado");
             panelResultado.getStyleClass().add("panel-rechazado");
-            lblResultadoIcono.setText("❌");
+            lblResultadoIcono.setText("No");
             lblResultadoTitulo.setText("Acceso denegado");
             lblResultadoDetalle.setText(resultado == ResultadoValidacion.PASAJERO_NO_ENCONTRADO
                     ? "Datos incorrectos o pasajero no encontrado."
                     : "El pasajero no tiene un ticket activo en esta ruta.");
         }
 
-        // Volver al formulario limpio después de 3 segundos
         PauseTransition pausa = new PauseTransition(Duration.seconds(3));
         pausa.setOnFinished(e -> resetFormulario());
         pausa.play();

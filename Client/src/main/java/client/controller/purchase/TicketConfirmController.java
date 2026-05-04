@@ -77,7 +77,6 @@ public class TicketConfirmController {
         lblSalida.setText(ruta.getDateTravelStr());
         lblLlegada.setText(ruta.getDateArrivalStr());
 
-        // Estaciones intermedias
         try {
             RouteGraph graph = new RouteGraph();
             LinkedList<Station> path = graph.getShortestPath(ruta.getOrigin(), ruta.getDestiny());
@@ -95,7 +94,7 @@ public class TicketConfirmController {
             lblEstaciones.setText(ruta.getOrigin().getName() + "  →  " + ruta.getDestiny().getName());
         }
 
-        // Tren y vagones
+
         if (ticket.getTrain() != null) {
             lblTren.setText(ticket.getTrain().getName()
                     + "  (ID: " + ticket.getTrain().getId() + ")");
@@ -119,12 +118,10 @@ public class TicketConfirmController {
             lblVagonMaleta.setText("—");
         }
 
-        // Persona de contacto
         if (lblContactoNombre != null)   lblContactoNombre.setText(ticket.getContactName() != null   ? ticket.getContactName()   : "—");
         if (lblContactoApellido != null) lblContactoApellido.setText(ticket.getContactLastName() != null ? ticket.getContactLastName() : "—");
         if (lblContactoTelefono != null) lblContactoTelefono.setText(ticket.getContactPhone() != null  ? ticket.getContactPhone()  : "—");
 
-        // Maletas
         vboxMaletas.getChildren().clear();
         Array<Luggage> luggages = ticket.getLuggage();
         boolean tieneMaletas = false;

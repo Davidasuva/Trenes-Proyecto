@@ -41,13 +41,11 @@ public class BoardingOrderController implements Initializable {
 
     private BoardingScreenModel model;
     private List<String[]> entradas = new ArrayList<>();
-    // Cada entrada: [turno, nombrePasajero, categoria, vagon]
     private int indiceActual = 0;
     private Timeline timeline;
     private boolean pausado = false;
 
-    // Intervalo en segundos entre cada pasajero
-    private static final int INTERVALO_SEG = 4;
+    private static final int INTERVALO_SEG = 3;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -130,13 +128,10 @@ public class BoardingOrderController implements Initializable {
                 indiceActual++;
                 mostrarEntrada(indiceActual);
             } else {
-                // Fin del abordaje — mostrar completado y reiniciar desde el turno 1
-                lblEstado.setText("✅  Abordaje completado — reiniciando...");
+                lblEstado.setText("Abordaje completado — reiniciando...");
                 lblEstado.setVisible(true);
                 timeline.stop();
                 btnPausarReanudar.setDisable(true);
-
-                // Esperar 3 segundos y reiniciar desde el primer turno
                 javafx.animation.PauseTransition pausa =
                         new javafx.animation.PauseTransition(Duration.seconds(3));
                 pausa.setOnFinished(ev -> {
@@ -157,7 +152,6 @@ public class BoardingOrderController implements Initializable {
     private void mostrarEntrada(int idx) {
         if (idx < 0 || idx >= entradas.size()) return;
 
-        // Panel anterior
         if (idx > 0) {
             String[] anterior = entradas.get(idx - 1);
             panelAnterior.setVisible(true);
@@ -175,7 +169,6 @@ public class BoardingOrderController implements Initializable {
         lblCategoria.setText(entrada[2]);
         lblVagon.setText(entrada[3]);
 
-        // Progreso
         double progreso = (double)(idx + 1) / entradas.size();
         progressBar.setProgress(progreso);
         lblProgreso.setText((idx + 1) + " / " + entradas.size());

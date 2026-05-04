@@ -17,6 +17,36 @@ import server.model.user.Passenger;
 import server.model.user.User;
 import server.model.luggage.Luggage;
 
+/**
+ * Modelo principal de la aplicación cliente de compra de tickets.
+ * <p>
+ * Extiende {@link Subject} para implementar el patrón Observador: cuando
+ * ocurre un evento (login, compra, error), notifica a todos los observadores
+ * registrados con el mensaje de log actualizado.
+ * </p>
+ *
+ * <p>Se conecta al servidor de trenes vía RMI para gestionar:</p>
+ * <ul>
+ *   <li>Autenticación y registro de pasajeros.</li>
+ *   <li>Consulta de rutas disponibles.</li>
+ *   <li>Compra de tickets con equipaje opcional.</li>
+ *   <li>Historial de tickets del pasajero.</li>
+ *   <li>Cambio de ruta de un ticket activo.</li>
+ * </ul>
+ *
+ * <p><b>Precios por categoría:</b></p>
+ * <ul>
+ *   <li>Premium (0): $150 COP × km</li>
+ *   <li>Ejecutivo (1): $100 COP × km</li>
+ *   <li>Estándar (2): $60 COP × km</li>
+ * </ul>
+ *
+ * @author Equipo Dinamita
+ * @version 1.0.0
+ * @see Passenger
+ * @see Ticket
+ * @see Route
+ */
 public class ClientModel extends Subject {
     private final String uri;
     private final String userUri;
@@ -31,28 +61,46 @@ public class ClientModel extends Subject {
     private String logger;
     private Passenger currentPassenger;
 
+    /**
+     * Construye el modelo con los datos de conexión al servidor RMI.
+     *
+     * @param ip          IP del servidor
+     * @param port        puerto RMI
+     * @param serviceName nombre base del servicio en el registro RMI
+     */
     public ClientModel(String ip, int port, String serviceName) {
-        this.uri      = "//" + ip + ":" + port + "/" + serviceName;
-        this.userUri  = "//" + ip + ":" + port + "/" + serviceName + "-users";
-        this.routeUri = "//" + ip + ":" + port + "/" + serviceName + "-routes";
+        this.uri         = "//" + ip + ":" + port + "/" + serviceName;
+        this.userUri     = "//" + ip + ":" + port + "/" + serviceName + "-users";
+        this.routeUri    = "//" + ip + ":" + port + "/" + serviceName + "-routes";
         this.carriageUri = "//" + ip + ":" + port + "/" + serviceName + "-carriages";
     }
 
+    /**
+     * Establece la conexión inicial con los cuatro servicios remotos del servidor.
+     *
+     * @return {@code true} si todos los servicios se conectaron correctamente
+     */
     public boolean connect() {
         try {
-            ticketService = (TicketInterface) Naming.lookup(uri);
-            userService   = (User)            Naming.lookup(userUri);
-            routeService  = (RouteInterface)  Naming.lookup(routeUri);
+            ticketService   = (TicketInterface)   Naming.lookup(uri);
+            userService     = (User)              Naming.lookup(userUri);
+            routeService    = (RouteInterface)    Naming.lookup(routeUri);
             carriageService = (CarriageInterface) Naming.lookup(carriageUri);
             log("Conectando al servidor: " + uri);
             return true;
         } catch (Exception e) {
             log("No se pudo conectar a: " + uri + " - " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
 
+    /**
+     * Autentica a un pasajero existente con correo y contraseña.
+     *
+     * @param email    correo electrónico registrado
+     * @param password contraseña
+     * @return {@code true} si las credenciales son válidas y el usuario es un Pasajero
+     */
     public boolean connect(String email, String password) {
         try {
             AbstractUser user = userService.userPerEmailAndPassword(email, password, null);
@@ -66,11 +114,22 @@ public class ClientModel extends Subject {
             return true;
         } catch (Exception e) {
             log("Error en login: " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
 
+    /**
+     * Registra un nuevo pasajero en el sistema.
+     *
+     * @param id                 número de documento
+     * @param mail               correo electrónico
+     * @param name               nombre
+     * @param lastName           apellido
+     * @param password           contraseña
+     * @param typeIdentification tipo de documento
+     * @param address            dirección
+     * @return {@code true} si el registro fue exitoso
+     */
     public boolean registerPassenger(String id, String mail, String name, String lastName,
                                      String password, String typeIdentification, String address) {
         try {
@@ -81,11 +140,15 @@ public class ClientModel extends Subject {
             return true;
         } catch (Exception e) {
             log("Error al registrar: " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
 
+    /**
+     * Obtiene la lista de rutas disponibles para compra.
+     *
+     * @return lista de rutas activas; lista vacía si hay error
+     */
     public LinkedList<Route> getAvailableRoutes() {
         try {
             LinkedList<Route> routes = routeService.getAvailableRoutes();
@@ -93,34 +156,50 @@ public class ClientModel extends Subject {
             return routes;
         } catch (Exception e) {
             log("Error al obtener rutas: " + e.getMessage());
-            e.printStackTrace();
             return new LinkedList<>();
         }
     }
 
-    /** Compra sin maletas (compatibilidad). */
+    /**
+     * Compra un ticket sin maletas (sobrecarga por compatibilidad).
+     *
+     * @param route    ruta del viaje
+     * @param category categoría del asiento (0=Premium, 1=Ejecutivo, 2=Estándar)
+     * @return ticket comprado, o {@code null} si falló
+     */
     public Ticket buyTicket(Route route, int category) {
         return buyTicket(route, category, null);
     }
 
-    /** Compra con lista opcional de maletas. */
+    /**
+     * Compra un ticket con lista opcional de maletas.
+     * <p>El proceso:
+     * <ol>
+     *   <li>Verifica que el pasajero esté autenticado.</li>
+     *   <li>Busca un vagón de pasajeros con cupo disponible.</li>
+     *   <li>Si hay maletas, busca un vagón de carga con espacio suficiente.</li>
+     *   <li>Calcula el precio según categoría y distancia.</li>
+     *   <li>Registra el ticket en el servidor vía RMI.</li>
+     *   <li>Registra las maletas en el vagón de carga del servidor.</li>
+     * </ol>
+     * </p>
+     *
+     * @param route    ruta del viaje
+     * @param category categoría del asiento (0, 1 o 2)
+     * @param maletas  lista de maletas a registrar, puede ser {@code null}
+     * @return ticket registrado, o {@code null} si no hay cupo o ocurrió un error
+     */
     public Ticket buyTicket(Route route, int category, LinkedList<Luggage> maletas) {
         if (currentPassenger == null) {
             log("Debe iniciar sesión para poder comprar un ticket.");
             return null;
         }
         try {
-            // Obtener el tren de la ruta
             server.model.train.Train train = route.getTrains().peek();
-            if (train == null) {
-                log("La ruta no tiene un tren asignado.");
-                return null;
-            }
+            if (train == null) { log("La ruta no tiene un tren asignado."); return null; }
 
-            // Buscar vagón de pasajeros con capacidad disponible
             CarriagePassenger carriagePassenger = null;
             CarriageLoad carriageLoad = null;
-
             int maletasARegistrar = (maletas != null) ? maletas.size() : 0;
 
             Iterator<AbstractCarriage> itC = train.getCarriages().iterator();
@@ -132,8 +211,7 @@ public class ClientModel extends Subject {
                 }
                 if (c instanceof CarriageLoad && carriageLoad == null) {
                     CarriageLoad cl = (CarriageLoad) c;
-                    // El vagón debe tener espacio para TODAS las maletas del pasajero
-                    if (cl.getLuggageCount() + maletasARegistrar <= server.model.carriage.CarriageLoad.MAX_LUGGAGES_PER_WAGON) {
+                    if (cl.getLuggageCount() + maletasARegistrar <= CarriageLoad.MAX_LUGGAGES_PER_WAGON) {
                         carriageLoad = cl;
                     }
                 }
@@ -143,27 +221,15 @@ public class ClientModel extends Subject {
                 log("No hay vagones de pasajeros con capacidad disponible en este tren.");
                 return null;
             }
-
-            // Si quiere llevar maletas pero no hay vagón de carga con espacio, bloquear compra
             if (maletasARegistrar > 0 && carriageLoad == null) {
-                log("No hay espacio en los vagones de carga para " + maletasARegistrar
-                        + " maleta(s). Cada vagón admite máximo "
-                        + server.model.carriage.CarriageLoad.MAX_LUGGAGES_PER_WAGON
-                        + " maletas. Por favor, reduce la cantidad de maletas o no las registres.");
+                log("No hay espacio en los vagones de carga para " + maletasARegistrar + " maleta(s).");
                 return null;
             }
 
-            // Calcular precio según categoría y distancia
             double distancia = route.getTotalDistance();
-            double tarifaBase;
-            switch (category) {
-                case 0: tarifaBase = 150; break;  // Premium
-                case 1: tarifaBase = 100; break;  // Ejecutivo
-                default: tarifaBase = 60; break;  // Estándar
-            }
+            double tarifaBase = (category == 0) ? 150 : (category == 1) ? 100 : 60;
             int precio = (int) Math.round(distancia * tarifaBase);
 
-            // Generar ID de tiquete automáticamente
             String ticketId;
             try {
                 int count = ticketService.getTickets().size();
@@ -172,94 +238,66 @@ public class ClientModel extends Subject {
                 ticketId = "TKT-" + System.currentTimeMillis();
             }
 
-            // Crear tiquete
-            Ticket ticket = new Ticket(
-                    ticketId,
-                    currentPassenger,
-                    route,
-                    train,
-                    carriageLoad,
-                    carriagePassenger,
-                    category,
-                    true,
-                    java.time.LocalDate.now().toString()
-            );
+            Ticket ticket = new Ticket(ticketId, currentPassenger, route, train,
+                    carriageLoad, carriagePassenger, category, true,
+                    java.time.LocalDate.now().toString());
             ticket.setPrice(precio);
 
-            // Registrar pasajero en el vagón del SERVIDOR vía RMI
             boolean agregado = carriageService.addPassengerToCarriage(carriagePassenger.getId(), ticket);
-            if (!agregado) {
-                log("No se pudo registrar el pasajero en el vagón del servidor.");
-                return null;
-            }
+            if (!agregado) { log("No se pudo registrar el pasajero en el vagón del servidor."); return null; }
 
-            // Agregar maletas SOLO si hay vagón de carga disponible
-            if (maletas != null && !maletas.isEmpty()) {
-                if (carriageLoad == null) {
-                    log("Advertencia: este tren no tiene vagón de carga. Las maletas no se registraron.");
-                } else {
-                    Iterator<Luggage> iterator=maletas.iterator();
-                    while(iterator.hasNext()) {
-                        Luggage next=iterator.next();
-                        boolean ok=carriageService.addLuggageToCarriage(carriageLoad.getId(), next);
-                        if(ok){
-                            next.setCarriage(carriageLoad);
-                            ticket.getLuggage().add(next); // registrar en el ticket para mostrarlo
-                        } else {
-                            log("Advertencia: maleta de " + next.getWeight()
-                                    + " kg no se pudo agregar (vagón lleno o peso excedido).");
-                        }
-                    }
+            if (maletas != null && !maletas.isEmpty() && carriageLoad != null) {
+                Iterator<Luggage> iterator = maletas.iterator();
+                while (iterator.hasNext()) {
+                    Luggage next = iterator.next();
+                    boolean ok = carriageService.addLuggageToCarriage(carriageLoad.getId(), next);
+                    if (ok) { next.setCarriage(carriageLoad); ticket.getLuggage().add(next); }
+                    else { log("Advertencia: maleta de " + next.getWeight() + " kg no se pudo agregar."); }
                 }
             }
 
             Ticket registered = ticketService.register(ticket);
-
-            // Refrescar vagones desde el servidor para mostrar contadores reales
-            try {
-                AbstractCarriage cpActualizado = carriageService.getCarriageById(carriagePassenger.getId());
-                if (cpActualizado instanceof CarriagePassenger) {
-                    registered.setCarriagePassenger((CarriagePassenger) cpActualizado);
-                }
-                if (carriageLoad != null) {
-                    AbstractCarriage clActualizado = carriageService.getCarriageById(carriageLoad.getId());
-                    if (clActualizado instanceof CarriageLoad) {
-                        registered.setCarriageLoad((CarriageLoad) clActualizado);
-                    }
-                }
-            } catch (Exception ignored) {}
-
-            log("Ticket comprado! ID: " + registered.getId()
-                    + " | Ruta: " + registered.getRoute().getName()
-                    + " | Categoría: " + registered.getCategory()
-                    + " | Precio: $" + precio);
+            log("Ticket comprado! ID: " + registered.getId() + " | Precio: $" + precio);
             return registered;
 
         } catch (Exception e) {
             log("Error al comprar un ticket: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
 
-    /** Calcula el precio estimado de un tiquete según categoría y distancia de la ruta */
+    /**
+     * Calcula el precio estimado de un ticket según categoría y distancia de la ruta.
+     *
+     * @param route    ruta del viaje
+     * @param category categoría del asiento (0=Premium, 1=Ejecutivo, 2=Estándar)
+     * @return precio estimado en COP
+     */
     public int calcularPrecio(Route route, int category) {
         double distancia = route.getTotalDistance();
-        double tarifaBase;
-        switch (category) {
-            case 0: tarifaBase = 150; break;  // Premium
-            case 1: tarifaBase = 100; break;  // Ejecutivo
-            default: tarifaBase = 60; break;  // Estándar
-        }
+        double tarifaBase = (category == 0) ? 150 : (category == 1) ? 100 : 60;
         return (int) Math.round(distancia * tarifaBase);
     }
 
+    /**
+     * Retorna el pasajero autenticado actualmente.
+     *
+     * @return pasajero autenticado, o {@code null} si no hay sesión activa
+     */
     public Passenger getCurrentPassenger() { return currentPassenger; }
-    public String getLogger()              { return logger; }
-    public boolean isLoggedIn()            { return currentPassenger != null; }
 
-    /** Obtiene todos los tickets del pasajero actual (activos e históricos) */
-    public LinkedList<server.model.ticket.Ticket> getMyTickets() {
+    /** @return último mensaje de log del modelo */
+    public String getLogger() { return logger; }
+
+    /** @return {@code true} si hay un pasajero autenticado */
+    public boolean isLoggedIn() { return currentPassenger != null; }
+
+    /**
+     * Obtiene todos los tickets del pasajero autenticado.
+     *
+     * @return lista de tickets; lista vacía si no hay sesión o hubo error
+     */
+    public LinkedList<Ticket> getMyTickets() {
         if (currentPassenger == null) return new LinkedList<>();
         try {
             return ticketService.seeTicketsPerPassenger(currentPassenger);
@@ -269,14 +307,19 @@ public class ClientModel extends Subject {
         }
     }
 
-    /** Rutas con el mismo origen que la ruta actual (para cambio de destino) */
-    public LinkedList<server.model.route.Route> getRoutesWithSameOrigin(server.model.route.Route current) {
+    /**
+     * Obtiene rutas con el mismo origen que una ruta dada (útil para cambio de destino).
+     *
+     * @param current ruta de referencia
+     * @return lista de rutas con el mismo origen pero distinto ID
+     */
+    public LinkedList<Route> getRoutesWithSameOrigin(Route current) {
         try {
-            LinkedList<server.model.route.Route> all = routeService.getAvailableRoutes();
-            LinkedList<server.model.route.Route> result = new LinkedList<>();
-            Iterator<server.model.route.Route> it = all.iterator();
+            LinkedList<Route> all = routeService.getAvailableRoutes();
+            LinkedList<Route> result = new LinkedList<>();
+            Iterator<Route> it = all.iterator();
             while (it.hasNext()) {
-                server.model.route.Route r = it.next();
+                Route r = it.next();
                 if (r.getOrigin().equals(current.getOrigin()) && r.getId() != current.getId()) {
                     result.add(r);
                 }
@@ -288,22 +331,28 @@ public class ClientModel extends Subject {
         }
     }
 
-    /** Cambia la ruta de un ticket activo y persiste el cambio en el servidor */
-    public boolean changeTicketRoute(server.model.ticket.Ticket ticket, server.model.route.Route newRoute) {
+    /**
+     * Cambia la ruta de un ticket activo y persiste el cambio en el servidor vía RMI.
+     *
+     * @param ticket   ticket cuya ruta se desea cambiar
+     * @param newRoute nueva ruta a asignar
+     * @return {@code true} si el cambio fue exitoso
+     */
+    public boolean changeTicketRoute(Ticket ticket, Route newRoute) {
         try {
-            // Aplicar el cambio localmente para que la UI refleje el valor nuevo
             ticket.setRoute(newRoute);
-            // Persistir en el servidor usando el método remoto modifyTicket
             ticketService.modifyTicket(ticket, ticket.getId());
             log("Ruta actualizada a: " + newRoute.getName());
             return true;
         } catch (Exception e) {
             log("Error cambiando ruta: " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
 
+    /**
+     * Cierra la sesión del pasajero actual.
+     */
     public void logout() {
         currentPassenger = null;
         log("Sesión cerrada.");

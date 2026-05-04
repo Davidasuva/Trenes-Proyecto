@@ -16,7 +16,6 @@ public class AuthController {
 
     private UserService userService;
 
-    /** Modelo inyectado por ServerFactory antes de mostrar la ventana. */
     private ServerModel model;
 
     @FXML private TextField     txtUsuario;
@@ -28,17 +27,11 @@ public class AuthController {
 
     private boolean passwordVisible = false;
 
-    // ──────────────────────────────────────────────────────────
-    // Inyección del modelo (llamada por ServerFactory)
-    // ──────────────────────────────────────────────────────────
 
     public void setModel(ServerModel model) {
         this.model = model;
     }
 
-    // ──────────────────────────────────────────────────────────
-    // Inicialización FXML
-    // ──────────────────────────────────────────────────────────
 
     @FXML
     public void initialize() {
@@ -52,7 +45,6 @@ public class AuthController {
             e.printStackTrace();
         }
 
-        // Sincronizar campos de contraseña
         txtPassword.textProperty().addListener((obs, o, n) -> {
             if (!passwordVisible) txtPasswordVisible.setText(n);
         });
@@ -60,15 +52,10 @@ public class AuthController {
             if (passwordVisible) txtPassword.setText(n);
         });
 
-        // Enter para avanzar al siguiente campo / hacer login
         txtUsuario.setOnAction(e -> txtPassword.requestFocus());
         txtPassword.setOnAction(e -> handleLogin());
         txtPasswordVisible.setOnAction(e -> handleLogin());
     }
-
-    // ──────────────────────────────────────────────────────────
-    // Handlers
-    // ──────────────────────────────────────────────────────────
 
     @FXML
     public void handleTogglePassword() {
@@ -119,11 +106,6 @@ public class AuthController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────
-    // Navegación: Login → Server view
-    // El modelo ya fue creado por ServerFactory; aquí solo
-    // cambiamos de escena y lo pasamos a ServerView.
-    // ──────────────────────────────────────────────────────────
 
     private void abrirServerView() {
         try {
@@ -135,9 +117,6 @@ public class AuthController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────
-    // Utilidades de UI
-    // ──────────────────────────────────────────────────────────
 
     private void mostrarError(String msg) {
         lblError.setText(msg);

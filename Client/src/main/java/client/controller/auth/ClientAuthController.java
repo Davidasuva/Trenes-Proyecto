@@ -44,14 +44,12 @@ public class ClientAuthController {
     @FXML
     public void initialize() {
         try {
-            // Cargar opciones del combobox de tipo de documento
             cmbRegTipoId.setItems(FXCollections.observableArrayList(
                     "Cédula de Ciudadanía (C.C.)",
                     "Tarjeta de Identidad (T.I.)",
                     "Cédula de Extranjería (C.E.)",
                     "Pasaporte",
-                    "NIT",
-                    "Registro Civil"
+                    "NIT"
             ));
 
             Environment env = Environment.getInstance();
@@ -74,7 +72,6 @@ public class ClientAuthController {
                 });
             }).start();
 
-            // Sincronizar campos contraseña login
             txtLoginPass.textProperty().addListener((obs, o, n) -> {
                 if (!loginPassVisible) txtLoginPassVisible.setText(n);
             });
@@ -82,7 +79,6 @@ public class ClientAuthController {
                 if (loginPassVisible) txtLoginPass.setText(n);
             });
 
-            // Sincronizar campos contraseña registro
             txtRegPass.textProperty().addListener((obs, o, n) -> {
                 if (!regPassVisible) txtRegPassVisible.setText(n);
             });

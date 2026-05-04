@@ -37,7 +37,7 @@ public class ServerController {
             lblStatus.getStyleClass().add("status-running");
             btnDeploy.setDisable(true);
 
-            // Pre-crear todas las escenas del menú antes de habilitar el botón
+
             try {
                 ServerFactory.buildMenuScenes(model);
                 btnIrMenu.setDisable(false);
@@ -61,7 +61,6 @@ public class ServerController {
         ServerFactory.navigateToRoutes(stage);
     }
 
-    // ── Consola: observer del History ────────────────────────────────────────
 
     private void suscribirseAlHistory(History history) {
         new Observer(history) {

@@ -134,12 +134,12 @@ public class DashboardController {
         VBox card = new VBox(8);
         card.getStyleClass().add("ruta-card");
 
-        // Fila superior: nombre + chip activo
         HBox topRow = new HBox(10);
         topRow.setAlignment(Pos.CENTER_LEFT);
         Label nombre = new Label(ruta.getName());
         nombre.getStyleClass().add("ruta-nombre");
-        // Determinar estado según hora actual
+
+
         java.time.LocalDateTime ahora = java.time.LocalDateTime.now();
         boolean enCurso = ruta.getDateTravel() != null && ahora.isAfter(ruta.getDateTravel());
         Label chip = enCurso ? new Label("En curso") : new Label("Publicada");
@@ -148,11 +148,10 @@ public class DashboardController {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         topRow.getChildren().addAll(nombre, spacer, chip);
 
-        // Trayecto: Origen → Destino
+
         Label trayecto = new Label(ruta.getOrigin().getName() + "  →  " + ruta.getDestiny().getName());
         trayecto.getStyleClass().add("ruta-trayecto");
 
-        // Distancia y fechas
         HBox infoRow = new HBox(24);
         infoRow.setAlignment(Pos.CENTER_LEFT);
         Label dist = new Label("📏  " + String.format("%.0f km", ruta.getTotalDistance()));
@@ -162,7 +161,6 @@ public class DashboardController {
         fechas.getStyleClass().add("ruta-fechas");
         infoRow.getChildren().addAll(dist, fechas);
 
-        // Estaciones intermedias
         String estacionesStr = obtenerEstaciones(ruta);
         Label estLabel = new Label("ESTACIONES INTERMEDIAS");
         estLabel.getStyleClass().add("ruta-estaciones-label");
@@ -170,7 +168,6 @@ public class DashboardController {
         estaciones.getStyleClass().add("ruta-estaciones");
         estaciones.setWrapText(true);
 
-        // Botón comprar
         HBox bottomRow = new HBox();
         bottomRow.setAlignment(Pos.CENTER_RIGHT);
         Button btnComprar = new Button("Comprar tiquete →");
@@ -180,7 +177,6 @@ public class DashboardController {
 
         card.getChildren().addAll(topRow, trayecto, infoRow, estLabel, estaciones, bottomRow);
 
-        // Click en la card también abre compra
         card.setOnMouseClicked(e -> {
             if (e.getTarget() != btnComprar) abrirCompra(ruta);
         });
@@ -236,7 +232,6 @@ public class DashboardController {
             return;
         }
 
-        // Buscar la ruta más corta entre las disponibles que coincidan con origen y destino
         Route mejorRuta = null;
         double menorDistancia = Double.MAX_VALUE;
         for (Route r : todasLasRutas) {
@@ -253,7 +248,6 @@ public class DashboardController {
             return;
         }
 
-        // Resaltar / abrir compra de la mejor ruta
         final Route rutaRecomendada = mejorRuta;
         lblLog.setText("✔  Ruta recomendada: " + rutaRecomendada.getName() +  " (" + String.format("%.0f", rutaRecomendada.getTotalDistance()) + " km");
         abrirCompra(rutaRecomendada);

@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 
 public class TicketController implements Initializable {
 
-    // ── Tabla ──
     @FXML private ComboBox<String>       cmbFiltroRuta;
     @FXML private ComboBox<String>       cmbFiltroPasajero;
     @FXML private TableView<Ticket>      tablaTickets;
@@ -32,7 +31,6 @@ public class TicketController implements Initializable {
             colCategoria, colEstado, colFechaCompra;
     @FXML private TableColumn<Ticket, String> colAcciones;
 
-    // ── Panel edición ──
     @FXML private VBox    panelForm;
     @FXML private Label   lblTituloForm, lblErrorForm;
     @FXML private Label   lblId, lblPasajero, lblRuta, lblFechaCompra, lblCategoria;
@@ -48,7 +46,6 @@ public class TicketController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // ── Columnas ──
         colId.setCellValueFactory(c ->
                 new SimpleStringProperty(c.getValue().getId()));
         colPasajero.setCellValueFactory(c -> {
@@ -67,7 +64,6 @@ public class TicketController implements Initializable {
         colFechaCompra.setCellValueFactory(c ->
                 new SimpleStringProperty(c.getValue().getDateBuy()));
 
-        // ── Columna acciones ──
         colAcciones.setCellFactory(col -> new TableCell<>() {
             private final Button btnEditar = new Button("Editar");
             private final HBox   box       = new HBox(btnEditar);
@@ -84,7 +80,6 @@ public class TicketController implements Initializable {
             }
         });
 
-        // ── Estado del ticket en el formulario ──
         cmbEstado.getItems().addAll("Activo", "Inactivo");
 
         tablaTickets.setItems(ticketsMostrados);
@@ -98,8 +93,6 @@ public class TicketController implements Initializable {
         poblarFiltros();
     }
 
-    // ── Carga ────────────────────────────────────────────────────────────────
-
     private void cargarTabla() {
         todosTickets.clear();
         if (ticketService == null) return;
@@ -111,7 +104,6 @@ public class TicketController implements Initializable {
     }
 
     private void poblarFiltros() {
-        // Rutas únicas
         ObservableList<String> rutas = FXCollections.observableArrayList();
         rutas.add("Todas las rutas");
         try {
@@ -121,7 +113,6 @@ public class TicketController implements Initializable {
         cmbFiltroRuta.setItems(rutas);
         cmbFiltroRuta.getSelectionModel().selectFirst();
 
-        // Pasajeros únicos
         ObservableList<String> pasajeros = FXCollections.observableArrayList();
         pasajeros.add("Todos los pasajeros");
         try {
@@ -135,7 +126,6 @@ public class TicketController implements Initializable {
         cmbFiltroPasajero.getSelectionModel().selectFirst();
     }
 
-    // ── Filtros ───────────────────────────────────────────────────────────────
 
     @FXML private void handleFiltrarRuta()     { aplicarFiltros(); }
     @FXML private void handleFiltrarPasajero() { aplicarFiltros(); }
@@ -159,8 +149,6 @@ public class TicketController implements Initializable {
             if (okRuta && okPasajero) ticketsMostrados.add(t);
         }
     }
-
-    // ── Edición ──────────────────────────────────────────────────────────────
 
     private void abrirEdicion(Ticket t) {
         ticketEnEdicion = t;
@@ -195,12 +183,10 @@ public class TicketController implements Initializable {
         mostrarPanel(false);
     }
 
-    // ── Navegación ────────────────────────────────────────────────────────────
     @FXML private void irRutas()    { ServerFactory.navigateToRoutes  ((Stage) tablaTickets.getScene().getWindow()); }
     @FXML private void irTrenes()   { ServerFactory.navigateToTrains  ((Stage) tablaTickets.getScene().getWindow()); }
     @FXML private void irUsuarios() { ServerFactory.navigateToUsers   ((Stage) tablaTickets.getScene().getWindow()); }
 
-    // ── Helpers ──────────────────────────────────────────────────────────────
 
     private String categoriaLabel(int cat) {
         return switch (cat) {

@@ -20,14 +20,12 @@ import java.util.ResourceBundle;
 
 public class TrainController implements Initializable {
 
-    // ── Tabla ──
     @FXML private TextField txtBuscar;
     @FXML private ComboBox<String> cmbFiltroFabricante;
     @FXML private TableView<Train> tablaTrenes;
     @FXML private TableColumn<Train, String> colId, colNombre, colFabricante, colTipo, colCapacidad, colKilometraje;
     @FXML private TableColumn<Train, String> colAcciones;
 
-    // ── Formulario ──
     @FXML private VBox panelForm;
     @FXML private Label lblTituloForm, lblErrorForm, lblLimite;
     @FXML private Label txtId;  // ahora es Label (ID auto-generado, solo lectura)
@@ -52,11 +50,9 @@ public class TrainController implements Initializable {
         cmbFabricante.getItems().addAll("Mercedes-Benz", "Arnold");
         cmbFabricante.setOnAction(e -> { actualizarTipos(); actualizarLimite(); });
 
-        // Actualizar indicador de límite al escribir vagones
         txtVagonesPasajeros.textProperty().addListener((o, ov, nv) -> actualizarLimite());
         txtVagonesCarga.textProperty().addListener((o, ov, nv) -> actualizarLimite());
 
-        // Columnas
         colId.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
         colNombre.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
         colFabricante.setCellValueFactory(c -> new SimpleStringProperty(fabricanteDesdeNombre(c.getValue().getType())));
@@ -166,7 +162,6 @@ public class TrainController implements Initializable {
 
         try {
             if (trainEnEdicion == null) {
-                // ID auto-generado: siguiente al máximo existente
                 int nuevoId = 1;
                 try {
                     edu.uva.model.iterator.Iterator<Train> it = trainService.getTrains().iterator();
@@ -189,12 +184,10 @@ public class TrainController implements Initializable {
 
     @FXML private void handleCancelar() { mostrarPanel(false); }
 
-    // ── Navegación ──
     @FXML private void irRutas()        { ServerFactory.navigateToRoutes  ((Stage) tablaTrenes.getScene().getWindow()); }
     @FXML private void irUsuarios()     { ServerFactory.navigateToUsers   ((Stage) tablaTrenes.getScene().getWindow()); }
     @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaTrenes.getScene().getWindow()); }
 
-    // ── Helpers ──
     private void actualizarTipos() {
         cmbTipo.getItems().clear();
         String fab = cmbFabricante.getValue();

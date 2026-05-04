@@ -28,14 +28,13 @@ import java.util.ResourceBundle;
 
 public class RouteController implements Initializable {
 
-    // ── Tabla ──
+
     @FXML private TextField txtBuscar;
     @FXML private TableView<Route> tablaRutas;
     @FXML private TableColumn<Route, String> colId, colNombre, colOrigen, colDestino,
             colDistancia, colEstado, colFechaSalida, colFechaLlegada;
     @FXML private TableColumn<Route, String> colAcciones;
 
-    // ── Formulario ──
     @FXML private VBox panelForm;
     @FXML private Label lblTituloForm, lblErrorForm, lblEstaciones;
     @FXML private TextField txtNombre;
@@ -44,7 +43,6 @@ public class RouteController implements Initializable {
     @FXML private ComboBox<Train> cmbTren;
     @FXML private ComboBox<Station> cmbOrigen, cmbDestino;
 
-    // ── Panel abordaje ──
     @FXML private VBox panelAbordaje;
     @FXML private Label lblTituloAbordaje;
     @FXML private TextArea txtOrdenAbordaje;
@@ -55,12 +53,10 @@ public class RouteController implements Initializable {
     private ObservableList<Station> estaciones   = FXCollections.observableArrayList();
     private ObservableList<Train>   listaTrenes  = FXCollections.observableArrayList();
 
-    /** Ruta que está siendo editada; null = modo creación */
     private Route rutaEnEdicion = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // ── Columnas ──
         colId.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
         colNombre.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
         colOrigen.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getOrigin().getName()));
@@ -125,8 +121,6 @@ public class RouteController implements Initializable {
                 setGraphic(empty ? null : box);
             }
         });
-
-        // ── Converters ComboBox ──
         cmbOrigen.setConverter(new javafx.util.StringConverter<Station>() {
             @Override public String toString(Station s) { return s == null ? "" : s.getName(); }
             @Override public Station fromString(String str) { return null; }
@@ -140,10 +134,9 @@ public class RouteController implements Initializable {
             @Override public Train fromString(String str) { return null; }
         });
 
-        // ── Spinners de hora ──
-        inicializarSpinner(spHoraSalida,  0, 23, 8);
+        inicializarSpinner(spHoraSalida,  0, 23, 12);
         inicializarSpinner(spMinSalida,   0, 59, 0);
-        inicializarSpinner(spHoraLlegada, 0, 23, 10);
+        inicializarSpinner(spHoraLlegada, 0, 23, 13);
         inicializarSpinner(spMinLlegada,  0, 59, 0);
 
         tablaRutas.setItems(dataRutas);
@@ -205,7 +198,6 @@ public class RouteController implements Initializable {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // ── Abrir modo edición ────────────────────────────────────────────────────
 
     private void abrirEdicion(Route r) {
         java.time.LocalDateTime now = java.time.LocalDateTime.now();
@@ -218,7 +210,6 @@ public class RouteController implements Initializable {
             mostrarError("Solo se pueden editar rutas inactivas (desactívala primero).");
             return;
         }
-        // Cerrar panel de abordaje si estaba abierto
         panelAbordaje.setVisible(false);
         panelAbordaje.setManaged(false);
 
@@ -226,7 +217,6 @@ public class RouteController implements Initializable {
         lblTituloForm.setText("Editar Ruta");
         txtNombre.setText(r.getName());
 
-        // Cargar fechas y horas en los controles
         if (r.getDateTravel() != null) {
             dpFechaSalida.setValue(r.getDateTravel().toLocalDate());
             spHoraSalida.getValueFactory().setValue(r.getDateTravel().getHour());
@@ -259,8 +249,6 @@ public class RouteController implements Initializable {
         ocultarError();
         mostrarPanel(true);
     }
-
-    // ── Handlers ─────────────────────────────────────────────────────────────
 
     @FXML private void handleBuscar() {
         String q = txtBuscar.getText().toLowerCase().trim();
@@ -313,7 +301,6 @@ public class RouteController implements Initializable {
         Station dst   = cmbDestino.getValue();
         Train tren    = cmbTren.getValue();
 
-        // Construir LocalDateTime desde DatePicker + Spinners
         LocalDate fechaSalDate = dpFechaSalida.getValue();
         LocalDate fechaLlegDate = dpFechaLlegada.getValue();
 
@@ -345,7 +332,6 @@ public class RouteController implements Initializable {
 
         try {
             if (rutaEnEdicion == null) {
-                // ── Validar tren libre ──
                 String rutaUsando = routeService.getRouteNameUsingTrain(tren);
                 if (rutaUsando != null) {
                     mostrarError("El tren ya está asignado a la ruta activa: \"" + rutaUsando + "\".");
@@ -358,7 +344,6 @@ public class RouteController implements Initializable {
                         fechaSal, fechaLleg, org, dst, adminFicticio());
                 dataRutas.add(r);
             } else {
-                // ── Editar ──
                 String rutaUsando = routeService.getRouteNameUsingTrain(tren);
                 if (rutaUsando != null && !rutaUsando.equals(rutaEnEdicion.getName())) {
                     mostrarError("El tren ya está asignado a la ruta activa: \"" + rutaUsando + "\".");
@@ -379,7 +364,6 @@ public class RouteController implements Initializable {
         } catch (Exception ex) { mostrarError(ex.getMessage()); }
     }
 
-    // ── Panel abordaje ──────────────────────────────────────────────────────
 
     private void mostrarAbordaje(Route r) {
         mostrarPanel(false);
@@ -407,12 +391,10 @@ public class RouteController implements Initializable {
         mostrarPanel(false);
     }
 
-    // ── Navegación ──
     @FXML private void irTrenes()       { ServerFactory.navigateToTrains ((Stage) tablaRutas.getScene().getWindow()); }
     @FXML private void irUsuarios()     { ServerFactory.navigateToUsers  ((Stage) tablaRutas.getScene().getWindow()); }
     @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaRutas.getScene().getWindow()); }
 
-    // ── Helpers ──
     private Admin adminFicticio() {
         return new Admin("0","Admin@project.com","Admin123","Admin","1234","C.C","cr 29#92-49",3);
     }

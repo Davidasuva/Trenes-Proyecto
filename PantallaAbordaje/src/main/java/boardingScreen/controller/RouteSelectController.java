@@ -54,7 +54,7 @@ public class RouteSelectController implements Initializable {
                 if (ok) {
                     cargarRutas();
                 } else {
-                    lblEstado.setText("❌  No se pudo conectar al servidor.");
+                    lblEstado.setText("No se pudo conectar al servidor.");
                     lblEstado.setVisible(true);
                 }
             });

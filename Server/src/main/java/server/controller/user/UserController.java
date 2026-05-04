@@ -147,8 +147,6 @@ public class UserController implements Initializable {
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 
-    // ── Handlers ────────────────────────────────────────────────────────────
-
     @FXML private void handleBuscar() {
         String q = txtBuscar.getText().toLowerCase().trim();
         if (q.isEmpty()) { tablaUsuarios.setItems(dataUsuarios); return; }
@@ -178,7 +176,6 @@ public class UserController implements Initializable {
         String dir      = txtDireccion.getText().trim();
         String tipoDoc  = cmbTipoDoc.getValue();
 
-        // ── Validaciones ──
         if (id.isEmpty())          { mostrarError("El ID es obligatorio."); return; }
         if (nombre.isEmpty())      { mostrarError("El nombre es obligatorio."); return; }
         if (apellido.isEmpty())    { mostrarError("El apellido es obligatorio."); return; }
@@ -193,13 +190,11 @@ public class UserController implements Initializable {
 
         try {
             if (usuarioEnEdicion == null) {
-                // ── Crear nuevo ──
                 Passenger p = new Passenger(id, correo, nombre, apellido, password, tipoDoc,
                         dir.isEmpty() ? "—" : dir);
                 userService.registerPassenger(p);
                 dataUsuarios.add(p);
             } else {
-                // ── Editar existente ──
                 usuarioEnEdicion.setName(nombre);
                 usuarioEnEdicion.setLastName(apellido);
                 usuarioEnEdicion.setMail(correo);
@@ -211,7 +206,6 @@ public class UserController implements Initializable {
             tablaUsuarios.refresh();
             mostrarPanel(false);
         } catch (Exception ex) {
-            // Mensaje amigable para ID duplicado
             String msg = ex.getMessage();
             if (msg != null && msg.contains("id")) {
                 mostrarError("Ya existe un usuario con ese ID.");
@@ -228,12 +222,11 @@ public class UserController implements Initializable {
         mostrarPanel(false);
     }
 
-    // ── Navegación ──
+
     @FXML private void irRutas()        { ServerFactory.navigateToRoutes  ((Stage) tablaUsuarios.getScene().getWindow()); }
     @FXML private void irTrenes()       { ServerFactory.navigateToTrains  ((Stage) tablaUsuarios.getScene().getWindow()); }
     @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaUsuarios.getScene().getWindow()); }
 
-    // ── Helpers ──
     private void mostrarPanel(boolean v) { panelForm.setVisible(v); panelForm.setManaged(v); }
     private void limpiarFormulario() {
         txtId.setDisable(false);

@@ -19,16 +19,13 @@ import java.util.List;
 
 public class TicketHistoryController {
 
-    // ── Filtros ──
     @FXML private TextField txtBuscar;
     @FXML private ComboBox<String> cmbFiltroEstado;
 
-    // ── Tabla ──
     @FXML private TableView<Ticket> tablaTickets;
     @FXML private TableColumn<Ticket, String> colId, colRuta, colOrigen, colDestino,
             colFechaCompra, colSalida, colLlegada, colCategoria, colEstado, colPrecio;
 
-    // ── Panel editar ruta ──
     @FXML private VBox panelEditarRuta;
     @FXML private Label lblTicketEditar, lblOrigenFijo, lblErrorEditar;
     @FXML private ComboBox<Route> cmbNuevaRuta;
@@ -41,7 +38,6 @@ public class TicketHistoryController {
 
     @FXML
     public void initialize() {
-        // Columnas
         colId.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getId()));
         colRuta.setCellValueFactory(c -> {
             Route r = c.getValue().getRoute();
@@ -69,7 +65,6 @@ public class TicketHistoryController {
         colPrecio.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(
                 String.format("$ %,d", c.getValue().getPrice())));
 
-        // Columna Acciones: botón editar ruta solo si el ticket está activo y la ruta aún no inicia
         TableColumn<Ticket, Void> colAcciones = new TableColumn<>("Acción");
         colAcciones.setPrefWidth(130);
         colAcciones.setCellFactory(col -> new TableCell<>() {
@@ -92,13 +87,11 @@ public class TicketHistoryController {
         });
         tablaTickets.getColumns().add(colAcciones);
 
-        // Filtros
         cmbFiltroEstado.setItems(FXCollections.observableArrayList(
                 "Todos", "Activos", "Pasados/Finalizados"));
         cmbFiltroEstado.setValue("Todos");
         cmbFiltroEstado.setOnAction(e -> aplicarFiltros());
 
-        // Converter para ComboBox de rutas
         cmbNuevaRuta.setConverter(new javafx.util.StringConverter<Route>() {
             @Override public String toString(Route r) {
                 if (r == null) return "";
@@ -118,7 +111,6 @@ public class TicketHistoryController {
         cargarTickets();
     }
 
-    // ── Carga ────────────────────────────────────────────────────────────────
 
     private void cargarTickets() {
         new Thread(() -> {
@@ -135,7 +127,6 @@ public class TicketHistoryController {
         }).start();
     }
 
-    // ── Filtros ───────────────────────────────────────────────────────────────
 
     @FXML
     private void handleBuscar() { aplicarFiltros(); }
@@ -146,7 +137,6 @@ public class TicketHistoryController {
 
         ticketsMostrados.clear();
         for (Ticket t : todosTickets) {
-            // Filtro estado
             boolean okEstado = true;
             if ("Activos".equals(estado)) {
                 okEstado = t.Status() && !esRutaFinalizada(t);
@@ -154,7 +144,6 @@ public class TicketHistoryController {
                 okEstado = !t.Status() || esRutaFinalizada(t);
             }
 
-            // Filtro texto: por ID de ticket, nombre de ruta, origen o destino
             boolean okBusq = busq.isEmpty();
             if (!okBusq) {
                 okBusq = t.getId().toLowerCase().contains(busq);
@@ -169,7 +158,6 @@ public class TicketHistoryController {
         }
     }
 
-    // ── Edición de ruta ──────────────────────────────────────────────────────
 
     private void abrirEdicionRuta(Ticket t) {
         ticketEnEdicion = t;
@@ -182,7 +170,6 @@ public class TicketHistoryController {
         cmbNuevaRuta.getItems().clear();
         lblInfoNuevaRuta.setText("");
 
-        // Cargar rutas con mismo origen en hilo aparte
         new Thread(() -> {
             var rutas = model.getRoutesWithSameOrigin(rutaActual);
             List<Route> listaRutas = new ArrayList<>();
@@ -238,7 +225,6 @@ public class TicketHistoryController {
     @FXML
     private void handleRefresh() { cargarTickets(); }
 
-    // ── Navegación ───────────────────────────────────────────────────────────
 
     @FXML
     private void handleVolver() {
@@ -253,7 +239,6 @@ public class TicketHistoryController {
         }
     }
 
-    // ── Helpers ──────────────────────────────────────────────────────────────
 
     private String catLabel(int cat) {
         return switch (cat) {
