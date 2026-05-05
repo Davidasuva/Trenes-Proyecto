@@ -1,18 +1,21 @@
 package server.model.user;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import edu.uva.app.bintree.avl.BinAVLTree;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
 import server.model.carriage.AbstractCarriage;
 import server.model.luggage.Luggage;
 import edu.uva.app.array.Array;
 
-public class UserService  extends UnicastRemoteObject implements User{
+public class UserService extends UnicastRemoteObject implements User {
 
-    private LinkedList<AbstractUser> users=new LinkedList<>();
+    private BinAVLTree<AbstractUser> users = new BinAVLTree<>();
+
     public UserService() throws RemoteException {
         super();
     }
+
     @Override
     public AbstractUser register(AbstractUser user) throws RemoteException {
         if (getUserById(user.getId()) != null) {
@@ -21,7 +24,7 @@ public class UserService  extends UnicastRemoteObject implements User{
         if (userPerEmailAndPassword(user.getMail(), user.getPassword(), null) != null) {
             throw new RemoteException("Ya existe un usuario con el email: " + user.getMail());
         }
-        users.add(user);
+        users.insert(user);
         return user;
     }
 
@@ -31,7 +34,8 @@ public class UserService  extends UnicastRemoteObject implements User{
             throw new IllegalArgumentException("Categoría inválida");
         }
         LinkedList<AbstractUser> result = new LinkedList<>();
-        Iterator<AbstractUser> iterator = users.iterator();
+        LinkedList<AbstractUser> all = users.inorder();
+        Iterator<AbstractUser> iterator = all.iterator();
         while (iterator.hasNext()) {
             AbstractUser user = iterator.next();
             if (user.getType() == category) {
@@ -59,10 +63,11 @@ public class UserService  extends UnicastRemoteObject implements User{
 
     @Override
     public AbstractUser userPerEmailAndPassword(String email, String password, Object object) throws RemoteException {
-        Iterator<AbstractUser> iterator=users.iterator();
-        while(iterator.hasNext()){
-            AbstractUser user=iterator.next();
-            if(user.getMail().equals(email)&&user.getPassword().equals(password)){
+        LinkedList<AbstractUser> all = users.inorder();
+        Iterator<AbstractUser> iterator = all.iterator();
+        while (iterator.hasNext()) {
+            AbstractUser user = iterator.next();
+            if (user.getMail().equals(email) && user.getPassword().equals(password)) {
                 return user;
             }
         }
@@ -71,25 +76,28 @@ public class UserService  extends UnicastRemoteObject implements User{
 
     @Override
     public AbstractUser getUserById(String id) throws RemoteException {
-        Iterator<AbstractUser> iterator = users.iterator();
+        LinkedList<AbstractUser> all = users.inorder();
+        Iterator<AbstractUser> iterator = all.iterator();
         while (iterator.hasNext()) {
             AbstractUser user = iterator.next();
             if (user.getId().equals(id)) return user;
         }
         return null;
     }
+
     @Override
     public AbstractUser removeUser(String id) throws RemoteException {
         AbstractUser user = getUserById(id);
-        if (user == null){
+        if (user == null) {
             return null;
         }
         users.remove(user);
         return user;
     }
+
     @Override
     public LinkedList<AbstractUser> getUsers() throws RemoteException {
-        return users;
+        return users.inorder();
     }
 
     @Override
@@ -98,7 +106,6 @@ public class UserService  extends UnicastRemoteObject implements User{
             throw new RemoteException("Solo administradores");
         }
         return register(worker);
-
     }
 
     @Override

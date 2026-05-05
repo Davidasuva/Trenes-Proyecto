@@ -1,6 +1,7 @@
 package server.model.train;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import edu.uva.app.bintree.avl.BinAVLTree;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
 import server.model.carriage.AbstractCarriage;
@@ -9,7 +10,7 @@ import server.model.carriage.CarriageLoad;
 import server.model.user.AbstractUser;
 
 public class TrainService extends UnicastRemoteObject implements TrainInterface {
-    private LinkedList<Train> trains=new LinkedList<>();
+    private BinAVLTree<Train> trains = new BinAVLTree<>();
     private int carriageIdCounter = 1;
     private server.model.carriage.CarriageService carriageService;
 
@@ -72,7 +73,7 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
             }
         }
 
-        trains.add(train);
+        trains.insert(train);
         return train;
     }
 
@@ -89,7 +90,8 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
     }
     @Override
     public Train getTrainById(int id) throws RemoteException {
-        Iterator<Train> iterator = trains.iterator();
+        LinkedList<Train> all = trains.inorder();
+        Iterator<Train> iterator = all.iterator();
         while (iterator.hasNext()) {
             Train train = iterator.next();
             if (train.getId() == id) return train;
@@ -132,7 +134,8 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
     @Override
     public LinkedList<Train> getTrainsByType(String type) throws RemoteException {
         LinkedList<Train> result = new LinkedList<>();
-        Iterator<Train> iterator = trains.iterator();
+        LinkedList<Train> all = trains.inorder();
+        Iterator<Train> iterator = all.iterator();
         while (iterator.hasNext()) {
             Train train = iterator.next();
             if (train.getType().equalsIgnoreCase(type)) {
@@ -144,7 +147,8 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
     @Override
     public LinkedList<Train> getTrainsByCapacity(int minCapacity) throws RemoteException {
         LinkedList<Train> result = new LinkedList<>();
-        Iterator<Train> iterator = trains.iterator();
+        LinkedList<Train> all = trains.inorder();
+        Iterator<Train> iterator = all.iterator();
         while (iterator.hasNext()) {
             Train train = iterator.next();
             if (train.getCapacity() >= minCapacity) {
@@ -155,12 +159,13 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
     }
     @Override
     public LinkedList<Train> getTrains() throws RemoteException {
-        return trains;
+        return trains.inorder();
     }
     @Override
     public LinkedList<Train> getTrainsByMileage(int maxMileage) throws RemoteException {
         LinkedList<Train> result = new LinkedList<>();
-        Iterator<Train> iterator = trains.iterator();
+        LinkedList<Train> all = trains.inorder();
+        Iterator<Train> iterator = all.iterator();
         while (iterator.hasNext()) {
             Train train = iterator.next();
             if (train.getMileage() <= maxMileage) {

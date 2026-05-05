@@ -164,7 +164,7 @@ public class TrainController implements Initializable {
             if (trainEnEdicion == null) {
                 int nuevoId = 1;
                 try {
-                    edu.uva.model.iterator.Iterator<Train> it = trainService.getTrains().iterator();
+                    Iterator<Train> it = trainService.getTrains().iterator();
                     while (it.hasNext()) {
                         int tid = it.next().getId();
                         if (tid >= nuevoId) nuevoId = tid + 1;
@@ -184,8 +184,9 @@ public class TrainController implements Initializable {
 
     @FXML private void handleCancelar() { mostrarPanel(false); }
 
-    @FXML private void irRutas()        { ServerFactory.navigateToRoutes  ((Stage) tablaTrenes.getScene().getWindow()); }
-    @FXML private void irUsuarios()     { ServerFactory.navigateToUsers   ((Stage) tablaTrenes.getScene().getWindow()); }
+    @FXML private void irRutas()        { ServerFactory.navigateToRoutes    ((Stage) tablaTrenes.getScene().getWindow()); }
+    @FXML private void irUsuarios()     { ServerFactory.navigateToUsers     ((Stage) tablaTrenes.getScene().getWindow()); }
+    @FXML private void irEmpleados()    { ServerFactory.navigateToEmployees ((Stage) tablaTrenes.getScene().getWindow()); }
     @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaTrenes.getScene().getWindow()); }
 
     private void actualizarTipos() {

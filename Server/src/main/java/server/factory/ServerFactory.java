@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import server.controller.auth.AuthController;
+import server.controller.employee.EmployeeController;
 import server.controller.route.RouteController;
 import server.controller.ticket.TicketController;
 import server.controller.train.TrainController;
@@ -25,14 +26,16 @@ public class ServerFactory {
     private static Scene sceneTrains;
     private static Scene sceneUsers;
     private static Scene sceneTickets;
+    private static Scene sceneEmployees;
 
     // ── Modelo compartido ─────────────────────────────────────────────────────
     private static ServerModel sharedModel;
 
-    private static UserController   userController   = new UserController();
-    private static TicketController ticketController = new TicketController();
-    private static RouteController  routeController  = new RouteController();
-    private static TrainController  trainController  = new TrainController();
+    private static UserController     userController     = new UserController();
+    private static EmployeeController employeeController = new EmployeeController();
+    private static TicketController   ticketController   = new TicketController();
+    private static RouteController    routeController    = new RouteController();
+    private static TrainController    trainController    = new TrainController();
 
     public static void showLogin(Stage stage) {
         try {
@@ -82,14 +85,16 @@ public class ServerFactory {
         if (sceneRoutes != null) return;
         sharedModel = model;
         try {
-            sceneRoutes  = buildScene("/server/view/route/RouteView.fxml",
-                    server.view.route.RouteView.class,   "route");
-            sceneTrains  = buildScene("/server/view/train/TrainView.fxml",
-                    server.view.train.TrainView.class,   "train");
-            sceneUsers   = buildScene("/server/view/user/UserView.fxml",
-                    server.view.user.UserView.class,     "user");
-            sceneTickets = buildScene("/server/view/ticket/TicketView.fxml",
-                    server.view.ticket.TicketView.class, "ticket");
+            sceneRoutes    = buildScene("/server/view/route/RouteView.fxml",
+                    server.view.route.RouteView.class,       "route");
+            sceneTrains    = buildScene("/server/view/train/TrainView.fxml",
+                    server.view.train.TrainView.class,       "train");
+            sceneUsers     = buildScene("/server/view/user/UserView.fxml",
+                    server.view.user.UserView.class,         "user");
+            sceneTickets   = buildScene("/server/view/ticket/TicketView.fxml",
+                    server.view.ticket.TicketView.class,     "ticket");
+            sceneEmployees = buildScene("/server/view/employee/EmployeeView.fxml",
+                    server.view.employee.EmployeeView.class, "employee");
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error pre-creando escenas del menú", e);
@@ -106,16 +111,20 @@ public class ServerFactory {
 
         Object ctrl = loader.getController();
         switch (tipo) {
-            case "route"  -> { routeController  = (RouteController)  ctrl; routeController.setModel(sharedModel); }
-            case "train"  -> { trainController  = (TrainController)  ctrl; trainController.setModel(sharedModel); }
-            case "user"   -> { userController   = (UserController)   ctrl; userController.setModel(sharedModel);  }
-            case "ticket" -> { ticketController = (TicketController) ctrl; ticketController.setModel(sharedModel);}
+            case "route"    -> { routeController    = (RouteController)    ctrl; routeController.setModel(sharedModel);    }
+            case "train"    -> { trainController    = (TrainController)    ctrl; trainController.setModel(sharedModel);    }
+            case "user"     -> { userController     = (UserController)     ctrl; userController.setModel(sharedModel);     }
+            case "ticket"   -> { ticketController   = (TicketController)   ctrl; ticketController.setModel(sharedModel);   }
+            case "employee" -> { employeeController = (EmployeeController) ctrl; employeeController.setModel(sharedModel); }
         }
 
         // CSS compartido
         java.net.URL css = refClass.getResource("AdminView.css");
+        if (css == null) css = refClass.getResource("EmployeeView.css");
         if (css == null) css = ServerFactory.class.getResource(
                 fxmlPath.substring(0, fxmlPath.lastIndexOf('/') + 1) + "AdminView.css");
+        if (css == null) css = ServerFactory.class.getResource(
+                fxmlPath.substring(0, fxmlPath.lastIndexOf('/') + 1) + "EmployeeView.css");
         // Para ticket, el CSS está en route/
         if (css == null)
             css = ServerFactory.class.getResource("/server/view/route/AdminView.css");
@@ -154,5 +163,10 @@ public class ServerFactory {
     public static void navigateToTickets(Stage stage) {
         if (ticketController != null) ticketController.refreshTickets();
         applySceneAndMaximize(stage, sceneTickets, "trenes — Tickets");
+    }
+
+    public static void navigateToEmployees(Stage stage) {
+        if (employeeController != null) employeeController.refreshEmployees();
+        applySceneAndMaximize(stage, sceneEmployees, "trenes — Empleados");
     }
 }

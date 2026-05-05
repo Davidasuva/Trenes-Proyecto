@@ -28,6 +28,7 @@
             <Button text="rutas"     styleClass="nav-link" onAction="#irRutas"/>
             <Button text="trenes"    styleClass="nav-link" onAction="#irTrenes"/>
             <Button text="usuarios"  styleClass="nav-link" onAction="#irUsuarios"/>
+            <Button text="empleados" styleClass="nav-link" onAction="#irEmpleados"/>
             <Button text="tickets"   styleClass="nav-link-active"/>
         </HBox>
 

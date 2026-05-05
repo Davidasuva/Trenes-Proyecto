@@ -1,6 +1,7 @@
 package server.model.carriage;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import edu.uva.app.bintree.avl.BinAVLTree;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.app.priorityQueue.PriorityQueue;
 import edu.uva.app.stack.array.Stack;
@@ -9,20 +10,21 @@ import server.model.luggage.Luggage;
 import server.model.ticket.Ticket;
 
 public class CarriageService extends UnicastRemoteObject implements CarriageInterface {
-    private LinkedList<AbstractCarriage> carriages = new LinkedList();
+    private BinAVLTree<AbstractCarriage> carriages = new BinAVLTree<>();
     public CarriageService() throws RemoteException {
         super();
     }
 
     @Override
     public AbstractCarriage register(AbstractCarriage carriage) throws RemoteException {
-        carriages.add(carriage);
+        carriages.insert(carriage);
         return carriage;
     }
 
     @Override
     public AbstractCarriage getCarriageById(int id) throws RemoteException {
-        Iterator<AbstractCarriage> iterator = carriages.iterator();
+        LinkedList<AbstractCarriage> all = carriages.inorder();
+        Iterator<AbstractCarriage> iterator = all.iterator();
         while (iterator.hasNext()) {
             AbstractCarriage carriage = iterator.next();
             if (carriage.getId() == id) {
@@ -78,7 +80,8 @@ public class CarriageService extends UnicastRemoteObject implements CarriageInte
     @Override
     public LinkedList<CarriageLoad> getLoadCarriages() throws RemoteException {
         LinkedList<CarriageLoad> result = new LinkedList<>();
-        Iterator<AbstractCarriage> iterator = carriages.iterator();
+        LinkedList<AbstractCarriage> all = carriages.inorder();
+        Iterator<AbstractCarriage> iterator = all.iterator();
         while (iterator.hasNext()) {
             AbstractCarriage carriage = iterator.next();
             if (carriage instanceof CarriageLoad) {
@@ -90,7 +93,8 @@ public class CarriageService extends UnicastRemoteObject implements CarriageInte
     @Override
     public LinkedList<CarriagePassenger> getPassengerCarriages() throws RemoteException {
         LinkedList<CarriagePassenger> result = new LinkedList<>();
-        Iterator<AbstractCarriage> iterator = carriages.iterator();
+        LinkedList<AbstractCarriage> all = carriages.inorder();
+        Iterator<AbstractCarriage> iterator = all.iterator();
         while (iterator.hasNext()) {
             AbstractCarriage carriage = iterator.next();
             if (carriage instanceof CarriagePassenger) {
@@ -101,7 +105,7 @@ public class CarriageService extends UnicastRemoteObject implements CarriageInte
     }
     @Override
     public LinkedList<AbstractCarriage> getCarriages() throws RemoteException {
-        return carriages;
+        return carriages.inorder();
     }
 
 

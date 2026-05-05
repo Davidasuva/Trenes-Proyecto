@@ -162,7 +162,9 @@ public class Ticket implements Serializable, Comparable<Ticket> {
      *
      * @return {@code true} si el ticket está activo
      */
-    public boolean Status() { return status; }
+    public boolean Status() {
+        return status;
+    }
 
     /**
      * Retorna la fecha de compra del ticket.

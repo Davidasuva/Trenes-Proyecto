@@ -183,9 +183,10 @@ public class TicketController implements Initializable {
         mostrarPanel(false);
     }
 
-    @FXML private void irRutas()    { ServerFactory.navigateToRoutes  ((Stage) tablaTickets.getScene().getWindow()); }
-    @FXML private void irTrenes()   { ServerFactory.navigateToTrains  ((Stage) tablaTickets.getScene().getWindow()); }
-    @FXML private void irUsuarios() { ServerFactory.navigateToUsers   ((Stage) tablaTickets.getScene().getWindow()); }
+    @FXML private void irRutas()    { ServerFactory.navigateToRoutes    ((Stage) tablaTickets.getScene().getWindow()); }
+    @FXML private void irTrenes()   { ServerFactory.navigateToTrains    ((Stage) tablaTickets.getScene().getWindow()); }
+    @FXML private void irUsuarios() { ServerFactory.navigateToUsers     ((Stage) tablaTickets.getScene().getWindow()); }
+    @FXML private void irEmpleados(){ ServerFactory.navigateToEmployees ((Stage) tablaTickets.getScene().getWindow()); }
 
 
     private String categoriaLabel(int cat) {

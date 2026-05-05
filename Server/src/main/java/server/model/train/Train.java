@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @see AbstractCarriage
  */
-public class Train implements Serializable {
+public class Train implements Serializable, Comparable<Train> {
     private static final long serialVersionUID = 3L;
 
     private int id;
@@ -119,5 +119,10 @@ public class Train implements Serializable {
         if (!(obj instanceof Train)) return false;
         Train t = (Train) obj;
         return this.id == t.getId();
+    }
+
+    @Override
+    public int compareTo(Train t) {
+        return Integer.compare(this.id, t.getId());
     }
 }

@@ -17,7 +17,7 @@ public class RouteGraph implements Serializable {
     private Station d = new Station(3, "Barracas");
     private Station e = new Station(4, "Manas");
     private Station f = new Station(5, "Madrid");
-    private Station g = new Station(6, "Estación Colonia");
+    private Station g = new Station(6, "Estación Jumanji");
     private Station h = new Station(7, "Kennedy");
     private Station i = new Station(8, "Girón");
     private Station j = new Station(9, "PiedeCosta");
@@ -75,13 +75,11 @@ public class RouteGraph implements Serializable {
             graph.addEdgeWithWeight(f, g, 80);
             graph.addEdgeWithWeight(g, f, 80);
 
-            graph.addEdgeWithWeight(g, h, 30);
             graph.addEdgeWithWeight(h, g, 30);
 
             graph.addEdgeWithWeight(g, i, 145);
             graph.addEdgeWithWeight(i, g, 145);
 
-            graph.addEdgeWithWeight(h, f, 30);
             graph.addEdgeWithWeight(f, h, 30);
         }catch(Exception e){
             e.printStackTrace();

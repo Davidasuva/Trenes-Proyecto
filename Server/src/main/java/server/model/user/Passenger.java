@@ -23,7 +23,7 @@ import server.model.ticket.Ticket;
 public class Passenger extends AbstractUser {
 
     /** Historial completo de todos los tickets del pasajero. */
-    LinkedList<Ticket> historyTickets;
+    public LinkedList<Ticket> historyTickets;
 
     /** Ticket activo del viaje en curso. Puede ser {@code null} si no está viajando. */
     Ticket actualTicket;

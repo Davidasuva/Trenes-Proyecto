@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @see CarriageLoad
  * @see Ticket
  */
-public class Luggage implements Serializable {
+public class Luggage implements Serializable, Comparable<Luggage> {
     private static final long serialVersionUID = 1L;
     private int id;
     private int weight;
@@ -67,5 +67,10 @@ public class Luggage implements Serializable {
         if (!(o instanceof Luggage)) return false;
         Luggage l = (Luggage) o;
         return this.id == l.getId();
+    }
+
+    @Override
+    public int compareTo(Luggage l) {
+        return Integer.compare(this.id, l.getId());
     }
 }

@@ -7,9 +7,9 @@
 
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="server.controller.user.UserController"
+      fx:controller="server.controller.employee.EmployeeController"
       styleClass="raiz-admin"
-      stylesheets="@AdminView.css"
+      stylesheets="@EmployeeView.css"
       prefWidth="1100" prefHeight="700">
 
     <VBox HBox.hgrow="ALWAYS" spacing="0">
@@ -24,19 +24,19 @@
                 <Label text="trenes" styleClass="nav-brand"/>
             </HBox>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="rutas"        styleClass="nav-link" onAction="#irRutas"/>
-            <Button text="trenes"       styleClass="nav-link" onAction="#irTrenes"/>
-            <Button text="usuarios"     styleClass="nav-link-active"/>
-            <Button text="empleados"    styleClass="nav-link" onAction="#irEmpleados"/>
-            <Button text="tickets"      styleClass="nav-link" onAction="#irTickets"/>
+            <Button text="rutas"       styleClass="nav-link" onAction="#irRutas"/>
+            <Button text="trenes"      styleClass="nav-link" onAction="#irTrenes"/>
+            <Button text="usuarios"    styleClass="nav-link" onAction="#irUsuarios"/>
+            <Button text="empleados"   styleClass="nav-link-active"/>
+            <Button text="tickets"     styleClass="nav-link" onAction="#irTickets"/>
         </HBox>
 
         <VBox VBox.vgrow="ALWAYS" spacing="0">
             <VBox.margin><Insets top="28" left="28" right="28" bottom="28"/></VBox.margin>
 
             <VBox spacing="4">
-                <Label text="Usuarios" styleClass="seccion-titulo"/>
-                <Label text="Consulta y administra los pasajeros registrados." styleClass="seccion-subtitulo"/>
+                <Label text="Empleados" styleClass="seccion-titulo"/>
+                <Label text="Gestiona el personal: pilotos y personal de abordo." styleClass="seccion-subtitulo"/>
             </VBox>
 
             <Region minHeight="20" maxHeight="20"/>
@@ -48,22 +48,22 @@
                            prefWidth="340"
                            onKeyReleased="#handleBuscar"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="+ Nuevo Usuario" styleClass="btn-primario" onAction="#handleNuevoUsuario"/>
+                <Button text="+ Nuevo Empleado" styleClass="btn-primario" onAction="#handleNuevoEmpleado"/>
             </HBox>
 
             <Region minHeight="14" maxHeight="14"/>
 
-            <TableView fx:id="tablaUsuarios" styleClass="tabla" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tablaEmpleados" styleClass="tabla" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="colId"        text="ID"         prefWidth="100"/>
-                    <TableColumn fx:id="colNombre"    text="Nombre"     prefWidth="170"/>
-                    <TableColumn fx:id="colCorreo"    text="Correo"     prefWidth="200"/>
+                    <TableColumn fx:id="colNombre"    text="Nombre"     prefWidth="160"/>
+                    <TableColumn fx:id="colCorreo"    text="Correo"     prefWidth="190"/>
                     <TableColumn fx:id="colDocumento" text="Documento"  prefWidth="130"/>
-                    <TableColumn fx:id="colTelefono"  text="Teléfono"   prefWidth="130"/>
+                    <TableColumn fx:id="colRol"       text="Rol"        prefWidth="160"/>
                     <TableColumn fx:id="colAcciones"  text="Acciones"   prefWidth="150"/>
                 </columns>
                 <placeholder>
-                    <Label text="No hay usuarios registrados." styleClass="seccion-subtitulo"/>
+                    <Label text="No hay empleados registrados." styleClass="seccion-subtitulo"/>
                 </placeholder>
             </TableView>
         </VBox>
@@ -74,7 +74,7 @@
           prefWidth="320" spacing="0"
           visible="false" managed="false">
 
-        <Label fx:id="lblTituloForm" text="Nuevo Usuario" styleClass="form-titulo"/>
+        <Label fx:id="lblTituloForm" text="Nuevo Empleado" styleClass="form-titulo"/>
         <Region minHeight="22" maxHeight="22"/>
 
         <Label text="ID / Documento" styleClass="form-label"/>
@@ -114,9 +114,10 @@
 
         <Region minHeight="14" maxHeight="14"/>
 
-        <Label text="Dirección" styleClass="form-label"/>
+        <Label text="Rol" styleClass="form-label"/>
         <Region minHeight="5" maxHeight="5"/>
-        <TextField fx:id="txtDireccion" promptText="Dirección" styleClass="campo"/>
+        <ComboBox fx:id="cmbRol" styleClass="combo-campo" maxWidth="Infinity"
+                  promptText="Selecciona el rol..."/>
 
         <Region minHeight="6" maxHeight="6"/>
 

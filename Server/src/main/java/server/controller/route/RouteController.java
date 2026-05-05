@@ -391,8 +391,9 @@ public class RouteController implements Initializable {
         mostrarPanel(false);
     }
 
-    @FXML private void irTrenes()       { ServerFactory.navigateToTrains ((Stage) tablaRutas.getScene().getWindow()); }
-    @FXML private void irUsuarios()     { ServerFactory.navigateToUsers  ((Stage) tablaRutas.getScene().getWindow()); }
+    @FXML private void irTrenes()       { ServerFactory.navigateToTrains    ((Stage) tablaRutas.getScene().getWindow()); }
+    @FXML private void irUsuarios()     { ServerFactory.navigateToUsers     ((Stage) tablaRutas.getScene().getWindow()); }
+    @FXML private void irEmpleados()    { ServerFactory.navigateToEmployees ((Stage) tablaRutas.getScene().getWindow()); }
     @FXML private void irTickets() { ServerFactory.navigateToTickets((Stage) tablaRutas.getScene().getWindow()); }
 
     private Admin adminFicticio() {

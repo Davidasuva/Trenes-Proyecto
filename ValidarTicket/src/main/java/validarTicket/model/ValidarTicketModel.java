@@ -9,6 +9,7 @@ import server.model.ticket.TicketInterface;
 import server.model.user.AbstractUser;
 import server.model.user.Passenger;
 import server.model.user.User;
+import server.model.user.Worker;
 
 import java.rmi.Naming;
 
@@ -124,7 +125,7 @@ public class ValidarTicketModel {
     public ResultadoValidacion validar(String nombre, String correo, String password) {
         try {
             AbstractUser user = userService.userPerEmailAndPassword(correo, password, null);
-            if (user == null || !(user instanceof Passenger)) {
+            if (user == null || (!(user instanceof Passenger) && !(user instanceof Worker))){
                 return ResultadoValidacion.PASAJERO_NO_ENCONTRADO;
             }
             Passenger pasajero = (Passenger) user;
