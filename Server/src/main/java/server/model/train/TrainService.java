@@ -8,17 +8,18 @@ import server.model.carriage.AbstractCarriage;
 import server.model.carriage.CarriagePassenger;
 import server.model.carriage.CarriageLoad;
 import server.model.user.AbstractUser;
+import server.model.carriage.CarriageService;
 
 public class TrainService extends UnicastRemoteObject implements TrainInterface {
     private BinAVLTree<Train> trains = new BinAVLTree<>();
     private int carriageIdCounter = 1;
-    private server.model.carriage.CarriageService carriageService;
+    private CarriageService carriageService;
 
     public TrainService() throws RemoteException {
         super();
     }
 
-    public void setCarriageService(server.model.carriage.CarriageService carriageService) {
+    public void setCarriageService(CarriageService carriageService) {
         this.carriageService = carriageService;
     }
 

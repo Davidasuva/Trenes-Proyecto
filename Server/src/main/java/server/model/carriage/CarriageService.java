@@ -27,6 +27,17 @@ public class CarriageService extends UnicastRemoteObject implements CarriageInte
         return carriages.getBy(u -> Integer.compare(id,u.getId()));
     }
     @Override
+    public boolean emptyACarriagePassenger(int carriageId) throws RemoteException{
+        CarriagePassenger carriage = (CarriagePassenger) getCarriageById(carriageId);
+        return carriage.emptyCarriagePassenger();
+    }
+
+    @Override
+    public boolean emptyACarriageLoad(int carriageId) throws RemoteException{
+        CarriageLoad carriage = (CarriageLoad) getCarriageById(carriageId);
+        return carriage.emptyCarriageLoad();
+    }
+    @Override
     public Stack<Luggage> seeLuggagesPerCarriage(int carriageId) throws RemoteException {
         AbstractCarriage carriage = getCarriageById(carriageId);
         if (!(carriage instanceof CarriageLoad)) {

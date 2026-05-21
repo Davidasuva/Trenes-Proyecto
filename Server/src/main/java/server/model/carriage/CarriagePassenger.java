@@ -55,6 +55,13 @@ public class CarriagePassenger extends AbstractCarriage implements Serializable 
             return false;
         }
     }
+    public boolean emptyCarriagePassenger(){
+        try{
+            return passengers.clear();
+        }catch(Exception e){
+            return false;
+        }
+    }
 
     /** @return número actual de pasajeros en el vagón */
     public int getNumberOfPassengers() { return actualCapacity; }

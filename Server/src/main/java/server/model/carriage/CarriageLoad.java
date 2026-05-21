@@ -64,6 +64,13 @@ public class CarriageLoad extends AbstractCarriage {
         if (pushed) luggageCount++;
         return pushed;
     }
+    public boolean emptyCarriageLoad(){
+        try{
+            return luggages.clear();
+        }catch(Exception e){
+            return false;
+        }
+    }
 
     /**
      * Indica si el vagón puede recibir más maletas.

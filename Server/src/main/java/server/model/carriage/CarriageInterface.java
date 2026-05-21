@@ -20,6 +20,7 @@ public interface CarriageInterface extends Remote {
     LinkedList<CarriageLoad> getLoadCarriages() throws RemoteException;
     LinkedList<CarriagePassenger> getPassengerCarriages() throws RemoteException;
     LinkedList<AbstractCarriage> getCarriages() throws RemoteException;
-
+    boolean emptyACarriagePassenger(int carriageId) throws RemoteException;
+    boolean emptyACarriageLoad(int carriageId) throws RemoteException;
 }
 

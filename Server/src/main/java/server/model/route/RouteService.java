@@ -44,25 +44,13 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface 
                 Route r = it.next();
                 if (r.isActive() && r.getDateArrival() != null && r.getDateArrival().isBefore(now)) {
                     r.setActive(false);
-                    System.out.println("[Scheduler] Ruta desactivada automáticamente: " + r.getName()
+                    System.out.println("Ruta desactivada automáticamente: " + r.getName()
                             + " (llegada: " + r.getDateArrivalStr() + ")");
                 }
             }
         } catch (Exception e) {
-            System.err.println("[Scheduler] Error revisando rutas: " + e.getMessage());
+            System.err.println("Error revisando rutas: " + e.getMessage());
         }
-    }
-
-    public int getRouteStatus(Route route) {
-        if (!route.isActive()) return 2;
-        LocalDateTime now = LocalDateTime.now();
-        if (route.getDateTravel() != null && now.isAfter(route.getDateTravel())) {
-            if (route.getDateArrival() != null && now.isAfter(route.getDateArrival())) {
-                return 2;
-            }
-            return 1;
-        }
-        return 0;
     }
 
     @Override
@@ -104,7 +92,7 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface 
     }
 
     @Override
-    public Route getRouteById(int id)       {
+    public Route getRouteById(int id){
         return routes.getBy(r -> Integer.compare(id, r.getId()));
     }
 
@@ -265,6 +253,7 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface 
         return routeGraph.getShortestDistance(origin, destiny) != -1;
     }
 
+    @Override
     public LinkedList<String> getBoardingOrder(int routeId) throws RemoteException {
         Route route = getRouteById(routeId);
         LinkedList<String> result = new LinkedList<>();
@@ -374,8 +363,18 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface 
 
     @Override
     public int getRouteStatus(int routeId) throws RemoteException {
-        Route route = getRouteById(routeId);
-        if (route == null) return 2;
-        return getRouteStatus(route);
+        Route route=getRouteById(routeId);
+        if(route==null){
+            return -1;
+        }
+        if (!route.isActive()) return 2;
+        LocalDateTime now = LocalDateTime.now();
+        if (route.getDateTravel() != null && now.isAfter(route.getDateTravel())) {
+            if (route.getDateArrival() != null && now.isAfter(route.getDateArrival())) {
+                return 2;
+            }
+            return 1;
+        }
+        return 0;
     }
 }
