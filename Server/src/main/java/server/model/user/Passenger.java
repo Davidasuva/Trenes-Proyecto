@@ -22,14 +22,11 @@ import server.model.ticket.Ticket;
  */
 public class Passenger extends AbstractUser {
 
-    /** Historial completo de todos los tickets del pasajero. */
-    public LinkedList<Ticket> historyTickets;
-
     /** Ticket activo del viaje en curso. Puede ser {@code null} si no está viajando. */
-    Ticket actualTicket;
+    private Ticket actualTicket;
 
     /** Indica si el pasajero está actualmente en viaje. */
-    Boolean isTraveling;
+    private Boolean isTraveling;
 
     /**
      * Construye un pasajero con sus datos personales básicos.
@@ -48,22 +45,6 @@ public class Passenger extends AbstractUser {
         super(id, mail, name, lastName, password, typeIdetification, adress, 1);
         actualTicket = null;
         isTraveling = false;
-        historyTickets = new LinkedList<>();
-    }
-
-    /**
-     * Agrega un ticket al historial del pasajero.
-     *
-     * @param ticket ticket a registrar en el historial
-     * @return {@code true} si se agregó correctamente, {@code false} en caso de error
-     */
-    public boolean addTicket(Ticket ticket) {
-        try {
-            historyTickets.add(ticket);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     /**

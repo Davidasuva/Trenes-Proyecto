@@ -55,11 +55,12 @@
 
             <TableView fx:id="tablaEmpleados" styleClass="tabla" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colId"        text="ID"         prefWidth="100"/>
-                    <TableColumn fx:id="colNombre"    text="Nombre"     prefWidth="160"/>
-                    <TableColumn fx:id="colCorreo"    text="Correo"     prefWidth="190"/>
-                    <TableColumn fx:id="colDocumento" text="Documento"  prefWidth="130"/>
-                    <TableColumn fx:id="colRol"       text="Rol"        prefWidth="160"/>
+                    <TableColumn fx:id="colId"        text="ID"         prefWidth="90"/>
+                    <TableColumn fx:id="colNombre"    text="Nombre"     prefWidth="140"/>
+                    <TableColumn fx:id="colCorreo"    text="Correo"     prefWidth="170"/>
+                    <TableColumn fx:id="colDocumento" text="Documento"  prefWidth="110"/>
+                    <TableColumn fx:id="colRol"       text="Rol"        prefWidth="130"/>
+                    <TableColumn fx:id="colRuta"      text="Ruta"       prefWidth="140"/>
                     <TableColumn fx:id="colAcciones"  text="Acciones"   prefWidth="150"/>
                 </columns>
                 <placeholder>
@@ -118,6 +119,13 @@
         <Region minHeight="5" maxHeight="5"/>
         <ComboBox fx:id="cmbRol" styleClass="combo-campo" maxWidth="Infinity"
                   promptText="Selecciona el rol..."/>
+
+        <Region minHeight="14" maxHeight="14"/>
+
+        <Label text="Ruta asignada *" styleClass="form-label"/>
+        <Region minHeight="5" maxHeight="5"/>
+        <ComboBox fx:id="cmbRuta" styleClass="combo-campo" maxWidth="Infinity"
+                  promptText="Selecciona una ruta..."/>
 
         <Region minHeight="6" maxHeight="6"/>
 

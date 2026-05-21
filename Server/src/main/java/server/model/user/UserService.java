@@ -75,14 +75,8 @@ public class UserService extends UnicastRemoteObject implements User {
     }
 
     @Override
-    public AbstractUser getUserById(String id) throws RemoteException {
-        LinkedList<AbstractUser> all = users.inorder();
-        Iterator<AbstractUser> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            AbstractUser user = iterator.next();
-            if (user.getId().equals(id)) return user;
-        }
-        return null;
+    public AbstractUser getUserById(String id) {
+        return users.getBy(u -> id.compareTo(u.getId()));
     }
 
     @Override

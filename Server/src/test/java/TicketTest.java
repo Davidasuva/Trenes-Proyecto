@@ -46,13 +46,6 @@ class TicketTest {
     }
 
     @Test
-    @DisplayName("Constructor agrega automáticamente el ticket al historial del pasajero")
-    void testTicketAutoAddedToPassenger() {
-        // El historial del pasajero ya tiene el ticket (agregado en el constructor)
-        assertFalse(passenger.historyTickets.isEmpty());
-    }
-
-    @Test
     @DisplayName("verificateLuggage retorna true para maleta <= 80 kg")
     void testVerificateLuggageValid() {
         Luggage luggage = new Luggage(1, 80);

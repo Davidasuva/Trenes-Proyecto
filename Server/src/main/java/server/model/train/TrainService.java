@@ -89,14 +89,8 @@ public class TrainService extends UnicastRemoteObject implements TrainInterface 
         return train;
     }
     @Override
-    public Train getTrainById(int id) throws RemoteException {
-        LinkedList<Train> all = trains.inorder();
-        Iterator<Train> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            Train train = iterator.next();
-            if (train.getId() == id) return train;
-        }
-        return null;
+    public Train getTrainById(int id)       {
+        return trains.getBy(t -> Integer.compare(id, t.getId()));
     }
     @Override
     public LinkedList<AbstractCarriage> seeCarriagesPerTrain(int trainId) throws RemoteException {

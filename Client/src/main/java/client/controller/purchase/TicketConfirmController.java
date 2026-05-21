@@ -105,7 +105,7 @@ public class TicketConfirmController {
         if (ticket.getCarriagePassenger() != null) {
             CarriagePassenger cp = ticket.getCarriagePassenger();
             lblVagonPasajero.setText("Vagón #" + cp.getId()
-                    + "  (" + cp.getActualCapacity() + "/" + cp.getMaxCapacity() + " pasajeros)");
+                    + "  (" + cp.getNumberOfPassengers() + "/" + cp.getMaxCapacity() + " pasajeros)");
         } else {
             lblVagonPasajero.setText("—");
         }
@@ -113,7 +113,8 @@ public class TicketConfirmController {
         if (ticket.getCarriageLoad() != null) {
             CarriageLoad cl = ticket.getCarriageLoad();
             lblVagonMaleta.setText("Vagón #" + cl.getId()
-                    + "  (carga: " + cl.getActualWeight() + "/" + cl.getMaxCapacity() + " kg)");
+                    + "  (" + cl.getLuggageCount() + "/" + CarriageLoad.MAX_LUGGAGES_PER_WAGON + " maletas"
+                    + "  —  " + cl.getActualWeight() + " kg)");
         } else {
             lblVagonMaleta.setText("—");
         }

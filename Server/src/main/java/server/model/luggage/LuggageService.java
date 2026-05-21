@@ -4,6 +4,7 @@ import java.rmi.server.UnicastRemoteObject;
 import edu.uva.app.bintree.avl.BinAVLTree;
 import edu.uva.app.linkedlist.singly.singly.LinkedList;
 import edu.uva.model.iterator.Iterator;
+import server.model.user.AbstractUser;
 import server.model.user.Passenger;
 public class LuggageService extends UnicastRemoteObject implements LuggageInterface {
 
@@ -21,16 +22,8 @@ public class LuggageService extends UnicastRemoteObject implements LuggageInterf
         return luggage;
     }
     @Override
-    public Luggage getLuggageById(int id) throws RemoteException {
-        LinkedList<Luggage> all = luggages.inorder();
-        Iterator<Luggage> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            Luggage luggage = iterator.next();
-            if (luggage.getId() == id) {
-                return luggage;
-            }
-        }
-        return null;
+    public Luggage getLuggageById(int id) {
+        return luggages.getBy(u -> Integer.compare(id,u.getId()));
     }
     @Override
     public Luggage removeLuggage(int id) throws RemoteException {

@@ -155,13 +155,4 @@ class PassengerTest {
         assertDoesNotThrow(() -> passenger.setTraveling());
     }
 
-    @Test
-    @DisplayName("addTicket retorna true y agrega al historial")
-    void testAddTicketReturnsTrue() {
-        // Necesitamos un ticket mínimo — usamos null para verificar que el método
-        // no lanza excepción (la lista linked list acepta null).
-        // En producción el ticket sería real.
-        // Solo se verifica que el historial no lanza excepción.
-        assertDoesNotThrow(() -> passenger.addTicket(null));
-    }
 }

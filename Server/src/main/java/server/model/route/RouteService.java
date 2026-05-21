@@ -104,14 +104,8 @@ public class RouteService extends UnicastRemoteObject implements RouteInterface 
     }
 
     @Override
-    public Route getRouteById(int id) throws RemoteException {
-        LinkedList<Route> all = routes.inorder();
-        Iterator<Route> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            Route route = iterator.next();
-            if (route.getId() == id) return route;
-        }
-        return null;
+    public Route getRouteById(int id)       {
+        return routes.getBy(r -> Integer.compare(id, r.getId()));
     }
 
     @Override

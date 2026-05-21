@@ -246,6 +246,12 @@ public class ClientModel extends Subject {
             boolean agregado = carriageService.addPassengerToCarriage(carriagePassenger.getId(), ticket);
             if (!agregado) { log("No se pudo registrar el pasajero en el vagón del servidor."); return null; }
 
+            // Releer el vagón de pasajeros del servidor para obtener la capacidad actualizada
+            AbstractCarriage cpActualizado = carriageService.getCarriageById(carriagePassenger.getId());
+            if (cpActualizado instanceof CarriagePassenger) {
+                ticket.setCarriagePassenger((CarriagePassenger) cpActualizado);
+            }
+
             if (maletas != null && !maletas.isEmpty() && carriageLoad != null) {
                 Iterator<Luggage> iterator = maletas.iterator();
                 while (iterator.hasNext()) {
@@ -253,6 +259,16 @@ public class ClientModel extends Subject {
                     boolean ok = carriageService.addLuggageToCarriage(carriageLoad.getId(), next);
                     if (ok) { next.setCarriage(carriageLoad); ticket.getLuggage().add(next); }
                     else { log("Advertencia: maleta de " + next.getWeight() + " kg no se pudo agregar."); }
+                }
+                // Releer el vagón de carga del servidor para obtener el peso actualizado
+                AbstractCarriage clActualizado = carriageService.getCarriageById(carriageLoad.getId());
+                if (clActualizado instanceof CarriageLoad) {
+                    ticket.setCarriageLoad((CarriageLoad) clActualizado);
+                    // Actualizar la referencia del carriage en cada maleta registrada
+                    for (int i = 0; i < ticket.getLuggage().size(); i++) {
+                        Luggage l = ticket.getLuggage().get(i);
+                        if (l != null) l.setCarriage((CarriageLoad) clActualizado);
+                    }
                 }
             }
 

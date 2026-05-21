@@ -77,7 +77,6 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         this.status = status;
         this.dateBuy = dateBuy;
         luggage = new Array<>(2);
-        passenger.addTicket(this);
     }
 
     /**

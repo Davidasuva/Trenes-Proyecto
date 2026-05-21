@@ -8,6 +8,7 @@ import edu.uva.app.stack.array.Stack;
 import edu.uva.model.iterator.Iterator;
 import server.model.luggage.Luggage;
 import server.model.ticket.Ticket;
+import server.model.user.AbstractUser;
 
 public class CarriageService extends UnicastRemoteObject implements CarriageInterface {
     private BinAVLTree<AbstractCarriage> carriages = new BinAVLTree<>();
@@ -22,16 +23,8 @@ public class CarriageService extends UnicastRemoteObject implements CarriageInte
     }
 
     @Override
-    public AbstractCarriage getCarriageById(int id) throws RemoteException {
-        LinkedList<AbstractCarriage> all = carriages.inorder();
-        Iterator<AbstractCarriage> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            AbstractCarriage carriage = iterator.next();
-            if (carriage.getId() == id) {
-                return carriage;
-            }
-        }
-        return null;
+    public AbstractCarriage getCarriageById(int id) {
+        return carriages.getBy(u -> Integer.compare(id,u.getId()));
     }
     @Override
     public Stack<Luggage> seeLuggagesPerCarriage(int carriageId) throws RemoteException {

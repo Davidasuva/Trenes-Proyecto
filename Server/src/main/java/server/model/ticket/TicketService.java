@@ -51,16 +51,8 @@ public class TicketService extends UnicastRemoteObject implements TicketInterfac
     }
 
     @Override
-    public Ticket getTicketById(String id) throws RemoteException {
-        LinkedList<Ticket> all = tickets.inorder();
-        Iterator<Ticket> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            Ticket ticket = iterator.next();
-            if (ticket.getId().equals(id)) {
-                return ticket;
-            }
-        }
-        return null;
+    public Ticket getTicketById(String id)  {
+        return tickets.getBy(t -> id.compareTo(t.getId()));
     }
 
     @Override

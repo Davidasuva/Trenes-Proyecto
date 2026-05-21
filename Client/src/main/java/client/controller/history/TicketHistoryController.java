@@ -149,8 +149,8 @@ public class TicketHistoryController {
                 okBusq = t.getId().toLowerCase().contains(busq);
                 if (!okBusq && t.getRoute() != null) {
                     okBusq = t.getRoute().getName().toLowerCase().contains(busq)
-                          || t.getRoute().getOrigin().getName().toLowerCase().contains(busq)
-                          || t.getRoute().getDestiny().getName().toLowerCase().contains(busq);
+                            || t.getRoute().getOrigin().getName().toLowerCase().contains(busq)
+                            || t.getRoute().getDestiny().getName().toLowerCase().contains(busq);
                 }
             }
 
@@ -192,11 +192,15 @@ public class TicketHistoryController {
     private void actualizarInfoRuta() {
         Route sel = cmbNuevaRuta.getValue();
         if (sel == null) { lblInfoNuevaRuta.setText(""); return; }
+        int nuevoPrecio = (ticketEnEdicion != null)
+                ? model.calcularPrecio(sel, ticketEnEdicion.getCategory())
+                : 0;
         lblInfoNuevaRuta.setText(
-            "Destino: " + sel.getDestiny().getName()
-            + "  |  Salida: " + sel.getDateTravelStr()
-            + "  |  Llegada: " + sel.getDateArrivalStr()
-            + "  |  " + String.format("%.0f km", sel.getTotalDistance()));
+                "Destino: " + sel.getDestiny().getName()
+                        + "  |  Salida: " + sel.getDateTravelStr()
+                        + "  |  Llegada: " + sel.getDateArrivalStr()
+                        + "  |  " + String.format("%.0f km", sel.getTotalDistance())
+                        + "  |  Nuevo precio: " + String.format("$ %,d COP", nuevoPrecio));
     }
 
     @FXML
@@ -207,6 +211,8 @@ public class TicketHistoryController {
             mostrarError("Selecciona una ruta de destino.");
             return;
         }
+        int nuevoPrecio = model.calcularPrecio(nuevaRuta, ticketEnEdicion.getCategory());
+        ticketEnEdicion.setPrice(nuevoPrecio);
         boolean ok = model.changeTicketRoute(ticketEnEdicion, nuevaRuta);
         if (ok) {
             tablaTickets.refresh();
